@@ -1,8 +1,9 @@
 (async function () {
   const C = {
-    bg: "#0E0D10", surface: "#161418", raised: "#1E1B20", line: "#3B3030",
-    soft: "#2A262E", paper: "#FAF8F2", muted: "#C7C5CC", orange: "#FF5A1F",
-    ember: "#FF8A3D", cyan: "#3DE0D0", green: "#3DE08A", red: "#E0483C"
+    bg: "#0E0D10", surface: "#161418", raised: "#1E1B20", line: "#48251C",
+    soft: "#2A262E", hair: "#2E2B31", paper: "#FAF8F2", muted: "#C7C5CC",
+    silver: "#DAD8DE", orange: "#FF5A1F", ember: "#FF8A3D", amber: "#F5D9A8",
+    cyan: "#3DE0D0", green: "#3DE08A", yellow: "#F6C344", red: "#E0483C"
   };
 
   function rgb(hex) {
@@ -60,36 +61,53 @@
     return node;
   }
   function rule(parent, name, x, y, width, color) { return rect(parent, name, x, y, width, 1, color || C.soft); }
-  function lotus(parent, x, y) {
-    const mark = frame(parent, "Brand / Lotus", x, y, 38, 38, null);
-    ellipse(mark, "Petal / Center", 14, 3, 10, 26, C.orange);
-    const left = ellipse(mark, "Petal / Left", 7, 8, 10, 23, C.ember); left.rotation = -28;
-    const right = ellipse(mark, "Petal / Right", 21, 8, 10, 23, C.ember); right.rotation = 28;
-    ellipse(mark, "Seed", 16, 23, 6, 6, C.paper); return mark;
+  function grid(parent, name, x, y, width, height, spacing, color, opacity) {
+    const node = frame(parent, name, x, y, width, height, null);
+    const step = spacing || 46;
+    for (let gx = 0; gx <= width; gx += step) rect(node, "Grid / V / " + gx, gx, 0, 1, height, color || C.orange, null, 0, opacity == null ? 0.07 : opacity);
+    for (let gy = 0; gy <= height; gy += step) rect(node, "Grid / H / " + gy, 0, gy, width, 1, color || C.orange, null, 0, opacity == null ? 0.07 : opacity);
+    return node;
   }
-  function button(parent, label, x, y, width, primary) {
-    const node = frame(parent, "Button / " + label, x, y, width, 48, primary ? C.orange : null, primary ? null : C.orange);
-    text(node, "Label", label, 0, 14, { font: F.bold, size: 14, color: primary ? C.bg : C.ember, width: width, align: "CENTER", lineHeight: 19 });
+  function lotus(parent, x, y) {
+    const mark = frame(parent, "Brand / Lotus", x, y, 46, 41, C.raised);
+    ellipse(mark, "Petal / Center", 18, 4, 10, 27, C.orange);
+    const left = ellipse(mark, "Petal / Left", 11, 9, 10, 24, C.ember); left.rotation = -30;
+    const right = ellipse(mark, "Petal / Right", 25, 9, 10, 24, C.ember); right.rotation = 30;
+    ellipse(mark, "Petal / Outer left", 6, 16, 9, 18, C.orange);
+    ellipse(mark, "Petal / Outer right", 31, 16, 9, 18, C.orange);
+    rect(mark, "Water line", 8, 34, 30, 2, C.ember); return mark;
+  }
+  function button(parent, label, x, y, width, variant) {
+    const kind = variant === true ? "primary" : variant === false ? "outline" : (variant || "primary");
+    const primary = kind === "primary", ghost = kind === "ghost";
+    const node = frame(parent, "Button / " + label, x, y, width, 48, primary ? C.orange : null, primary ? null : ghost ? C.hair : C.orange);
+    text(node, "Label", label, 0, 14, { font: F.bold, size: 14, color: primary ? C.bg : ghost ? C.paper : C.ember, width: width, align: "CENTER", lineHeight: 19 });
+    return node;
   }
 
   function publicHeader(root) {
     const node = frame(root, "Global / Marketing Header", 0, 0, 1440, 74, C.bg, C.line);
-    lotus(node, 48, 18); text(node, "Brand", "ORANGE NELUMBO", 98, 27, { font: F.displayBold, size: 17 });
+    lotus(node, 56, 17); text(node, "Brand", "ORANGE NELUMBO", 112, 28, { font: F.displayBold, size: 17 });
     ["Visual notes", "Simulations", "Educators", "Videos", "FAQs"].forEach(function (label, i) {
-      text(node, "Nav / " + label, label, 500 + i * 112, 28, { font: F.bold, size: 13, color: C.muted });
+      text(node, "Nav / " + label, label, 572 + i * 105, 28, { font: F.displayBold, size: 13, color: C.muted });
     });
-    button(node, "Sign in", 1160, 14, 100, false); button(node, "Explore free", 1272, 14, 122, true);
+    button(node, "Sign in", 1170, 14, 98, "ghost"); button(node, "Explore free", 1280, 14, 112, "outline");
   }
   function publicFooter(root, y) {
-    const node = frame(root, "Global / Marketing Footer", 0, y, 1440, 290, C.bg, C.line);
-    lotus(node, 48, 44); text(node, "Brand", "ORANGE NELUMBO", 98, 53, { font: F.displayBold, size: 18 });
-    text(node, "Description", "Visual JEE notes and interactive simulations that make difficult ideas easier to see and understand.", 48, 105, { size: 15, color: C.muted, width: 410, lineHeight: 24 });
+    const node = frame(root, "Global / Marketing Footer", 0, y, 1440, 444, C.bg, C.line);
+    lotus(node, 56, 64); text(node, "Brand", "ORANGE NELUMBO", 112, 75, { font: F.displayBold, size: 18 });
+    text(node, "Description", "Visual JEE notes and interactive simulations that make difficult ideas easier to see and understand.", 56, 129, { font: F.display, size: 15, color: C.muted, width: 390, lineHeight: 27 });
+    button(node, "Explore free", 56, 224, 154, "primary");
     const cols = [["Learn", "Visual notes\nSimulation Lab\nVideo lectures"], ["Support", "FAQs\nEducator login\nContact"], ["Legal", "Privacy\nTerms"]];
     cols.forEach(function (col, i) {
-      text(node, "Column / " + col[0], col[0], 660 + i * 220, 52, { font: F.bold, size: 14 });
-      text(node, "Links / " + col[0], col[1], 660 + i * 220, 88, { size: 14, color: C.muted, lineHeight: 29 });
+      text(node, "Column / " + col[0], col[0], 674 + i * 220, 68, { font: F.displayBold, size: 14 });
+      text(node, "Links / " + col[0], col[1], 674 + i * 220, 106, { font: F.display, size: 14, color: C.muted, lineHeight: 30 });
     });
-    rule(node, "Divider", 48, 236, 1344); text(node, "Copyright", "© 2026 Orange Nelumbo", 48, 258, { size: 12, color: C.muted });
+    rule(node, "Legal divider", 0, 310, 1440, C.hair);
+    text(node, "Independence note", "Orange Nelumbo is an independent educational platform and is not affiliated with, endorsed by, or sponsored by the NTA, the JEE Apex Board, or the IITs.", 56, 332, { font: F.display, size: 12, color: C.muted, width: 1328, lineHeight: 20 });
+    rule(node, "Copyright divider", 0, 383, 1440, C.hair);
+    text(node, "Copyright", "\u00A9 2026 Orange Nelumbo", 56, 405, { font: F.display, size: 12, color: C.muted });
+    text(node, "Tagline", "See the idea. Understand the concept.", 1100, 405, { font: F.display, size: 12, color: C.muted });
   }
   function learningRail(root, height, active) {
     const node = frame(root, "Global / Learning Navigation", 0, 0, 278, height, C.surface, C.line);
@@ -113,7 +131,31 @@
     rect(node, "Notifications", 922, 15, 44, 44, C.surface, C.soft); rect(node, "Profile", 984, 15, 44, 44, C.orange);
   }
 
-  function item(value) { return typeof value === "string" ? { title: value, body: "Editable content for this website section." } : value; }
+  const contentCopy = {
+    "Make it visible": "Use diagrams, motion, and spatial explanation wherever words alone create friction.",
+    "Keep it focused": "Remove dashboard noise and keep each screen centred on the student's immediate learning task.",
+    "Let students test it": "Turn passive reading into exploration through small, purposeful simulations.",
+    "Visual notes": "Notes open in a dedicated reader so the learning document stays separate from the rest of the app.",
+    "Simulations": "Live simulations let you change inputs and observe the result. Upcoming simulations are clearly marked.",
+    "Video lectures": "Video lectures are planned for a future release and are not presented as currently available.",
+    "Profile and settings": "Profile, notifications, and preferences are grouped under Account and kept separate from learning.",
+    "1. Scope of this preview": "This notice describes the Orange Nelumbo front-end demonstration. The preview has no production account service, payment processor, or server-side academic profile.",
+    "2. Information shown or entered": "The fictional student profile, sample progress, ranks, and study history are demonstration data and are not linked to a real learner.",
+    "3. Browser-local storage": "The preview may use browser storage to remember demonstration choices, progress, or interface preferences on the current device.",
+    "4. Cookies, analytics, and third parties": "The preview is not designed to set advertising cookies or send product analytics to an application backend.",
+    "5. Students and minors": "A production account and consent flow must be designed for applicable requirements. This preview does not request a child's real academic or identity data.",
+    "6. Security and retention": "No demo form data is intentionally retained by an Orange Nelumbo application server. Browser-local values remain until cleared.",
+    "7. Your choices and questions": "You can stop using the preview and clear its browser data at any time. This notice may change before a live service launches.",
+    "1. Demonstration status": "Orange Nelumbo currently provides a front-end demonstration. Features, plans, prices, dates, ranks, and results are sample product content.",
+    "2. Educational purpose and no guarantees": "Lessons and simulations are educational tools. No rank, score, percentile, admission, or selection is promised.",
+    "3. Official exam information": "Students must verify dates, eligibility, syllabi, and application rules through the official examination authorities.",
+    "4. Acceptable use": "Use the preview for lawful educational purposes. Do not disrupt the service, bypass access controls, or use it to cheat in an examination.",
+    "5. Plans, prices, refunds, and payments": "No live purchase occurs in this preview. A future paid service must show final prices and terms before payment.",
+    "6. Availability and changes": "Preview features may change, reset, or become unavailable. Browser-local progress can disappear when site data is cleared.",
+    "7. Responsibility and limitation": "Use of the preview is at your discretion. Do not make decisions solely from demo analytics or incomplete preview content.",
+    "8. Contact": "Questions about these demonstration terms can be directed to the reference support address shown in the product."
+  };
+  function item(value) { return typeof value === "string" ? { title: value, body: contentCopy[value] || "" } : value; }
   function heading(node, section, learning, x, width) {
     const hero = section.type === "hero";
     text(node, "Heading", section.title, x, 42, { font: learning ? F.bold : F.displayBold, size: hero ? 50 : 35, width: width, lineHeight: hero ? 56 : 42 });
@@ -125,18 +167,21 @@
     data.forEach(function (raw, i) {
       const value = item(raw), col = i % cols, row = Math.floor(i / cols);
       const card = frame(node, "Card / " + value.title, x + col * (w + gap), y + row * (h + gap), w, h, C.surface, C.line);
-      rect(card, "Icon", 22, 22, 38, 38, i % 2 ? C.cyan : C.orange, null, 0, 0.95);
+      const icon = frame(card, "Icon", 22, 22, 38, 38, null, C.line);
+      text(icon, "Glyph", i % 3 === 0 ? "\u2297" : i % 3 === 1 ? "\u25B3" : "\u03A3", 0, 9, { font: F.mono, size: 16, color: i % 2 ? C.cyan : C.ember, width: 38, align: "CENTER", lineHeight: 20 });
       text(card, "Title", value.title, 22, 78, { font: learning ? F.bold : F.displayBold, size: 20, width: w - 44, lineHeight: 26 });
       if (value.meta) text(card, "Meta", value.meta, 22, 108, { font: F.medium, size: 12, color: C.ember, width: w - 44 });
-      text(card, "Body", value.body || "", 22, value.meta ? 132 : 114, { size: 13, color: C.muted, width: w - 44, lineHeight: 20 });
+      if (value.body) text(card, "Body", value.body, 22, value.meta ? 132 : 114, { size: 13, color: C.muted, width: w - 44, lineHeight: 20 });
     });
   }
   function rows(node, section, x, y, width, learning) {
+    const rowHeight = section.height > 1000 ? Math.min(230, Math.floor((section.height - y - 50) / Math.max(1, (section.items || []).length))) : 68;
+    const rowGap = section.height > 1000 ? 16 : 10;
     (section.items || []).forEach(function (raw, i) {
-      const value = item(raw), row = frame(node, "Row / " + value.title, x, y + i * 78, width, 68, C.surface, C.soft);
+      const value = item(raw), row = frame(node, "Row / " + value.title, x, y + i * (rowHeight + rowGap), width, rowHeight, C.surface, C.soft);
       text(row, "Index", String(i + 1).padStart(2, "0"), 18, 24, { font: F.mono, size: 11, color: C.ember });
       text(row, "Title", value.title, 68, 15, { font: learning ? F.bold : F.displayBold, size: 17, width: 310 });
-      text(row, "Body", value.body || "", 400, 14, { size: 13, color: C.muted, width: width - 430, lineHeight: 20 });
+      if (value.body) text(row, "Body", value.body, 400, 14, { size: 13, color: C.muted, width: width - 430, lineHeight: 20 });
     });
   }
   function form(node, section, x, y, width) {
@@ -166,7 +211,7 @@
     });
     const content = frame(node, "Reading content", x + 238, y, width - 238, 430, C.bg);
     text(content, "Title", "The concept, explained visually", 0, 0, { font: F.bold, size: 28, width: width - 280 });
-    text(content, "Body", "DM Sans keeps the learning interface clear at study density. This editable block represents the note copy, formulas, diagrams, callouts, examples, and interactive lab.", 0, 54, { size: 15, color: C.muted, width: width - 300, lineHeight: 26 });
+    text(content, "Body", "Follow the diagram, connect each variable to the motion, and use the worked relation to predict what changes at the highest point.", 0, 54, { size: 15, color: C.muted, width: width - 300, lineHeight: 26 });
     const visual = frame(content, "Visual diagram", 0, 150, width - 290, 220, C.surface, C.line);
     ellipse(visual, "Orbit", 150, 36, 145, 145, null, C.orange, 0.45); ellipse(visual, "Core", 202, 88, 42, 42, C.orange);
     rect(visual, "Graph axis", 370, 42, 2, 130, C.muted, null, 0, 0.45); rect(visual, "Graph line", 370, 107, Math.max(160, width - 720), 3, C.cyan);
@@ -185,6 +230,283 @@
       ellipse(visual, "Orbit", 105, 42, 220, 220, null, C.orange, 0.38); ellipse(visual, "Core", 185, 122, 60, 60, C.orange);
       rule(visual, "Axis", 54, section.height - 180, 322, C.cyan); button(node, section.button || "Explore", inset, section.height - 92, 190, true);
     }
+  }
+
+  function outlinedIcon(parent, name, x, y, symbol, color) {
+    const icon = frame(parent, "Icon / " + name, x, y, 48, 48, null, C.line);
+    text(icon, "Glyph", symbol, 0, 12, { font: F.mono, size: 20, color: color || C.ember, width: 48, align: "CENTER", lineHeight: 24 });
+    return icon;
+  }
+
+  function motionCard(parent, x, y, width, height) {
+    const card = frame(parent, "Hero visual / Motion under gravity", x, y, width, height, C.surface, C.line);
+    grid(card, "Background grid", 0, 0, width, height, 46, C.orange, 0.055);
+    text(card, "Subject", "Physics \u00B7 Kinematics", 28, 30, { font: F.displayBold, size: 14, color: C.ember });
+    text(card, "Title", "Motion under gravity", 28, 55, { font: F.displayBold, size: 24 });
+    text(card, "Book icon", "\u25A1", width - 56, 43, { font: F.mono, size: 24, color: C.ember });
+    rule(card, "Header divider", 28, 95, width - 56, C.hair);
+    const orbit = frame(card, "Vertical throw visual", 28, 123, width - 56, 320, null, C.line);
+    orbit.cornerRadius = 150;
+    const axisX = Math.round((width - 56) / 2);
+    rect(orbit, "Dashed path", axisX, 53, 1, 202, C.muted, null, 0, 0.5);
+    ellipse(orbit, "Ball / Apex", axisX - 16, 42, 32, 32, C.amber);
+    ellipse(orbit, "Ball / Ground", axisX - 16, 244, 32, 32, C.amber);
+    text(orbit, "Apex label", "v = 0 at the top", axisX + 48, 51, { font: F.displayBold, size: 14, color: C.cyan });
+    text(orbit, "Gravity label", "g stays downward", 88, 138, { font: F.display, size: 14, color: C.ember });
+    const note = frame(card, "Explanation / Note", 28, height - 82, (width - 68) / 2, 54, C.bg, C.hair);
+    text(note, "Copy", "A visual note explains the idea.", 16, 17, { font: F.display, size: 14, color: C.muted });
+    const lab = frame(card, "Explanation / Simulation", 40 + (width - 68) / 2, height - 82, (width - 68) / 2, 54, C.bg, C.hair);
+    text(lab, "Copy", "A simulation lets you test it.", 16, 17, { font: F.display, size: 14, color: C.muted });
+    return card;
+  }
+
+  function subjectCard(parent, x, y, width, title, symbol, copy) {
+    const card = frame(parent, "Card / " + title, x, y, width, 188, C.surface, C.line);
+    outlinedIcon(card, title, 28, 28, symbol, C.ember);
+    text(card, "Title", title, 28, 98, { font: F.displayBold, size: 24 });
+    text(card, "Description", copy, 28, 132, { font: F.display, size: 15, color: C.muted, width: width - 56, lineHeight: 25 });
+  }
+
+  function quoteCard(parent, x, y, width, name, detail, quote) {
+    const card = frame(parent, "Testimonial / " + name, x, y, width, 355, C.surface, C.line);
+    text(card, "Quote mark", "\u201C", 28, 26, { font: F.displayBold, size: 44, color: C.ember });
+    text(card, "Quote", quote, 28, 95, { font: F.display, size: 18, color: C.silver, width: width - 56, lineHeight: 30 });
+    rule(card, "Divider", 28, 277, width - 56, C.hair);
+    text(card, "Student", name, 28, 298, { font: F.displayBold, size: 15 });
+    text(card, "Detail", detail, 28, 323, { font: F.display, size: 13, color: C.muted });
+  }
+
+  function homeFrame(page, index) {
+    const root = frame(page, "Frame / " + String(index).padStart(2, "0") + " / Home / /", 0, 0, 1440, 4822, C.bg);
+    root.clipsContent = true; root.setPluginData("route", "/"); publicHeader(root);
+
+    const hero = frame(root, "Section / 01 / Hero", 0, 74, 1440, 713, C.bg, C.line);
+    grid(hero, "Hero grid", 0, 0, 1440, 713, 46, C.orange, 0.065);
+    text(hero, "Heading / Line 1", "JEE concepts", 56, 157, { font: F.displayBold, size: 72, width: 650, lineHeight: 76 });
+    text(hero, "Heading / Line 2", "made", 56, 244, { font: F.displayBold, size: 72, width: 230, lineHeight: 76 });
+    text(hero, "Heading / Accent", "visible.", 286, 244, { font: F.displayBold, size: 72, color: C.orange, width: 320, lineHeight: 76 });
+    text(hero, "Description", "Learn Physics, Chemistry, and Mathematics through visual notes and interactive simulations built for understanding\u2014not information overload.", 56, 357, { font: F.display, size: 20, color: C.muted, width: 660, lineHeight: 32 });
+    button(hero, "Explore the library  \u2192", 56, 467, 218, "primary");
+    button(hero, "Open demo", 286, 467, 138, "ghost");
+    [["\u2713", "Visual notes"], ["\u2713", "Interactive simulations"], ["\u2713", "Video lectures coming soon"]].forEach(function (value, i) {
+      const x = 56 + [0, 128, 328][i]; text(hero, "Proof / Check / " + i, value[0], x, 552, { font: F.bold, size: 14, color: C.green });
+      text(hero, "Proof / " + i, value[1], x + 24, 552, { font: F.display, size: 14, color: C.muted });
+    });
+    motionCard(hero, 788, 80, 580, 554);
+
+    const notes = frame(root, "Section / 02 / Visual notes", 0, 787, 1440, 598, C.bg);
+    text(notes, "Heading", "Notes designed to help you see\nthe logic.", 56, 127, { font: F.displayBold, size: 46, width: 680, lineHeight: 54 });
+    text(notes, "Description", "Each topic brings together diagrams, definitions, derivations, formulas, and common mistakes in one focused reading experience.", 856, 139, { font: F.display, size: 18, color: C.muted, width: 500, lineHeight: 31 });
+    subjectCard(notes, 56, 281, 424, "Physics", "\u2297", "Diagrams, physical intuition, derivations, and interactive models.");
+    subjectCard(notes, 500, 281, 424, "Chemistry", "\u25B3", "Visual structures, reaction logic, trends, and concise revision maps.");
+    subjectCard(notes, 944, 281, 424, "Mathematics", "\u03A3", "Step-by-step reasoning, geometric meaning, and worked patterns.");
+
+    const simulations = frame(root, "Section / 03 / Simulation Lab", 0, 1385, 1440, 529, C.surface, C.hair);
+    text(simulations, "Lab icon", "\u25B3", 56, 82, { font: F.mono, size: 34, color: C.cyan });
+    text(simulations, "Heading", "The Simulation Lab", 56, 136, { font: F.displayBold, size: 46 });
+    text(simulations, "Description", "Turn formulas into behaviour. Predict the result, change the inputs, and build intuition you can carry into a JEE question.", 56, 200, { font: F.display, size: 18, color: C.muted, width: 570, lineHeight: 31 });
+    const control = frame(simulations, "Feature / Controls", 56, 309, 282, 76, C.bg, C.hair);
+    text(control, "Icon", "\u2195", 18, 25, { font: F.mono, size: 19, color: C.ember }); text(control, "Copy", "Control variables and\ncompare outcomes.", 54, 15, { font: F.display, size: 14, color: C.muted, lineHeight: 23 });
+    const graphs = frame(simulations, "Feature / Graphs", 350, 309, 282, 76, C.bg, C.hair);
+    text(graphs, "Icon", "\u25CE", 18, 25, { font: F.mono, size: 19, color: C.cyan }); text(graphs, "Copy", "See graphs and motion\nupdate together.", 54, 15, { font: F.display, size: 14, color: C.muted, lineHeight: 23 });
+    button(simulations, "Open the Simulation Lab  \u2192", 56, 413, 244, "outline");
+    const telemetry = frame(simulations, "Simulation preview / Vertical throw", 760, 87, 608, 356, C.bg, C.line);
+    text(telemetry, "Title", "Vertical throw", 32, 31, { font: F.displayBold, size: 24 }); text(telemetry, "Status", "Live", 530, 35, { font: F.displayBold, size: 14, color: C.green });
+    rect(telemetry, "Slider track", 32, 107, 544, 8, C.soft); rect(telemetry, "Slider fill", 32, 107, 337, 8, C.orange);
+    text(telemetry, "Slider label", "Launch speed", 32, 132, { font: F.display, size: 14, color: C.muted }); text(telemetry, "Slider value", "9.8 m/s", 516, 132, { font: F.displayBold, size: 14 });
+    [["Time", "2.00 s"], ["Velocity", "-9.80 m/s"], ["Height", "0.00 m"]].forEach(function (value, i) {
+      const stat = frame(telemetry, "Telemetry / " + value[0], 32 + i * 181, 227, 180, 92, C.surface, C.hair);
+      text(stat, "Label", value[0], 16, 18, { font: F.display, size: 12, color: C.muted }); text(stat, "Value", value[1], 16, 49, { font: F.bold, size: 16, color: C.cyan });
+    });
+
+    const testimonials = frame(root, "Section / 04 / Student testimonials", 0, 1914, 1440, 761, C.bg);
+    text(testimonials, "Heading", "Built for the moment a concept\nfinally clicks.", 56, 119, { font: F.displayBold, size: 46, width: 730, lineHeight: 54 });
+    text(testimonials, "Description", "Students use the notes and labs to replace disconnected formulas with a picture they can reason through.", 856, 132, { font: F.display, size: 18, color: C.muted, width: 500, lineHeight: 31 });
+    quoteCard(testimonials, 56, 285, 424, "Meera Iyer", "JEE 2027 aspirant \u00B7 Chennai", "The derivation ladders show me exactly where each result comes from. I revise faster because I am no longer memorising disconnected formulas.");
+    quoteCard(testimonials, 500, 285, 424, "Aryan Kapoor", "Class 11 \u00B7 Jaipur", "The simulations make a difficult graph feel obvious. I can change one variable, predict the result and immediately test my reasoning.");
+    quoteCard(testimonials, 944, 285, 424, "Sana Khan", "JEE 2026 aspirant \u00B7 Hyderabad", "I like that progress means finishing the work, not collecting points. The notebook stays calm even when my week is busy.");
+
+    const educators = frame(root, "Section / 05 / Educator access", 0, 2675, 1440, 444, C.surface, C.hair);
+    text(educators, "Icon", "\u25B3", 56, 75, { font: F.mono, size: 34, color: C.ember });
+    text(educators, "Heading", "A dedicated entry for educators.", 56, 132, { font: F.displayBold, size: 46 });
+    text(educators, "Description", "Invited teachers and academic contributors can sign in through the educator entry to access their Orange Nelumbo workspace.", 56, 198, { font: F.display, size: 18, color: C.muted, width: 690, lineHeight: 31 });
+    button(educators, "Educator login  \u2192", 56, 308, 180, "primary");
+    const educatorCard = frame(educators, "Educator access card", 856, 75, 512, 294, C.bg, C.line); grid(educatorCard, "Card grid", 0, 0, 512, 294, 46, C.orange, 0.045);
+    rect(educatorCard, "Avatar", 28, 28, 48, 48, C.orange); text(educatorCard, "Avatar glyph", "E", 28, 40, { font: F.bold, size: 18, color: C.bg, width: 48, align: "CENTER" });
+    text(educatorCard, "Title", "Educator access", 96, 32, { font: F.displayBold, size: 20 }); text(educatorCard, "Meta", "For invited accounts", 96, 60, { font: F.display, size: 13, color: C.muted });
+    rule(educatorCard, "Divider", 28, 98, 456, C.hair);
+    ["Separate educator sign-in entry", "Access tied to an invited account", "Student learning remains in its own workspace"].forEach(function (label, i) { text(educatorCard, "Check / " + i, "\u2713", 28, 126 + i * 45, { font: F.bold, size: 13, color: C.green }); text(educatorCard, "Item / " + i, label, 55, 126 + i * 45, { font: F.display, size: 14, color: C.muted }); });
+
+    const videos = frame(root, "Section / 06 / Future video lectures", 0, 3119, 1440, 573, C.bg);
+    const videoCard = frame(videos, "Video lectures panel", 56, 112, 1312, 349, C.surface, C.line); grid(videoCard, "Panel grid", 0, 0, 1312, 349, 46, C.orange, 0.05);
+    text(videoCard, "Icon", "\u25B7", 56, 51, { font: F.mono, size: 34, color: C.ember });
+    text(videoCard, "Heading", "Visual-first video lectures are coming.", 56, 108, { font: F.displayBold, size: 46, width: 850, lineHeight: 54 });
+    text(videoCard, "Description", "Videos will connect directly to the same notes and simulations, so every topic stays part of one clear learning path.", 56, 181, { font: F.display, size: 18, color: C.muted, width: 760, lineHeight: 31 });
+    button(videoCard, "Start with the notes  \u2192", 1045, 240, 210, "primary");
+
+    const faqs = frame(root, "Section / 07 / FAQs", 0, 3692, 1440, 686, C.surface, C.hair);
+    text(faqs, "Heading", "Frequently asked\nquestions", 56, 92, { font: F.displayBold, size: 46, width: 500, lineHeight: 54 });
+    text(faqs, "Description", "Clear answers about the current library, future videos, simulations, and educator access.", 56, 226, { font: F.display, size: 18, color: C.muted, width: 420, lineHeight: 31 });
+    button(faqs, "Visit the help centre  \u2192", 56, 331, 206, "ghost");
+    const questions = [
+      ["What does Orange Nelumbo offer today?", "The current learning library focuses on visual notes and interactive simulations for JEE Physics, Chemistry, and Mathematics."],
+      ["Are the notes useful for JEE Main and JEE Advanced?", ""], ["How does the Simulation Lab help?", ""], ["Are video lectures available now?", ""], ["Who can use educator access?", ""], ["Can I save notes and continue later?", ""]
+    ];
+    let faqY = 86;
+    questions.forEach(function (value, i) {
+      const h = i === 0 ? 126 : 73, item = frame(faqs, "FAQ / " + String(i + 1).padStart(2, "0"), 590, faqY, 778, h, null);
+      rule(item, "Top border", 0, 0, 778, C.line); text(item, "Question", value[0], 0, 24, { font: F.displayBold, size: 18, width: 700, lineHeight: 25 }); text(item, "Toggle", i === 0 ? "-" : "+", 742, 22, { font: F.display, size: 22, color: C.ember });
+      if (value[1]) text(item, "Answer", value[1], 0, 63, { font: F.display, size: 14, color: C.muted, width: 720, lineHeight: 22 }); faqY += h;
+    });
+
+    publicFooter(root, 4378); return root;
+  }
+
+  function authFrame(page, route, index) {
+    const root = frame(page, "Frame / " + String(index).padStart(2, "0") + " / " + route.name + " / " + route.route, 0, 0, 1440, 900, C.bg);
+    root.clipsContent = true; root.setPluginData("route", route.route);
+    const left = frame(root, "Authentication / Brand panel", 0, 0, 756, 900, C.surface, C.hair);
+    grid(left, "Brand grid", 0, 0, 756, 900, 46, C.orange, 0.045);
+    ellipse(left, "Orbit / Outer", 355, -160, 540, 540, null, C.orange, 0.14);
+    ellipse(left, "Orbit / Inner", 435, -80, 380, 380, null, C.orange, 0.10);
+    lotus(left, 64, 42); text(left, "Brand", "ORANGE NELUMBO", 120, 53, { font: F.displayBold, size: 18 });
+    text(left, "Statement", "Learn the idea. Test\nthe edge cases. Keep\nmoving.", 64, 282, { font: F.displayBold, size: 53, width: 610, lineHeight: 62 });
+    text(left, "Description", "A focused JEE study system for notes, simulations, deliberate practice, and the small wins that compound.", 64, 472, { font: F.display, size: 18, color: C.muted, width: 520, lineHeight: 31 });
+    const proof = [["\u2297", "Concept-first notes"], ["\u03A3", "JEE-level practice"], ["\u2197", "Progress that makes sense"]];
+    proof.forEach(function (value, i) {
+      const card = frame(left, "Proof / " + value[1], 64 + i * 196, 565, 184, 94, C.raised, C.hair);
+      text(card, "Icon", value[0], 16, 15, { font: F.mono, size: 19, color: C.cyan }); text(card, "Label", value[1], 16, 49, { font: F.displayBold, size: 14, width: 150, lineHeight: 20 });
+    });
+    text(left, "System label", "ORANGE NELUMBO LEARNING SYSTEM  \u2197", 64, 848, { font: F.mono, size: 11, color: C.muted });
+
+    const right = frame(root, "Authentication / Form panel", 756, 0, 684, 900, C.bg);
+    const isEducator = route.name === "Educator Login", isSignup = route.name === "Signup", isForgot = route.name === "Forgot Password";
+    const headingValue = isEducator ? "Educator sign in." : isSignup ? "Create your learning account." : isForgot ? "Reset your password." : "Welcome back.";
+    const kickerValue = isEducator ? "EDUCATOR ACCESS" : isSignup ? "START WITH A CLEAR PLAN" : isForgot ? "ACCOUNT RECOVERY" : "STUDENT WORKSPACE";
+    const descriptionValue = isEducator ? "Use the credentials associated with your invited Orange Nelumbo educator account." : isSignup ? "Save your notes, simulations, and reading progress on this device." : isForgot ? "Enter your account email to prepare a reset link in this front-end demonstration." : "Continue your visual notes and simulations from exactly where you stopped.";
+    const top = isSignup ? 56 : 78;
+    text(right, "Kicker", kickerValue, 86, top, { font: F.mono, size: 11, color: C.orange });
+    text(right, "Heading", headingValue, 86, top + 31, { font: F.displayBold, size: isSignup ? 42 : 48, width: 520, lineHeight: 52 });
+    text(right, "Description", descriptionValue, 86, top + (isSignup ? 91 : 94), { font: F.display, size: 16, color: C.muted, width: 500, lineHeight: 27 });
+    if (isSignup) {
+      ["\u2713  Visual notes", "\u2713  Interactive simulations", "\u2713  Saved progress on this device"].forEach(function (label, i) { text(right, "Benefit / " + i, label, 86 + i * 162, 190, { font: F.display, size: 13, color: i ? C.muted : C.cyan }); });
+    }
+    const formY = isSignup ? 226 : top + 155;
+    const formH = isSignup ? 610 : isEducator ? 426 : isForgot ? 300 : 570;
+    const card = frame(right, "Form card", 86, formY, 512, formH, C.surface, C.hair);
+    const fields = isSignup ? ["Full name", "Email address", "Password", "Confirm password"] : isForgot ? ["Email address"] : ["Email address", "Password"];
+    fields.forEach(function (label, i) {
+      const twoColumn = isSignup && i >= 2, inputW = twoColumn ? 218 : 456;
+      const fieldX = twoColumn ? 28 + (i - 2) * 238 : 28;
+      const fieldY = isSignup ? (i < 2 ? 26 + i * 91 : 208) : 28 + i * 96;
+      text(card, "Label / " + label, label, fieldX, fieldY, { font: F.displayBold, size: 14 });
+      const input = frame(card, "Input / " + label, fieldX, fieldY + 28, inputW, 50, C.bg, C.line);
+      text(input, "Placeholder", label === "Email address" && !isSignup ? "aarav@orangenelumbo.com" : label === "Full name" ? "Aarav Sharma" : label.indexOf("Password") >= 0 ? "8+ characters" : "you@example.com", 14, 15, { font: F.display, size: 14, color: C.muted });
+    });
+    if (!isSignup && !isForgot) text(card, "Forgot password", "Forgot password?", 350, 219, { font: F.displayBold, size: 13, color: C.ember });
+    if (isSignup) {
+      rect(card, "Demo consent", 28, 302, 16, 16, C.orange); text(card, "Consent copy", "I understand this prototype stores dummy account data only in this browser.", 56, 300, { font: F.display, size: 13, color: C.muted, width: 400, lineHeight: 21 });
+      button(card, "Create my workspace  \u2192", 28, 363, 456, "primary");
+      text(card, "Account link", "Already have a dummy account?  Sign in", 0, 442, { font: F.display, size: 13, color: C.muted, width: 512, align: "CENTER" });
+    } else if (isForgot) {
+      button(card, "Prepare reset link  \u2192", 28, 132, 456, "primary"); text(card, "Back", "\u2190  Back to sign in", 28, 218, { font: F.displayBold, size: 13, color: C.ember });
+    } else {
+      button(card, isEducator ? "Sign in as educator  \u2192" : "Sign in  \u2192", 28, 257, 456, "primary");
+      if (isEducator) text(card, "Invite note", "Educator access is invite-only. Contact Orange Nelumbo if your account has not been activated.", 28, 334, { font: F.display, size: 13, color: C.muted, width: 456, lineHeight: 21 });
+      else {
+        text(card, "Divider label", "OR EXPLORE FIRST", 0, 332, { font: F.mono, size: 10, color: C.muted, width: 512, align: "CENTER" });
+        button(card, "Open the student demo", 28, 370, 456, "outline");
+        text(card, "Demo note", "Demo access loads a sample JEE 2027 profile. Nothing is submitted.", 0, 429, { font: F.display, size: 12, color: C.muted, width: 512, align: "CENTER" });
+        const dummy = frame(card, "Dummy login", 28, 465, 456, 78, C.raised, C.hair);
+        text(dummy, "Title", "Dummy login", 16, 12, { font: F.displayBold, size: 12 }); text(dummy, "Credentials", "aarav@orangenelumbo.com\norange2027", 16, 34, { font: F.mono, size: 11, color: C.muted, lineHeight: 17 });
+      }
+    }
+    return root;
+  }
+
+  function onboardingFrame(page, route, index) {
+    const root = frame(page, "Frame / " + String(index).padStart(2, "0") + " / Onboarding / /onboarding", 0, 0, 1440, 900, C.bg);
+    root.clipsContent = true; root.setPluginData("route", "/onboarding"); grid(root, "Background grid", 0, 0, 1440, 900, 46, C.orange, 0.035);
+    lotus(root, 64, 36); text(root, "Brand", "ORANGE NELUMBO", 120, 47, { font: F.displayBold, size: 18 }); text(root, "Progress meta", "PROFILE SETUP \u00B7 1 / 3", 1164, 51, { font: F.mono, size: 11, color: C.muted });
+    const aside = frame(root, "Onboarding / Plan overview", 64, 150, 460, 650, null);
+    text(aside, "Kicker", "WELCOME, AARAV", 0, 0, { font: F.mono, size: 11, color: C.orange });
+    text(aside, "Heading", "Turn the syllabus into a plan you can actually follow.", 0, 38, { font: F.displayBold, size: 45, width: 450, lineHeight: 49 });
+    text(aside, "Description", "Three quick choices personalise the front-end demo. They stay on this device and can be reset anytime.", 0, 202, { font: F.display, size: 16, color: C.muted, width: 430, lineHeight: 27 });
+    rect(aside, "Progress track", 0, 306, 420, 6, C.soft); rect(aside, "Progress fill", 0, 306, 140, 6, C.orange);
+    [["01", "Choose the target"], ["02", "Set a workable rhythm"], ["03", "Tune your starting point"]].forEach(function (value, i) {
+      const y = 350 + i * 76; const marker = frame(aside, "Step / " + value[0], 0, y, 32, 32, null, i === 0 ? C.orange : C.hair); text(marker, "Index", value[0], 0, 9, { font: F.mono, size: 10, color: i === 0 ? C.orange : C.muted, width: 32, align: "CENTER" }); text(aside, "Label / " + value[0], value[1], 48, y + 5, { font: F.bold, size: 14, color: i === 0 ? C.paper : C.muted });
+    });
+    const card = frame(root, "Onboarding / Step 1 card", 590, 132, 786, 700, C.surface, C.hair);
+    outlinedIcon(card, "Target", 40, 38, "\u25CE", C.orange); text(card, "Step", "STEP 1", 40, 112, { font: F.mono, size: 10, color: C.orange }); text(card, "Heading", "Choose the target", 40, 139, { font: F.bold, size: 30 }); text(card, "Description", "Set the exam and academic stage that shape your plan.", 40, 182, { size: 14, color: C.muted });
+    text(card, "Exam label", "Primary exam target", 40, 239, { font: F.bold, size: 14 });
+    [["JEE Main", "Speed, coverage, and accuracy"], ["JEE Advanced", "Depth, combinations, and edge cases"]].forEach(function (value, i) {
+      const choice = frame(card, "Choice / " + value[0], 40 + i * 344, 272, 324, 98, i === 1 ? C.raised : C.bg, i === 1 ? C.orange : C.hair); text(choice, "Title", value[0], 18, 22, { font: F.bold, size: 16 }); text(choice, "Description", value[1], 18, 51, { size: 12, color: C.muted }); rect(choice, "Check", 282, 14, 20, 20, i === 1 ? C.orange : null, i === 1 ? null : C.hair);
+    });
+    [["Academic stage", ["Class 11", "Class 12", "Dropper"]], ["Target year", ["JEE 2027", "JEE 2028", "JEE 2029"]]].forEach(function (group, gi) {
+      const gx = 40 + gi * 344; text(card, "Label / " + group[0], group[0], gx, 414, { font: F.bold, size: 14 }); group[1].forEach(function (label, i) { const choice = frame(card, "Choice / " + label, gx, 448 + i * 52, 324, 42, i === 0 ? C.raised : C.bg, i === 0 ? C.orange : C.hair); text(choice, "Label", label, 14, 13, { font: gi ? F.mono : F.bold, size: 13, color: i === 0 ? C.paper : C.muted }); });
+    });
+    rule(card, "Action divider", 40, 626, 708, C.hair); text(card, "Recommended", "Use recommended setup", 40, 655, { font: F.bold, size: 13, color: C.muted }); button(card, "Continue  \u2192", 584, 640, 164, "primary");
+    return root;
+  }
+
+  function noteSection(parent, number, title, subtitle, y, height) {
+    const node = frame(parent, "Lesson section / " + String(number).padStart(2, "0") + " / " + title, 0, y, 860, height, C.bg);
+    rule(node, "Top border", 0, 0, 860, C.line);
+    text(node, "Number", String(number).padStart(2, "0"), 0, 45, { font: F.mono, size: 14, color: C.ember });
+    text(node, "Heading", title, 42, 37, { font: F.bold, size: 34, width: 760, lineHeight: 41 });
+    text(node, "Subtitle", subtitle, 42, 89, { size: 15, color: C.muted, width: 720, lineHeight: 25 });
+    return node;
+  }
+
+  function readerFrame(page, route, index) {
+    const root = frame(page, "Frame / " + String(index).padStart(2, "0") + " / Protected Note Reader / " + route.route, 0, 0, 1440, 5320, C.bg);
+    root.clipsContent = true; root.setPluginData("route", route.route);
+    const header = frame(root, "Global / Protected Reader Header", 0, 0, 1440, 64, C.bg, C.hair);
+    text(header, "Back", "\u2190  Notes library", 40, 22, { font: F.bold, size: 14, color: C.muted }); lotus(header, 688, 12); text(header, "Protection", "\u25A1  Protected reader", 1244, 23, { font: F.medium, size: 12, color: C.green });
+    const hero = frame(root, "Reader / Lesson hero", 0, 64, 1440, 430, C.bg, C.line); grid(hero, "Hero grid", 0, 0, 1440, 430, 46, C.orange, 0.055);
+    text(hero, "Breadcrumb", "Learn  /  Physics  /  Kinematics  /  Motion under gravity", 60, 35, { size: 13, color: C.muted });
+    [["KIN-006 \u2192 011", C.ember], ["42% READ", C.yellow], ["CONCEPTS C1-C5", C.cyan]].forEach(function (value, i) { const badge = frame(hero, "Badge / " + i, 60 + i * 150, 84, 134, 28, null, value[1]); text(badge, "Label", value[0], 0, 8, { font: F.mono, size: 9, color: value[1], width: 134, align: "CENTER" }); });
+    text(hero, "Title", "Motion under gravity", 60, 137, { font: F.bold, size: 44, width: 850, lineHeight: 52 });
+    text(hero, "Summary", "Build the equations from one clean sign convention, connect the graph to the motion, and recognise the special cases JEE repeats.", 60, 205, { size: 18, color: C.muted, width: 820, lineHeight: 30 });
+    text(hero, "Metadata", "38 MIN     JEE MAIN + ADVANCED     \u25B3 INTERACTIVE LAB", 60, 292, { font: F.mono, size: 11, color: C.muted });
+    button(hero, "Bookmark", 986, 187, 120, "ghost"); button(hero, "Print / PDF", 1118, 187, 126, "ghost"); button(hero, "Mark complete", 1256, 187, 140, "primary");
+    text(hero, "Progress label", "Reading progress", 60, 354, { font: F.bold, size: 13, color: C.muted }); text(hero, "Progress value", "42%", 680, 354, { font: F.mono, size: 12, color: C.cyan }); rect(hero, "Progress track", 60, 384, 660, 10, C.soft); rect(hero, "Progress fill", 60, 384, 277, 10, C.orange);
+
+    const shell = frame(root, "Reader / Content shell", 60, 494, 1320, 4660, C.bg);
+    const toc = frame(shell, "Reader / Table of contents", 0, 0, 220, 660, C.bg);
+    text(toc, "Title", "ON THIS PAGE", 0, 42, { font: F.mono, size: 10, color: C.muted });
+    ["Basic theory", "Notation", "Derivation", "Special cases", "Worked examples", "Interactive lab"].forEach(function (label, i) {
+      const active = i === 0; if (active) rect(toc, "Active indicator", 0, 84 + i * 50, 2, 44, C.orange);
+      text(toc, "Link / " + label, String(i + 1).padStart(2, "0") + "  " + label, 16, 98 + i * 50, { font: F.medium, size: 13, color: active ? C.paper : C.muted });
+    });
+    const chapter = frame(toc, "Chapter topics", 0, 430, 190, 210, C.surface, C.hair); text(chapter, "Label", "CHAPTER \u00B7 TOPICS", 16, 17, { font: F.mono, size: 9, color: C.ember }); text(chapter, "Title", "Kinematics", 16, 43, { font: F.bold, size: 18 }); ["Motion in a straight line", "Motion under gravity", "Relative motion", "Projectile motion"].forEach(function (label, i) { text(chapter, "Topic / " + i, label, 16, 82 + i * 29, { size: 11, color: i === 1 ? C.paper : C.muted }); });
+    const article = frame(shell, "Reader / Article", 270, 0, 860, 4660, C.bg);
+
+    const theory = noteSection(article, 1, "Basic theory", "Read the motion as one continuous story: ascent, apex, and descent all share the same downward acceleration.", 0, 620);
+    text(theory, "Body", "A body thrown vertically upward slows because gravity acts downward. At the highest point its velocity is zero for an instant, but its acceleration remains g downward.", 42, 142, { size: 16, color: C.silver, width: 750, lineHeight: 29 });
+    const phase = frame(theory, "Visual / Three phases", 42, 250, 750, 282, C.surface, C.line); grid(phase, "Grid", 0, 0, 750, 282, 38, C.orange, 0.04);
+    ["ASCENT", "APEX", "DESCENT"].forEach(function (label, i) { const x = 38 + i * 236; text(phase, "Phase / " + label, label, x, 30, { font: F.mono, size: 10, color: i === 1 ? C.cyan : C.ember }); rect(phase, "Path / " + label, x + 86, 75, 1, 130, C.muted, null, 0, 0.45); ellipse(phase, "Ball / " + label, x + 75, 69 + (i === 1 ? 0 : i === 0 ? 92 : 45), 24, 24, C.amber); text(phase, "Signal / " + label, i === 0 ? "v upward, speed falling" : i === 1 ? "v = 0, a = -g" : "v downward, speed rising", x, 224, { size: 12, color: C.muted, width: 190, align: "CENTER" }); });
+
+    const notation = noteSection(article, 2, "Notation", "Keep the sign convention visible before substituting values.", 620, 560);
+    [["u", "Initial velocity"], ["v", "Velocity after time t"], ["a", "Acceleration = -g"], ["s", "Displacement"], ["t", "Elapsed time"], ["g", "9.8 m/s\u00B2 downward"]].forEach(function (value, i) { const col = i % 3, row = Math.floor(i / 3), card = frame(notation, "Definition / " + value[0], 42 + col * 252, 174 + row * 145, 236, 128, C.surface, C.hair); text(card, "Symbol", value[0], 18, 17, { font: F.displayBold, size: 31, color: C.yellow }); text(card, "Term", value[1], 18, 66, { font: F.bold, size: 14, width: 200, lineHeight: 21 }); });
+
+    const derivation = noteSection(article, 3, "Derivation", "Start from constant acceleration and carry the negative sign through every step.", 1180, 760);
+    [["01", "v = u - gt", "Velocity-time relation"], ["02", "s = ut - 1/2 gt\u00B2", "Displacement-time relation"], ["03", "v\u00B2 = u\u00B2 - 2gs", "Time-free relation"]].forEach(function (value, i) { const row = frame(derivation, "Formula / " + value[0], 42, 170 + i * 120, 750, 104, C.surface, C.line); text(row, "Step", "STEP " + value[0], 20, 19, { font: F.mono, size: 10, color: C.muted }); text(row, "Formula", value[1], 130, 17, { font: F.displayBold, size: 25, color: C.paper }); text(row, "Explanation", value[2], 130, 58, { size: 13, color: C.muted }); });
+    const graph = frame(derivation, "Visual / Velocity-time graph", 42, 548, 750, 150, C.bg, C.hair); rect(graph, "Y axis", 80, 25, 1, 102, C.muted); rect(graph, "X axis", 80, 93, 610, 1, C.muted); const line = rect(graph, "v-t line", 120, 36, 500, 3, C.cyan); line.rotation = 10; text(graph, "Apex", "v = 0", 365, 73, { font: F.mono, size: 10, color: C.ember });
+
+    const cases = noteSection(article, 4, "Special cases", "These are the shortcuts worth deriving once and then recognising quickly.", 1940, 670);
+    [["C1", "Time to reach the top", "t = u/g"], ["C2", "Maximum height", "H = u\u00B2/2g"], ["C3", "Total time of flight", "T = 2u/g"], ["C4", "Same height on return", "speed magnitude repeats"]].forEach(function (value, i) { const row = frame(cases, "Special case / " + value[0], 42, 165 + i * 108, 750, 92, C.surface, C.line); const badge = frame(row, "Badge", 18, 18, 52, 26, null, C.orange); text(badge, "Label", value[0], 0, 8, { font: F.mono, size: 9, color: C.ember, width: 52, align: "CENTER" }); text(row, "Title", value[1], 92, 17, { font: F.bold, size: 17 }); text(row, "Expression", value[2], 500, 20, { font: F.mono, size: 13, color: C.cyan }); text(row, "Trigger", "Recognise the constraint before choosing the equation.", 92, 53, { size: 12, color: C.muted }); });
+
+    const examples = noteSection(article, 5, "Worked examples", "Each example names the setup, attack, trap, and finishing line.", 2610, 870);
+    ["Find the maximum height", "Return to the launch point"].forEach(function (title, i) { const card = frame(examples, "Worked example / " + String(i + 1).padStart(2, "0"), 42, 168 + i * 315, 750, 285, C.surface, C.line); text(card, "Concept", "C" + (i + 1) + "  \u00B7  JEE PATTERN", 20, 18, { font: F.mono, size: 10, color: C.ember }); rule(card, "Divider", 0, 50, 750, C.hair); text(card, "Title", title, 52, 78, { font: F.bold, size: 24 }); [["THE SETUP", "Translate the words into u, v, a, s, and t."], ["HOW TO ATTACK", "Choose the equation that removes the missing variable."], ["THE TRAP", "Do not set acceleration to zero at the apex."], ["THE FINISH", "Check the sign and the limiting case."]].forEach(function (value, j) { const col = j % 2, row = Math.floor(j / 2); text(card, "Label / " + j, value[0], 28 + col * 360, 135 + row * 72, { font: F.mono, size: 9, color: j === 1 ? C.cyan : j === 2 ? C.red : j === 3 ? C.green : C.muted }); text(card, "Copy / " + j, value[1], 28 + col * 360, 156 + row * 72, { size: 12, color: C.muted, width: 320, lineHeight: 18 }); }); });
+
+    const lab = noteSection(article, 6, "Interactive lab", "Change the launch speed, predict the apex, and connect the animation to the graph.", 3480, 720);
+    const model = frame(lab, "Lab / Vertical throw", 42, 165, 750, 480, C.surface, C.line); grid(model, "Lab grid", 0, 0, 750, 480, 38, C.orange, 0.04); text(model, "Title", "Vertical throw lab", 24, 24, { font: F.bold, size: 22 }); text(model, "Status", "LIVE MODEL", 630, 30, { font: F.mono, size: 9, color: C.green }); rect(model, "Path", 374, 92, 1, 230, C.muted, null, 0, 0.55); ellipse(model, "Ball", 361, 110, 28, 28, C.amber); const controls = frame(model, "Controls", 24, 352, 702, 96, C.bg, C.hair); text(controls, "Label", "Launch speed", 18, 16, { size: 12, color: C.muted }); rect(controls, "Slider", 18, 49, 430, 7, C.soft); rect(controls, "Slider fill", 18, 49, 270, 7, C.orange); text(controls, "Value", "9.8 m/s", 470, 43, { font: F.mono, size: 13, color: C.cyan }); button(controls, "Run", 584, 24, 98, "primary");
+
+    const complete = frame(article, "Lesson completion", 0, 4200, 860, 260, C.bg); rule(complete, "Top border", 0, 0, 860, C.line); const completeCard = frame(complete, "Completion card", 0, 54, 860, 170, C.surface, C.line); text(completeCard, "Heading", "Can you explain the mechanism without the note?", 28, 30, { font: F.bold, size: 25, width: 570, lineHeight: 32 }); text(completeCard, "Copy", "Mark this concept complete only when the central relation and common trap feel retrievable.", 28, 83, { size: 13, color: C.muted, width: 540, lineHeight: 21 }); button(completeCard, "Mark complete", 650, 61, 170, "primary");
+    const adjacent = frame(article, "Adjacent topics", 0, 4460, 860, 150, C.bg); const previous = frame(adjacent, "Previous concept", 0, 0, 430, 130, C.surface, C.hair); text(previous, "Label", "\u2190  PREVIOUS CONCEPT", 22, 22, { font: F.mono, size: 9, color: C.muted }); text(previous, "Title", "Motion in a straight line", 22, 58, { font: F.bold, size: 19 }); const next = frame(adjacent, "Next concept", 430, 0, 430, 130, C.surface, C.hair); text(next, "Label", "NEXT CONCEPT  \u2192", 0, 22, { font: F.mono, size: 9, color: C.muted, width: 408, align: "RIGHT" }); text(next, "Title", "Relative motion", 0, 58, { font: F.bold, size: 19, width: 408, align: "RIGHT" });
+    text(article, "Disclaimer", "Orange Nelumbo is independent and is not affiliated with NTA, the JEE Apex Board, or the IITs.", 0, 4630, { size: 11, color: C.muted, width: 860, lineHeight: 18 });
+    return root;
   }
 
   function spec(name, route, mode, sections, active) { return { name: name, route: route, mode: mode, sections: sections, active: active || name }; }
@@ -207,37 +529,37 @@
       section("Video lectures", "hero", 470, [], "Visual-first lectures will connect to the same notes and simulations.", { button: "Start with the notes" }),
       section("Frequently asked questions", "faq", 660, ["What does Orange Nelumbo offer today?", "Does it cover JEE Main and Advanced?", "How does the Simulation Lab help?", "Are video lectures available now?", "Who can use educator access?", "Can I save notes?"], "Clear answers about notes, labs, videos, and educator access.", { alt: true })
     ]),
-    spec("About", "/about", "public", [section("Difficult concepts should be easier to see.", "hero", 500, [], "Why Orange Nelumbo is building visual learning tools for JEE.", { button: "Explore the library" }), section("How we build", "cards", 460, ["Make it visible", "Keep it focused", "Let students test it"], "Reduce the distance between a formula and its meaning."), section("Start with one concept", "hero", 420, [], "The demo includes visual notes and simulations across PCM.", { alt: true })]),
-    spec("Access", "/pricing", "public", [section("Explore the current learning demo.", "hero", 460, [], "Public pricing is not final. The demo focuses on notes and simulations."), section("Demo access", "cards", 470, ["Visual notes", "Interactive simulations", "Bookmarks", "Future video preview"], "What students can use today.", { columns: 2 })]),
-    spec("Help", "/help", "public", [section("How can we help?", "hero", 400, [], "Quick answers about the learning library and your account."), section("Help topics", "cards", 540, ["Visual notes", "Simulations", "Video lectures", "Profile and settings"], "", { columns: 2 }), section("Still need help?", "hero", 390, [], "Tell us which screen is causing trouble.", { alt: true, button: "Contact us" })]),
-    spec("Contact", "/contact", "public", [section("Contact Orange Nelumbo", "hero", 390, [], "Send a question about notes, simulations, videos, or account access."), section("Contact form", "form", 720, ["Your name", "Email address", "Topic", "Message"], "Front-end demonstration form.", { button: "Show success state" })]),
-    spec("Privacy", "/privacy", "public", [section("Privacy for the preview", "hero", 390, [], "How browser-local demo data is handled."), section("Privacy sections", "rows", 760, ["Data stored on this device", "Account information", "Learning progress", "Security", "Third-party services", "Your choices", "Contact"])]),
-    spec("Terms", "/terms", "public", [section("Terms for the preview", "hero", 390, [], "Rules for using the Orange Nelumbo demonstration."), section("Terms sections", "rows", 840, ["Preview status", "Permitted use", "Accounts", "Educational content", "Payments", "Intellectual property", "Liability", "Changes"])]),
+    spec("About", "/about", "public", [section("Difficult concepts should be easier to see.", "hero", 421, [], "Orange Nelumbo is building a focused JEE learning library around visual notes, interactive simulations, and visual-first video lectures."), section("We are reducing the distance between a formula and its meaning.", "cards", 656, ["Make it visible", "Keep it focused", "Let students test it"], ""), section("Start with one concept. See if it clicks.", "hero", 361, [], "The current demo includes sample visual notes and simulations across Physics, Chemistry, and Mathematics.", { alt: true, button: "Explore the library" })]),
+    spec("Access", "/pricing", "public", [section("Explore the current learning demo.", "hero", 310, [], "Public pricing is not final. The demo is focused on showing the visual notes and simulation experience."), section("Demo access", "cards", 631, ["Visual notes across Physics, Chemistry, and Mathematics", "Available interactive simulations", "Bookmarks and device-local reading progress", "Preview of the future video lecture area"], "", { columns: 2 })]),
+    spec("Help", "/help", "public", [section("How can we help?", "hero", 278, [], "Quick answers about the learning library and your account."), section("Help topics", "cards", 650, ["Visual notes", "Simulations", "Video lectures", "Profile and settings"], "", { columns: 2, cardHeight: 210 }), section("Still need help?", "hero", 201, [], "Tell us which note, simulation, or account screen is causing trouble.", { alt: true, button: "Contact us" })]),
+    spec("Contact", "/contact", "public", [section("Help starts with the real question.", "hero", 366, [], "Be specific and calm. Tell us what you were trying to do, what happened, and what you expected instead."), section("This form is deliberately a demo.", "form", 923, ["Your name", "Email address", "Topic", "Message"], "There is no backend or support inbox connected yet.", { button: "Show success state" }), section("Independence notice", "rows", 129, ["Orange Nelumbo is an independent educational platform."])]),
+    spec("Privacy", "/privacy", "public", [section("Privacy, stated precisely.", "hero", 334, [], "What this front-end preview stores, what it does not collect, and the choices available on this device."), section("Privacy sections", "rows", 2289, ["1. Scope of this preview", "2. Information shown or entered", "3. Browser-local storage", "4. Cookies, analytics, and third parties", "5. Students and minors", "6. Security and retention", "7. Your choices and questions"]), section("Independence notice", "rows", 129, ["Orange Nelumbo is an independent educational platform."])]),
+    spec("Terms", "/terms", "public", [section("Terms for the preview.", "hero", 334, [], "Please read these terms before using the Orange Nelumbo front-end demonstration."), section("Terms sections", "rows", 2692, ["1. Demonstration status", "2. Educational purpose and no guarantees", "3. Official exam information", "4. Acceptable use", "5. Plans, prices, refunds, and payments", "6. Availability and changes", "7. Responsibility and limitation", "8. Contact"])]),
     spec("404", "/_not-found", "public", [section("Page not found", "hero", 650, [], "The page moved, the link is incomplete, or the route never existed.", { button: "Return to the library" })]),
 
     spec("Student Login", "/login", "auth", [section("Welcome back.", "form", 760, ["Email address", "Password"], "Continue your visual notes and simulations.", { button: "Sign in" })]),
     spec("Educator Login", "/login?role=educator", "auth", [section("Educator sign in.", "form", 760, ["Email address", "Password"], "For invited Orange Nelumbo educator accounts.", { button: "Sign in as educator" })]),
     spec("Signup", "/signup", "auth", [section("Create your learning account.", "form", 820, ["Full name", "Email address", "Password", "Confirm password"], "Save notes, simulations, and reading progress.", { button: "Create my workspace" })]),
     spec("Forgot Password", "/forgot-password", "auth", [section("Reset your password.", "form", 620, ["Email address"], "Prepare a reset link for your account.", { button: "Prepare reset link" })]),
-    spec("Onboarding", "/onboarding", "auth", [section("Choose the target", "cards", 520, ["JEE Main", "JEE Advanced", "Class 11", "Class 12"], "Set the exam and academic stage.", { columns: 2 }), section("Set a workable rhythm", "cards", 520, ["30 min", "60 min", "90 min", "120 min"], "Pick a daily target and study window.", { columns: 2 }), section("Tune your starting point", "cards", 520, ["Physics", "Chemistry", "Mathematics", "Study city"], "Select subjects and optional study city.", { columns: 2 })]),
+    spec("Onboarding", "/onboarding", "onboarding", [section("Choose the target", "cards", 520, ["JEE Main", "JEE Advanced", "Class 11", "Class 12"], "Set the exam and academic stage.", { columns: 2 })]),
 
     spec("Learning Home", "/dashboard", "platform", [section("Welcome back, Aarav.", "cards", 460, ["Visual notes", "Simulations", "Video lectures"], "Pick up a visual note, test an idea, or browse a chapter."), section("Continue reading", "cards", 390, [{ title: "Motion under gravity", meta: "Physics · Kinematics", body: "Continue from the saved section in the dedicated reader." }], "", { columns: 1 }), section("Browse by subject", "cards", 440, ["Physics", "Chemistry", "Mathematics"]), section("Live simulations and saved notes", "cards", 410, ["Vertical throw", "Bookmarks"], "", { columns: 2 })], "Home"),
-    spec("Visual Notes", "/learn", "platform", [section("Visual notes for JEE", "hero", 390, [], "Browse Physics, Chemistry, and Mathematics by chapter."), section("Continue reading", "cards", 380, ["Motion under gravity"], "", { columns: 1 }), section("Choose a subject", "cards", 450, ["Physics", "Chemistry", "Mathematics"]), section("Bookmarked concepts", "cards", 420, ["Motion under gravity", "Complex numbers", "Chemical bonding"])], "Visual notes"),
+    spec("Visual Notes", "/learn", "platform", [section("Visual notes for JEE.", "hero", 390, [], "Browse Physics, Chemistry, and Mathematics by chapter. Every topic opens as a dedicated note, separate from the rest of the app."), section("Your active concept", "cards", 380, [{ title: "Motion under gravity", meta: "Physics \u00B7 Kinematics", body: "Return to the exact section where you stopped reading." }], "", { columns: 1 }), section("Choose a workbench", "cards", 520, ["Physics", "Chemistry", "Mathematics"]), section("Bookmarked concepts", "cards", 420, ["Motion under gravity", "Complex numbers", "Chemical bonding"])], "Visual notes"),
     spec("Subject", "/learn/[subject]", "platform", [section("Physics", "hero", 390, [], "Physical intuition, diagrams, derivations, and interactive models."), section("Chapter map", "cards", 720, ["Kinematics", "Laws of Motion", "Rotational Motion", "Electrostatics", "Optics", "Thermodynamics"], "", { columns: 2 })], "Visual notes"),
     spec("Chapter", "/learn/[subject]/[chapter]", "platform", [section("Kinematics", "hero", 390, [], "Build the chapter one visual note at a time."), section("Concept sequence", "rows", 620, ["Motion in a straight line", "Motion under gravity", "Relative motion", "Projectile motion", "Graphs in kinematics"]), section("Up next", "cards", 360, ["Motion under gravity"], "", { columns: 1 })], "Visual notes"),
     spec("Simulations", "/simulations", "platform", [section("Interactive simulations", "hero", 350, [], "Change one variable, predict the result, and see how the model responds."), section("Simulation gallery", "cards", 680, ["Vertical throw", "Projectile motion", "Electric field", "Molecular geometry", "Calculus area", "Wave interference"])], "Simulations"),
     spec("Simulation Detail", "/simulations/[slug]", "platform", [section("Vertical throw", "reader", 650, ["Model", "Controls", "Graph", "Prediction"], "A live model of velocity, height, and acceleration."), section("Simulation controls", "form", 520, ["Launch speed", "Preset", "Prediction"], "", { button: "Run simulation" })], "Simulations"),
     spec("Video Lectures", "/videos", "platform", [section("Video lectures are coming next.", "hero", 700, [], "Concise, visual-first lectures connected to each note and simulation.", { button: "Explore visual notes" })], "Video lectures"),
-    spec("Bookmarks", "/bookmarks", "platform", [section("Saved notes", "hero", 330, [], "Quick access to bookmarked learning material."), section("Bookmarked concepts", "cards", 650, ["Motion under gravity", "Complex numbers", "Chemical bonding", "Limits", "Electrostatics", "Thermodynamics"])], "Bookmarks"),
-    spec("Notifications", "/notifications", "platform", [section("Notifications", "hero", 320, [], "Updates about notes, simulations, and account activity."), section("Notification list", "rows", 650, ["New simulation available", "Reading progress saved", "Video lecture update", "Account preference changed", "New visual note"])], "Notifications"),
-    spec("Profile", "/profile", "platform", [section("Student profile", "hero", 330, [], "Identity and preferences kept separate from learning content."), section("Profile details", "form", 620, ["Full name", "Email address", "Study city", "Target exam", "Target year"], "", { button: "Save changes" })], "Profile"),
-    spec("Settings", "/settings", "platform", [section("Settings", "hero", 300, [], "Account, appearance, and device-local preferences."), section("Appearance", "cards", 370, ["Dark theme", "System theme"]), section("Notification preferences", "rows", 430, ["Email updates", "Simulation releases", "Video lecture updates"]), section("Session and data", "cards", 400, ["Reset preview data", "Log out"], "", { columns: 2 })], "Settings"),
+    spec("Bookmarks", "/bookmarks", "platform", [section("The ideas worth another pass.", "hero", 330, [], "Keep difficult concepts close without creating another backlog. Saved topics update immediately across the concept library on this device."), section("Saved concepts", "cards", 650, ["Motion under gravity", "Complex numbers", "Chemical bonding", "Limits", "Electrostatics", "Thermodynamics"])], "Bookmarks"),
+    spec("Notifications", "/notifications", "platform", [section("Only the alerts that change your next move.", "hero", 350, [], "Study prompts, plan notices, and product updates. Read state is stored only in this browser for the preview."), section("Notification list", "rows", 650, ["New simulation available", "Reading progress saved", "Video lecture update", "Account preference changed", "New visual note"])], "Notifications"),
+    spec("Profile", "/profile", "platform", [section("A profile built around the attempt ahead.", "hero", 350, [], "Your target and study rhythm shape recommendations. Changes are saved to this browser-only profile."), section("Student record", "form", 760, ["Full name", "Email address", "Study city", "Target exam", "Target year"], "", { button: "Save changes" }), section("Study rhythm and priority subjects", "cards", 480, ["90 minutes", "Evening", "Physics", "Mathematics"], "", { columns: 2 })], "Profile"),
+    spec("Settings", "/settings", "platform", [section("Make the system quieter and more useful.", "hero", 340, [], "Tune appearance, reminders, study rhythm, and sample data. Every control is local to this browser."), section("Appearance", "cards", 320, ["Dark"]), section("Notification preferences", "rows", 470, ["Study reminders", "Mock test alerts", "Weekly progress summary", "Product announcements"]), section("Study rhythm", "cards", 390, ["30 min", "60 min", "90 min", "120 min"], "", { columns: 2 }), section("Preview data and session", "cards", 420, ["Reset demo", "Sign out"], "", { columns: 2 })], "Settings"),
     spec("Protected Note Reader", "/notes/[subject]/[chapter]/[topic]", "reader", [section("Motion under gravity", "hero", 410, [], "A dedicated protected reader for the full visual note.", { button: "Mark complete" }), section("Visual note content", "reader", 660, ["Basic theory", "Notation", "Derivation", "Special cases", "Worked examples", "Interactive lab"], "Every note section is editable and named."), section("Complete the concept", "cards", 370, ["Can you explain the mechanism without the note?"], "", { columns: 1 }), section("Previous and next topics", "cards", 340, ["Motion in a straight line", "Relative motion"], "", { columns: 2 })])
   ];
 
   function routeFrame(page, route, index) {
     const headerH = route.mode === "public" || route.mode === "platform" ? 74 : route.mode === "reader" ? 64 : 0;
-    const footerH = route.mode === "public" ? 290 : 0;
+    const footerH = route.mode === "public" ? 444 : 0;
     const sectionsH = route.sections.reduce(function (sum, value) { return sum + value.height; }, 0);
     const totalH = headerH + sectionsH + footerH;
     const root = frame(page, "Frame / " + String(index).padStart(2, "0") + " / " + route.name + " / " + route.route, 0, 0, 1440, totalH, C.bg); root.clipsContent = true; root.setPluginData("route", route.route);
@@ -264,7 +586,7 @@
     lotus(root, 64, 58); text(root, "Title", "Orange Nelumbo\nFull website import", 64, 132, { font: F.displayBold, size: 56, width: 760, lineHeight: 62 });
     text(root, "Description", "Every live route template has its own top-level frame on this page. Every website section is a named, editable frame. Dynamic routes are represented once as reusable frame templates.", 64, 285, { font: F.display, size: 20, color: C.muted, width: 820, lineHeight: 32 });
     const groups = [
-      { title: "Public and account", values: routes.filter(function (r) { return r.mode === "public" || r.mode === "auth"; }).map(function (r) { return r.route; }) },
+      { title: "Public and account", values: routes.filter(function (r) { return r.mode === "public" || r.mode === "auth" || r.mode === "onboarding"; }).map(function (r) { return r.route; }) },
       { title: "Learning workspace", values: routes.filter(function (r) { return r.mode === "platform" || r.mode === "reader"; }).map(function (r) { return r.route; }) },
       { title: "Legacy redirects", values: ["/analytics → /dashboard", "/planner → /dashboard", "/practice/* → /dashboard", "/mocks/* → /dashboard", "/rank-map → /dashboard", "/results/* → /dashboard", "/diagnostic → /", "/checkout/* → /pricing", "/learn/[subject]/[chapter]/[topic] → /notes/…"] },
       { title: "Generation notes", values: ["Desktop canvas: 1440 px", "Fraunces: marketing", "DM Sans: learning", "Named section frames", "Editable cards, rows, forms and text", "Dynamic routes use [param] templates"] }
@@ -280,8 +602,15 @@
 
   const websitePage = figma.currentPage;
   websitePage.name = "Orange Nelumbo · Full Website";
+  websitePage.children.slice().forEach(function (node) {
+    const generatedRoute = node.type === "FRAME" && node.name.indexOf("Frame / ") === 0 && node.getPluginData("route");
+    const generatedIndex = node.type === "FRAME" && node.name === "Frame / 00 / Import Index";
+    if (generatedRoute || generatedIndex) node.remove();
+  });
   const generated = [coverFrame(websitePage)];
-  routes.forEach(function (route, i) { generated.push(routeFrame(websitePage, route, i + 1)); });
+  routes.forEach(function (route, i) {
+    generated.push(route.route === "/" ? homeFrame(websitePage, i + 1) : route.mode === "auth" ? authFrame(websitePage, route, i + 1) : route.mode === "onboarding" ? onboardingFrame(websitePage, route, i + 1) : route.mode === "reader" ? readerFrame(websitePage, route, i + 1) : routeFrame(websitePage, route, i + 1));
+  });
 
   const columns = 3;
   const horizontalGap = 180;
