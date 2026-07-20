@@ -18,7 +18,7 @@ interface FormErrors {
   accepted?: string;
 }
 
-const benefits = ["A personal study plan", "Saved progress on this device", "Full sample learning flow"];
+const benefits = ["Visual notes", "Interactive simulations", "Saved progress on this device"];
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -34,7 +34,7 @@ export default function SignUpPage() {
 
   useEffect(() => {
     if (!hydrated || !isAuthenticated) return;
-    router.replace(onboardingComplete ? "/dashboard" : "/onboarding");
+    router.replace(onboardingComplete ? "/" : "/onboarding?returnTo=%2F");
   }, [hydrated, isAuthenticated, onboardingComplete, router]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -56,7 +56,7 @@ export default function SignUpPage() {
         setMessage(result.message);
         return;
       }
-      router.replace("/onboarding");
+      router.replace("/onboarding?returnTo=%2F");
     } catch {
       setMessage("The dummy account could not be created. Please try again.");
     } finally {
@@ -68,10 +68,10 @@ export default function SignUpPage() {
     <div>
       <p className="mono-kicker text-ignition">Start with a clear plan</p>
       <h1 className="mt-4 font-display text-4xl font-bold tracking-[-.02em] text-paper sm:text-5xl">
-        Build your JEE workspace.
+        Create your learning account.
       </h1>
       <p className="mt-4 leading-7 text-titanium">
-        Set up a local student profile now. A real account system can be connected later.
+        Save your notes, simulations, and reading progress on this device.
       </p>
 
       <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2">

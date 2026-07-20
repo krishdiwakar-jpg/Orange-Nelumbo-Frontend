@@ -93,7 +93,7 @@ function LoginContent() {
         Welcome back.
       </h1>
       <p className="mt-4 max-w-md leading-7 text-titanium">
-        Continue your notes, labs, and practice plan from exactly where you stopped.
+        Continue your visual notes and simulations from exactly where you stopped.
       </p>
 
       <Card className="mt-8 border-steel bg-carbon p-5 sm:p-7">
