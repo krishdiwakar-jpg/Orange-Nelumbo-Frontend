@@ -55,7 +55,7 @@ function AccountMenu() {
       </button>
 
       {open ? (
-        <div className="absolute right-0 top-[52px] z-[70] w-64 border border-[#FF5A1F]/24 bg-[#161418] p-2 shadow-2xl" role="menu">
+        <div className="absolute right-0 top-[52px] z-[70] w-64 border border-[#FF5A1F]/24 bg-[#161418] p-2" role="menu">
           <div className="border-b border-white/8 px-3 py-3">
             <p className="truncate text-sm font-semibold text-white">{user?.name || "Student"}</p>
             <p className="mt-1 truncate text-xs text-[#C7C5CC]/70">{user?.email}</p>
@@ -87,7 +87,7 @@ export function MarketingHeader() {
   const { hydrated, isAuthenticated, signOut, user } = useApp();
 
   return (
-    <header className="sticky top-0 z-50 h-[74px] border-b border-[#FF5A1F]/20 bg-[#0E0D10]/92 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 h-[74px] border-b border-[#FF5A1F]/20 bg-[#0E0D10]">
       <div className="mx-auto flex h-full max-w-[1440px] items-center justify-between px-4 sm:px-6 lg:px-14">
         <Logo href="/" />
         <nav aria-label="Primary navigation" className="hidden items-center gap-5 xl:flex">
@@ -112,7 +112,7 @@ export function MarketingHeader() {
             <summary aria-label="Open navigation" className="grid size-11 cursor-pointer list-none place-items-center border border-[#FF5A1F]/30 text-white marker:hidden">
               <Menu aria-hidden="true" size={21} strokeWidth={1.7} />
             </summary>
-            <div className="absolute right-0 top-[54px] w-[min(88vw,320px)] border border-[#FF5A1F]/25 bg-[#161418] p-4 shadow-2xl">
+            <div className="absolute right-0 top-[54px] w-[min(88vw,320px)] border border-[#FF5A1F]/25 bg-[#161418] p-4">
               <nav aria-label="Mobile navigation" className="grid">
                 {links.map((link) => <Link className="border-b border-white/8 px-3 py-4 font-semibold text-[#C7C5CC] hover:text-white" href={link.href} key={link.href}>{link.label}</Link>)}
                 {hydrated && isAuthenticated ? (

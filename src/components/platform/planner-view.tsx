@@ -150,7 +150,7 @@ export function PlannerView() {
             <p className="mt-4 text-sm leading-6 text-[#C7C5CC]/80">Target range: 75–120 focused minutes. Breaks are not counted.</p>
           </div>
           <div className="border border-[#3DE0D0]/22 bg-[#161418] p-6">
-            <div className="flex items-center gap-3"><span className="size-2 bg-[#3DE0D0] shadow-[0_0_12px_#3DE0D0]" /><p className="font-mono text-[11px] uppercase tracking-[.16em] text-[#3DE0D0]">Engine note</p></div>
+            <div className="flex items-center gap-3"><span className="size-2 bg-[#3DE0D0]" /><p className="font-mono text-[11px] uppercase tracking-[.16em] text-[#3DE0D0]">Engine note</p></div>
             <p className="mt-5 font-display text-xl font-semibold">Physics carries 52% of today&apos;s load.</p>
             <p className="mt-3 text-sm leading-6 text-[#C7C5CC]/80">Recent mock errors show a higher return on mechanics work than another broad chemistry revision.</p>
           </div>

@@ -53,7 +53,7 @@ export default async function CheckoutSuccessPage({ searchParams }: SuccessPageP
               </div>
             </div>
 
-            <section aria-labelledby="receipt-heading" className="border border-[#FF5A1F]/35 bg-[#161418] p-6 shadow-[0_0_70px_rgba(255,90,31,.08)] sm:p-8">
+            <section aria-labelledby="receipt-heading" className="border border-[#FF5A1F]/35 bg-[#161418] p-6 sm:p-8">
               <div className="flex items-start justify-between gap-6 border-b border-white/8 pb-6">
                 <div>
                   <p className="kicker">Front-end receipt</p>

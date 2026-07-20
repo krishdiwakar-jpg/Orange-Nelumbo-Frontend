@@ -140,7 +140,7 @@ export function VerticalThrowLab({ lab }: { lab: LessonLab }) {
   }
 
   return (
-    <div className="overflow-hidden border border-[#FF5A1F]/30 bg-[#0E0D10] shadow-[0_0_70px_rgba(255,90,31,.08)]">
+    <div className="overflow-hidden border border-[#FF5A1F]/30 bg-[#0E0D10]">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/8 px-4 py-4 sm:px-6">
         <div>
           <p className="font-mono text-[11px] uppercase tracking-[.2em] text-[#FF5A1F]">{lab.title}</p>
@@ -160,7 +160,6 @@ export function VerticalThrowLab({ lab }: { lab: LessonLab }) {
           viewBox="0 0 800 360"
         >
           <defs>
-            <filter id="lab-ball-glow"><feGaussianBlur stdDeviation="5" result="blur" /><feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
             <marker id="lab-arrow" markerHeight="7" markerWidth="7" orient="auto" refX="6" refY="3.5" viewBox="0 0 7 7"><path d="M0 0L7 3.5L0 7Z" fill="#FF5A1F" /></marker>
           </defs>
 
@@ -181,9 +180,9 @@ export function VerticalThrowLab({ lab }: { lab: LessonLab }) {
               y2={toY(height) + Math.max(-55, Math.min(55, -velocity * 4))}
             />
           ) : null}
-          <circle cx="125" cy={toY(height)} fill="#F5D9A8" filter="url(#lab-ball-glow)" r="10" />
+          <circle cx="125" cy={toY(height)} fill="#F5D9A8" r="10" />
           <text fill="#FF8A3D" fontFamily="JetBrains Mono" fontSize="9" x="158" y={toY(height) + 3}>v = {fixed(velocity)} m/s</text>
-          {secondSpeed ? <><circle cx="225" cy={toY(secondHeight)} fill="#3DE0D0" filter="url(#lab-ball-glow)" r="9" /><text fill="#3DE0D0" fontFamily="JetBrains Mono" fontSize="9" x="238" y={toY(secondHeight) + 3}>u₂</text></> : null}
+          {secondSpeed ? <><circle cx="225" cy={toY(secondHeight)} fill="#3DE0D0" r="9" /><text fill="#3DE0D0" fontFamily="JetBrains Mono" fontSize="9" x="238" y={toY(secondHeight) + 3}>u₂</text></> : null}
 
           <line stroke="#55505C" x1={graphLeft} x2={graphRight} y1={graphY(0)} y2={graphY(0)} />
           <line stroke="#55505C" x1={graphLeft} x2={graphLeft} y1={graphTop} y2={graphBottom} />

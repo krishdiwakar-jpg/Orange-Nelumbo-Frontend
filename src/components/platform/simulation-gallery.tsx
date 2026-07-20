@@ -31,7 +31,7 @@ export function SimulationGallery() {
           const Icon = icons[simulation.subjectId];
           const live = simulation.availability === "live";
           return (
-            <article className={`group relative overflow-hidden border bg-[#161418] p-6 ${live ? "border-[#FF5A1F]/45 shadow-[0_0_50px_rgba(255,90,31,.08)]" : "border-[#FF5A1F]/18"}`} key={simulation.id}>
+            <article className={`group relative overflow-hidden border bg-[#161418] p-6 ${live ? "border-[#FF5A1F]/45" : "border-[#FF5A1F]/18"}`} key={simulation.id}>
               <div className="relative flex items-start justify-between">
                 <div className="grid size-12 place-items-center border border-[#FF5A1F]/25 text-[#FF8A3D]"><Icon size={22} /></div>
                 <span className={`flex items-center gap-2 text-xs font-semibold ${live ? "text-[#3DE08A]" : "text-[#C7C5CC]/70"}`}>{live ? <><span className="size-2 bg-[#3DE08A]" />Available</> : <><LockKeyhole size={12} />Coming soon</>}</span>

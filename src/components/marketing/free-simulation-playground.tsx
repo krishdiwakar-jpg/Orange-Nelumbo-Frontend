@@ -64,7 +64,7 @@ export function FreeSimulationPlayground({ initialSlug = "vertical-throw" }: { i
         })}
       </nav>
 
-      <section className="overflow-hidden border border-[#FF5A1F]/28 bg-[#161418] shadow-[0_0_70px_rgba(255,90,31,.07)]">
+      <section className="overflow-hidden border border-[#FF5A1F]/28 bg-[#161418]">
         <header className="flex flex-wrap items-start justify-between gap-5 border-b border-white/9 p-5 sm:p-7">
           <div className="flex items-start gap-4"><span className="grid size-12 place-items-center border border-[#FF5A1F]/35 text-[#FF8A3D]"><ActiveIcon size={22}/></span><div><h2 className="font-display text-2xl font-bold sm:text-3xl">{active.title}</h2><p className="mt-2 text-sm leading-6 text-[#C7C5CC]">{active.prompt}</p></div></div>
           <button className="button-ghost" onClick={() => setRevision((current) => current + 1)} type="button"><RotateCcw size={16}/> Replay</button>

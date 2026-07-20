@@ -5,10 +5,7 @@ export function HeroSimulationCanvas() {
     <div className="home-simulation-canvas brand-grid" role="img" aria-label="Looping previews of interactive science and mathematics simulations">
       <div className="flex items-center justify-between border-b border-white/9 px-4 py-3 sm:px-5">
         <div className="flex items-center gap-3">
-          <span className="relative flex size-2">
-            <span className="absolute inline-flex size-full animate-ping bg-[#3DE08A] opacity-50" />
-            <span className="relative inline-flex size-2 bg-[#3DE08A]" />
-          </span>
+          <span className="size-2 bg-[#3DE08A]" />
           <p className="text-xs font-semibold text-[#C7C5CC]">Concept canvas</p>
         </div>
       </div>
@@ -18,7 +15,7 @@ export function HeroSimulationCanvas() {
           <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-[#FF8A3D]">Kinematics</p><Activity size={17} className="text-[#FF8A3D]" /></div>
           <div className="relative mx-auto mt-3 h-40 max-w-52">
             <span className="absolute inset-y-2 left-1/2 border-l border-dashed border-white/25" />
-            <span className="sim-ball-loop absolute left-1/2 size-6 -translate-x-1/2 bg-[#F5D9A8] shadow-[0_0_24px_rgba(255,138,61,.55)]" />
+            <span className="sim-ball-loop absolute left-1/2 size-6 -translate-x-1/2 bg-[#F5D9A8]" />
             <span className="absolute bottom-0 left-1/2 h-px w-36 -translate-x-1/2 bg-white/25" />
             <span className="absolute right-0 top-2 font-mono text-[9px] text-[#3DE0D0]">v = 0</span>
             <span className="absolute left-0 top-20 font-mono text-[9px] text-[#FF8A3D]">a = -g</span>
@@ -40,8 +37,8 @@ export function HeroSimulationCanvas() {
           <div className="flex items-center justify-between"><p className="text-[11px] font-medium text-[#B48CFF]">Atomic structure</p><Atom size={17} className="text-[#B48CFF]" /></div>
           <div className="relative mx-auto mt-4 size-32">
             <span className="absolute inset-0 rounded-full border border-[#B48CFF]/35" />
-            <span className="sim-orbit-loop absolute inset-4 rounded-full border border-[#3DE0D0]/30"><i className="absolute -top-1 left-1/2 size-2 bg-[#3DE0D0] shadow-[0_0_14px_#3DE0D0]" /></span>
-            <span className="absolute inset-[42px] rounded-full bg-[#FF8A3D] shadow-[0_0_26px_rgba(255,138,61,.4)]" />
+            <span className="sim-orbit-loop absolute inset-4 rounded-full border border-[#3DE0D0]/30"><i className="absolute -top-1 left-1/2 size-2 bg-[#3DE0D0]" /></span>
+            <span className="absolute inset-[42px] rounded-full bg-[#FF8A3D]" />
           </div>
           <p className="text-sm font-semibold">Orbital probability</p>
         </div>

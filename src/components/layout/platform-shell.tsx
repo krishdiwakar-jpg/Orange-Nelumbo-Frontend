@@ -242,7 +242,7 @@ export function PlatformShell({ children }: { children: React.ReactNode }) {
       </aside>
 
       <div aria-hidden={searchOpen || undefined} className="lg:pl-[278px]">
-        <header className="sticky top-0 z-30 flex h-[74px] items-center justify-between border-b border-[#FF5A1F]/18 bg-[#0E0D10]/92 px-4 backdrop-blur-xl sm:px-6 lg:px-8">
+        <header className="sticky top-0 z-30 flex h-[74px] items-center justify-between border-b border-[#FF5A1F]/18 bg-[#0E0D10] px-4 sm:px-6 lg:px-8">
           <div className="flex min-w-0 items-center gap-3">
             <button aria-label="Open navigation" className="grid size-11 shrink-0 place-items-center border border-white/10 text-[#C7C5CC] lg:hidden" onClick={(event) => { sidebarReturnFocusRef.current = event.currentTarget; setSidebarOpen(true); }} ref={menuButtonRef} type="button">
               <Menu size={20} />
@@ -268,7 +268,7 @@ export function PlatformShell({ children }: { children: React.ReactNode }) {
                 <ChevronDown className="hidden text-[#C7C5CC]/70 xl:block" size={14} />
               </button>
               {accountOpen && (
-                <div className="absolute right-0 top-[52px] w-60 border border-[#FF5A1F]/22 bg-[#161418] p-2 shadow-2xl">
+                <div className="absolute right-0 top-[52px] w-60 border border-[#FF5A1F]/22 bg-[#161418] p-2">
                   <div className="border-b border-white/8 px-3 py-3">
                     <p className="font-semibold">{user?.name ?? "Aarav Sharma"}</p>
                     <p className="mt-1 truncate text-xs text-[#C7C5CC]/70">{user?.email ?? "aarav@example.com"}</p>
@@ -288,7 +288,7 @@ export function PlatformShell({ children }: { children: React.ReactNode }) {
         </footer>
       </div>
 
-      <nav aria-hidden={searchOpen || undefined} aria-label="Mobile primary navigation" className="fixed inset-x-0 bottom-0 z-30 grid h-[66px] grid-cols-5 border-t border-[#FF5A1F]/20 bg-[#161418]/96 backdrop-blur lg:hidden">
+      <nav aria-hidden={searchOpen || undefined} aria-label="Mobile primary navigation" className="fixed inset-x-0 bottom-0 z-30 grid h-[66px] grid-cols-5 border-t border-[#FF5A1F]/20 bg-[#161418] lg:hidden">
         {[
           mainNavigation[0],
           mainNavigation[1],
@@ -307,9 +307,9 @@ export function PlatformShell({ children }: { children: React.ReactNode }) {
       </nav>
 
       {searchOpen && (
-        <div aria-labelledby="concept-search-title" aria-modal="true" className="fixed inset-0 z-[80] bg-black/78 p-4 backdrop-blur-sm" role="dialog">
+        <div aria-labelledby="concept-search-title" aria-modal="true" className="fixed inset-0 z-[80] bg-black/78 p-4" role="dialog">
           <button aria-label="Close search" className="absolute inset-0 size-full cursor-default" onClick={() => setSearchOpen(false)} type="button" />
-          <div className="relative mx-auto mt-[8vh] max-w-2xl border border-[#FF5A1F]/30 bg-[#161418] shadow-[0_0_90px_rgba(255,90,31,.12)]" ref={searchDialogRef}>
+          <div className="relative mx-auto mt-[8vh] max-w-2xl border border-[#FF5A1F]/30 bg-[#161418]" ref={searchDialogRef}>
             <h2 className="sr-only" id="concept-search-title">Search notes and simulations</h2>
             <div className="flex h-16 items-center gap-3 border-b border-white/10 px-5">
               <Search className="text-[#FF8A3D]" size={20} />
