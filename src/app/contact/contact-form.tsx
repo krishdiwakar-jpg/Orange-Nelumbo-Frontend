@@ -32,10 +32,10 @@ export function ContactForm() {
         <span className="ui-field__label">What can we help with?</span>
         <select className="ui-input" defaultValue="" name="topic" required>
           <option disabled value="">Choose a topic</option>
-          <option value="learning">Learning and study flow</option>
-          <option value="practice">Practice or mock tests</option>
-          <option value="plans">Plans and demo billing</option>
-          <option value="access">Sign-in or browser-local progress</option>
+          <option value="notes">Visual notes</option>
+          <option value="simulations">Simulations</option>
+          <option value="videos">Future video lectures</option>
+          <option value="access">Sign-in, profile, or settings</option>
           <option value="other">Something else</option>
         </select>
       </label>

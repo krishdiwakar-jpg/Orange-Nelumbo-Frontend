@@ -6,12 +6,12 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "Orange Nelumbo | Adaptive JEE preparation",
+    default: "Orange Nelumbo | Visual JEE learning",
     template: "%s | Orange Nelumbo",
   },
   description:
-    "A precise, adaptive JEE preparation platform for learning, simulation, practice, mocks, and rank improvement.",
-  keywords: ["JEE preparation", "JEE Main", "JEE Advanced", "adaptive learning", "mock tests"],
+    "Visual notes and interactive simulations for JEE Physics, Chemistry, and Mathematics.",
+  keywords: ["JEE preparation", "JEE Main", "JEE Advanced", "visual notes", "physics simulations"],
 };
 
 export const viewport: Viewport = {

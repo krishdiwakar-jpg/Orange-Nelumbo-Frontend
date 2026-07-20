@@ -4,6 +4,7 @@ const protectedRouteRoots = new Set([
   "dashboard",
   "learn",
   "mocks",
+  "notes",
   "notifications",
   "planner",
   "practice",
@@ -12,6 +13,7 @@ const protectedRouteRoots = new Set([
   "results",
   "settings",
   "simulations",
+  "videos",
 ]);
 
 /** Keep post-auth redirects inside a known protected area of this app. */

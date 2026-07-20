@@ -4,22 +4,18 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  BarChart3,
   Bell,
   Bookmark,
   BookOpen,
-  CalendarDays,
   ChevronDown,
   CircleHelp,
   FlaskConical,
-  Gauge,
-  LayoutDashboard,
+  House,
   LogOut,
   Menu,
+  PlaySquare,
   Search,
   Settings,
-  Target,
-  Trophy,
   UserRound,
   X,
 } from "lucide-react";
@@ -28,27 +24,28 @@ import { Logo } from "@/components/brand/logo";
 import { useApp } from "@/components/providers/app-provider";
 
 const mainNavigation = [
-  { href: "/dashboard", label: "Mission control", icon: LayoutDashboard },
-  { href: "/learn", label: "Learn", icon: BookOpen },
-  { href: "/planner", label: "Planner", icon: CalendarDays },
-  { href: "/practice", label: "Practice", icon: Target },
-  { href: "/mocks", label: "Mock tests", icon: Trophy },
+  { href: "/dashboard", label: "Home", icon: House },
+  { href: "/learn", label: "Visual notes", icon: BookOpen },
   { href: "/simulations", label: "Simulations", icon: FlaskConical },
-  { href: "/analytics", label: "Analytics", icon: BarChart3 },
-  { href: "/rank-map", label: "Rank map", icon: Gauge },
+  { href: "/videos", label: "Video lectures", icon: PlaySquare },
 ];
 
 const utilityNavigation = [
   { href: "/bookmarks", label: "Bookmarks", icon: Bookmark },
+];
+
+const accountNavigation = [
+  { href: "/profile", label: "Profile", icon: UserRound },
+  { href: "/settings", label: "Settings", icon: Settings },
   { href: "/help", label: "Help centre", icon: CircleHelp },
 ];
 
 const searchItems = [
-  { title: "Motion under gravity", meta: "Physics · Kinematics", href: "/learn/physics/kinematics/motion-under-gravity" },
-  { title: "Rotational motion", meta: "Physics · Mechanics", href: "/learn/physics/rotational-motion" },
-  { title: "Chemical bonding", meta: "Chemistry · Inorganic", href: "/learn/chemistry/chemical-bonding" },
-  { title: "Integration", meta: "Mathematics · Calculus", href: "/learn/mathematics/calculus/integration" },
-  { title: "JEE full mock 08", meta: "Mock test · 180 min", href: "/mocks/full-syllabus-mock-08" },
+  { title: "Motion under gravity", meta: "Physics · Visual note", href: "/notes/physics/kinematics/motion-under-gravity" },
+  { title: "Vertical throw", meta: "Physics · Simulation", href: "/simulations/vertical-throw" },
+  { title: "Rotational motion", meta: "Physics · Visual note", href: "/learn/physics/rotational-motion" },
+  { title: "Chemical bonding", meta: "Chemistry · Visual note", href: "/learn/chemistry/chemical-bonding" },
+  { title: "Integration", meta: "Mathematics · Visual note", href: "/notes/mathematics/calculus/integration" },
 ];
 
 function isActive(pathname: string, href: string) {
@@ -58,15 +55,11 @@ function isActive(pathname: string, href: string) {
 function pageTitle(pathname: string) {
   const segment = pathname.split("/").filter(Boolean)[0] ?? "dashboard";
   const titles: Record<string, string> = {
-    dashboard: "Mission control",
-    learn: "Concept library",
-    planner: "Adaptive planner",
-    practice: "Targeted practice",
-    mocks: "Mock centre",
-    simulations: "Simulation lab",
-    analytics: "Performance analytics",
-    "rank-map": "Projected rank map",
-    bookmarks: "Saved for review",
+    dashboard: "Learning home",
+    learn: "Visual notes",
+    videos: "Video lectures",
+    simulations: "Simulations",
+    bookmarks: "Saved notes",
     notifications: "Notifications",
     profile: "Student profile",
     settings: "Settings",
@@ -184,7 +177,7 @@ export function PlatformShell({ children }: { children: React.ReactNode }) {
           <div className="h-1 w-36 overflow-hidden bg-[#2A262E]">
             <div className="h-full w-1/2 animate-pulse bg-[#FF5A1F]" />
           </div>
-          <p className="font-mono text-[11px] uppercase tracking-[.18em] text-[#C7C5CC]/70">Preparing mission control</p>
+          <p className="text-sm text-[#C7C5CC]/70">Opening your library…</p>
         </div>
       </main>
     );
@@ -214,7 +207,7 @@ export function PlatformShell({ children }: { children: React.ReactNode }) {
           </button>
         </div>
         <div className="scrollbar-thin flex-1 overflow-y-auto px-3 py-5">
-          <p className="px-3 font-mono text-[11px] uppercase tracking-[.22em] text-[#C7C5CC]/70">Platform</p>
+          <p className="px-3 text-xs font-semibold text-[#C7C5CC]/60">Learning</p>
           <nav aria-label="Platform navigation" className="mt-3 grid gap-1">
             {mainNavigation.map(({ href, label, icon: Icon }) => {
               const active = isActive(pathname, href);
@@ -232,7 +225,7 @@ export function PlatformShell({ children }: { children: React.ReactNode }) {
               );
             })}
           </nav>
-          <p className="mt-7 px-3 font-mono text-[11px] uppercase tracking-[.22em] text-[#C7C5CC]/70">Library</p>
+          <p className="mt-7 px-3 text-xs font-semibold text-[#C7C5CC]/60">Your library</p>
           <nav aria-label="Utility navigation" className="mt-3 grid gap-1">
             {utilityNavigation.map(({ href, label, icon: Icon }) => (
               <Link className={`flex min-h-11 items-center gap-3 border-l-2 px-3 text-sm font-semibold transition ${isActive(pathname, href) ? "border-[#FF5A1F] bg-[#FF5A1F]/9 text-white" : "border-transparent text-[#C7C5CC]/80 hover:text-white"}`} href={href} key={href} onClick={() => setSidebarOpen(false)}>
@@ -240,16 +233,14 @@ export function PlatformShell({ children }: { children: React.ReactNode }) {
               </Link>
             ))}
           </nav>
-        </div>
-        <div className="border-t border-white/8 p-4">
-          <div className="border border-[#FF5A1F]/20 bg-[#0E0D10] p-4">
-            <div className="flex items-center justify-between gap-3">
-              <p className="font-mono text-[11px] uppercase tracking-[.16em] text-[#FF8A3D]">Notes plan</p>
-              <span className="size-2 bg-[#3DE08A] shadow-[0_0_12px_#3DE08A]" />
-            </div>
-            <p className="mt-3 text-xs leading-5 text-[#C7C5CC]/80">Unlock adaptive practice and mock analytics.</p>
-            <Link className="mt-3 inline-flex text-xs font-bold text-[#FF8A3D] hover:text-[#FF5A1F]" href="/pricing">Compare plans →</Link>
-          </div>
+          <p className="mt-7 px-3 text-xs font-semibold text-[#C7C5CC]/60">Account</p>
+          <nav aria-label="Account navigation" className="mt-3 grid gap-1">
+            {accountNavigation.map(({ href, label, icon: Icon }) => (
+              <Link className={`flex min-h-11 items-center gap-3 border-l-2 px-3 text-sm font-semibold transition ${isActive(pathname, href) ? "border-[#FF5A1F] bg-[#FF5A1F]/9 text-white" : "border-transparent text-[#C7C5CC]/80 hover:text-white"}`} href={href} key={href} onClick={() => setSidebarOpen(false)}>
+                <Icon aria-hidden="true" size={18} strokeWidth={1.6} /> {label}
+              </Link>
+            ))}
+          </nav>
         </div>
       </aside>
 
@@ -260,13 +251,12 @@ export function PlatformShell({ children }: { children: React.ReactNode }) {
               <Menu size={20} />
             </button>
             <div className="min-w-0">
-              <p className="hidden font-mono text-[11px] uppercase tracking-[.17em] text-[#C7C5CC]/70 sm:block">Adaptive engine / live</p>
-              <h1 className="truncate font-display text-lg font-semibold sm:mt-1 sm:text-xl">{pageTitle(pathname)}</h1>
+              <h1 className="truncate font-display text-lg font-semibold sm:text-xl">{pageTitle(pathname)}</h1>
             </div>
           </div>
           <div className="flex items-center gap-2 sm:gap-3">
             <button className="hidden min-h-11 min-w-[220px] items-center gap-3 border border-white/10 bg-[#161418] px-4 text-left text-sm text-[#C7C5CC]/70 hover:border-[#FF5A1F]/35 md:flex" onClick={() => setSearchOpen(true)} type="button">
-              <Search size={16} /> Search concepts
+              <Search size={16} /> Search notes and simulations
               <kbd className="ml-auto border border-white/10 px-1.5 py-0.5 font-mono text-[11px]">⌘ K</kbd>
             </button>
             <button aria-label="Search" className="grid size-11 place-items-center border border-white/10 text-[#C7C5CC] md:hidden" onClick={() => setSearchOpen(true)} type="button"><Search size={18} /></button>
@@ -306,14 +296,14 @@ export function PlatformShell({ children }: { children: React.ReactNode }) {
           mainNavigation[0],
           mainNavigation[1],
           mainNavigation[2],
-          mainNavigation[3],
-          mainNavigation[4],
+          utilityNavigation[0],
+          accountNavigation[0],
         ].map(({ href, label, icon: Icon }) => {
           const active = isActive(pathname, href);
           return (
             <Link className={`grid place-items-center content-center gap-1 text-[11px] font-semibold ${active ? "text-[#FF8A3D]" : "text-[#C7C5CC]/70"}`} href={href} key={href}>
               <Icon size={18} strokeWidth={1.7} />
-              <span>{label === "Mission control" ? "Home" : label.replace(" tests", "s")}</span>
+              <span>{label === "Visual notes" ? "Notes" : label}</span>
             </Link>
           );
         })}
@@ -323,10 +313,10 @@ export function PlatformShell({ children }: { children: React.ReactNode }) {
         <div aria-labelledby="concept-search-title" aria-modal="true" className="fixed inset-0 z-[80] bg-black/78 p-4 backdrop-blur-sm" role="dialog">
           <button aria-label="Close search" className="absolute inset-0 size-full cursor-default" onClick={() => setSearchOpen(false)} type="button" />
           <div className="relative mx-auto mt-[8vh] max-w-2xl border border-[#FF5A1F]/30 bg-[#161418] shadow-[0_0_90px_rgba(255,90,31,.12)]" ref={searchDialogRef}>
-            <h2 className="sr-only" id="concept-search-title">Search concepts, chapters, and mock tests</h2>
+            <h2 className="sr-only" id="concept-search-title">Search notes and simulations</h2>
             <div className="flex h-16 items-center gap-3 border-b border-white/10 px-5">
               <Search className="text-[#FF8A3D]" size={20} />
-              <input autoFocus className="h-full min-w-0 flex-1 bg-transparent text-base text-white outline-none placeholder:text-[#C7C5CC]/70" onChange={(event) => setQuery(event.target.value)} placeholder="Search a concept, chapter, mock..." value={query} />
+              <input autoFocus className="h-full min-w-0 flex-1 bg-transparent text-base text-white outline-none placeholder:text-[#C7C5CC]/70" onChange={(event) => setQuery(event.target.value)} placeholder="Search a note, chapter, or simulation…" value={query} />
               <button aria-label="Close search" className="grid size-11 place-items-center text-[#C7C5CC]/70 hover:text-white" onClick={() => setSearchOpen(false)} type="button"><X size={19} /></button>
             </div>
             <div className="max-h-[60vh] overflow-y-auto p-2">
@@ -340,7 +330,7 @@ export function PlatformShell({ children }: { children: React.ReactNode }) {
                   <span className="font-mono text-xs text-[#FF8A3D]">↗</span>
                 </Link>
               ))}
-              {results.length === 0 && <p className="px-3 py-10 text-center text-sm text-[#C7C5CC]/70">No concept found. Try a subject, chapter, or mock name.</p>}
+              {results.length === 0 && <p className="px-3 py-10 text-center text-sm text-[#C7C5CC]/70">No result found. Try a subject or chapter name.</p>}
             </div>
           </div>
         </div>

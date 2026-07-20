@@ -10,7 +10,7 @@ export default function NotFound() {
         <Logo href="/" />
         <p className="kicker mt-12">404 — Off trajectory</p>
         <h1 className="mt-5 font-display text-5xl font-bold tracking-[-.02em]">This path has no next concept.</h1>
-        <p className="mt-5 text-lg leading-8 text-[#C7C5CC]">The page moved, the link is incomplete, or the route never existed. Return to mission control.</p>
+        <p className="mt-5 text-lg leading-8 text-[#C7C5CC]">The page moved, the link is incomplete, or the route never existed. Return to the learning library.</p>
         <Link className="button-primary mt-8 inline-flex" href="/"><ArrowLeft size={17} /> Back home</Link>
       </div>
     </main>

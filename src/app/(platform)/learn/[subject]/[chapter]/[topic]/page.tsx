@@ -1,7 +1,6 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
-import { TopicReader } from "@/components/learning/topic-reader";
-import { curriculum, lessons } from "@/data/platform";
+import { curriculum } from "@/data/platform";
 
 const topicAliases: Record<string, string> = {
   "definite-integrals": "integration",
@@ -34,9 +33,5 @@ export default async function TopicPage({
   const resolvedTopicSlug = topicAliases[topicSlug] ?? topicSlug;
   const topic = chapter?.topics.find((candidate) => candidate.slug === resolvedTopicSlug);
   if (!subject || !chapter || !topic) notFound();
-  const lesson = topic.lessonSlug
-    ? lessons.find((candidate) => candidate.slug === topic.lessonSlug)
-    : undefined;
-
-  return <TopicReader chapter={chapter} lesson={lesson} subject={subject} topic={topic} />;
+  redirect(`/notes/${subject.id}/${chapter.slug}/${topic.slug}`);
 }

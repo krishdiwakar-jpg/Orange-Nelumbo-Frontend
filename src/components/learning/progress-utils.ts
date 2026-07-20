@@ -48,7 +48,7 @@ export function learningPath(subject: Subject, chapter?: Chapter, topic?: Topic)
   const base = `/learn/${subject.id}`;
   if (!chapter) return base;
   const chapterPath = `${base}/${chapter.slug}`;
-  return topic ? `${chapterPath}/${topic.slug}` : chapterPath;
+  return topic ? `/notes/${subject.id}/${chapter.slug}/${topic.slug}` : chapterPath;
 }
 
 export function statusLabel(status: LearningStatus) {

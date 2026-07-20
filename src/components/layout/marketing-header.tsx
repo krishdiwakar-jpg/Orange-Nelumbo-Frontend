@@ -4,9 +4,9 @@ import { Menu } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
 
 const links = [
-  { href: "/#engine", label: "Adaptive engine" },
-  { href: "/#study-flow", label: "Study flow" },
-  { href: "/#plans", label: "Plans" },
+  { href: "/#notes", label: "Visual notes" },
+  { href: "/#simulations", label: "Simulations" },
+  { href: "/#videos", label: "Videos" },
   { href: "/help", label: "Help" },
 ];
 
@@ -32,7 +32,7 @@ export function MarketingHeader() {
               Sign in
             </Link>
             <Link className="button-outline" href="/signup">
-              Start free
+              Explore free
             </Link>
           </div>
           <details className="group relative sm:hidden">
@@ -58,7 +58,7 @@ export function MarketingHeader() {
                     Sign in
                   </Link>
                   <Link className="button-outline justify-center" href="/signup">
-                    Start free
+                    Explore free
                   </Link>
                 </div>
               </nav>
@@ -66,15 +66,6 @@ export function MarketingHeader() {
           </details>
         </div>
       </header>
-      <div className="promo-strip">
-        <span className="font-mono text-[11px] tracking-[.18em] sm:text-[11px]">
-          01 // FREE DIAGNOSTIC SAMPLE
-        </span>
-        <span>Five questions. Three subjects. No signup.</span>
-        <Link className="font-bold underline underline-offset-4" href="/diagnostic">
-          Try the sample
-        </Link>
-      </div>
     </>
   );
 }

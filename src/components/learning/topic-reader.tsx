@@ -339,7 +339,7 @@ export function TopicReader({
                 <Badge tone={badgeTone}>{state.progress > 0 && state.status !== "completed" ? `${state.progress}% read` : statusLabel(state.status)}</Badge>
                 {lesson ? <Badge tone="cyan">{lesson.conceptRange}</Badge> : <Badge tone="neutral">Preview note</Badge>}
               </div>
-              <h1 className="mt-6 max-w-5xl font-display text-4xl font-bold tracking-[-.02em] sm:text-[3.5rem]">{lesson?.title ?? topic.title}</h1>
+              <h1 className="mt-6 max-w-5xl font-display text-3xl font-bold tracking-[-.02em] sm:text-4xl lg:text-[2.75rem]">{lesson?.title ?? topic.title}</h1>
               <p className="mt-5 max-w-3xl text-base leading-8 text-[#C7C5CC] sm:text-lg">{lesson?.summary ?? topic.description}</p>
               <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 font-mono text-[11px] uppercase tracking-[.12em] text-[#C7C5CC]/70">
                 <span className="flex items-center gap-2"><Clock3 size={14} /> {lesson?.estimatedMinutes ?? topic.estimatedMinutes} min</span>
@@ -357,7 +357,7 @@ export function TopicReader({
         </div>
       </header>
 
-      <div className="mx-auto grid max-w-[1460px] gap-8 px-5 sm:px-7 lg:px-10 xl:grid-cols-[238px_minmax(0,900px)] xl:justify-center xl:px-12 2xl:grid-cols-[238px_minmax(0,900px)_220px]">
+      <div className="mx-auto grid max-w-[1320px] gap-8 px-5 sm:px-7 lg:px-10 xl:grid-cols-[220px_minmax(0,860px)] xl:justify-center xl:px-12">
         <aside className="order-first border-b border-white/8 py-6 xl:sticky xl:top-[74px] xl:h-[calc(100vh-74px)] xl:overflow-y-auto xl:border-b-0 xl:border-r xl:py-9 xl:pr-6">
           <p className="font-mono text-[11px] uppercase tracking-[.17em] text-[#C7C5CC]/70">On this page</p>
           <nav aria-label="Lesson sections" className="mt-4 flex gap-2 overflow-x-auto pb-2 xl:grid xl:overflow-visible">
@@ -427,17 +427,6 @@ export function TopicReader({
           </p>
         </article>
 
-        <aside className="hidden py-10 2xl:block">
-          <div className="sticky top-28 border border-[#FF5A1F]/20 bg-[#161418] p-4">
-            <p className="font-mono text-[11px] uppercase tracking-[.14em] text-[#C7C5CC]/70">Reading protocol</p>
-            <div className="mt-4 space-y-4 text-xs leading-5 text-[#C7C5CC]/80">
-              <p><span className="text-[#FF8A3D]">01</span> Fix the sign convention.</p>
-              <p><span className="text-[#FF8A3D]">02</span> Predict before revealing.</p>
-              <p><span className="text-[#FF8A3D]">03</span> Name the exam trap.</p>
-              <p><span className="text-[#FF8A3D]">04</span> Retrieve, then complete.</p>
-            </div>
-          </div>
-        </aside>
       </div>
     </div>
   );

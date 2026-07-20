@@ -129,10 +129,9 @@ export function LearningOverview() {
       <section className="hero-grid border-b border-[#FF5A1F]/18 px-5 py-10 sm:px-7 lg:px-10 xl:px-12">
         <div className="mx-auto max-w-[1380px]">
           <SectionHeader
-            description="Move from subject to chapter to concept. Each note follows the same evidence-first sequence: idea, notation, derivation, exam patterns and a model you can interrogate."
-            kicker="Concept library · PCM"
+            description="Browse Physics, Chemistry, and Mathematics by chapter. Every topic opens as a dedicated note, separate from the rest of the app."
             level={2}
-            title="Learn the idea. See the mechanism."
+            title="Visual notes for JEE."
           />
           <label className="mt-8 flex min-h-14 max-w-3xl items-center gap-3 border border-[#FF5A1F]/28 bg-[#0E0D10] px-4 focus-within:border-[#FF5A1F] focus-within:shadow-[0_0_24px_rgba(255,90,31,.10)]">
             <Search aria-hidden="true" className="shrink-0 text-[#FF8A3D]" size={19} />
@@ -140,7 +139,7 @@ export function LearningOverview() {
             <input
               className="min-h-12 min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-[#C7C5CC]/70"
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search a concept, chapter, formula or tag…"
+              placeholder="Search a note, chapter, formula, or keyword…"
               type="search"
               value={query}
             />
@@ -179,7 +178,7 @@ export function LearningOverview() {
               <div className="grid gap-0 lg:grid-cols-[1fr_300px]">
                 <div className="p-6 sm:p-8">
                   <p className="font-mono text-[11px] uppercase tracking-[.17em] text-[#FF8A3D]">{inProgress.subject.name} · {inProgress.chapter.title}</p>
-                  <h4 className="mt-4 font-display text-3xl font-bold">{inProgress.topic.title}</h4>
+                  <h4 className="mt-4 font-display text-2xl font-bold sm:text-3xl">{inProgress.topic.title}</h4>
                   <p className="mt-3 max-w-2xl leading-7 text-[#C7C5CC]">{inProgress.topic.description}</p>
                   <Progress className="mt-6 max-w-xl" showValue size="md" value={resolveTopicState(inProgress.topic, topicProgress).progress} />
                   <Link className="button-primary mt-7" href={learningPath(inProgress.subject, inProgress.chapter, inProgress.topic)}>
@@ -272,7 +271,7 @@ export function SubjectOverview({ subject }: { subject: Subject }) {
           <div className="mt-8 grid items-end gap-8 lg:grid-cols-[1fr_320px]">
             <div>
               <p className="mono-kicker">{subject.code} · Subject workbench</p>
-              <h2 className="mt-4 font-display text-5xl font-bold tracking-[-.02em] sm:text-[3.5rem]">{subject.name}</h2>
+              <h2 className="mt-4 font-display text-4xl font-bold tracking-[-.02em] sm:text-5xl">{subject.name}</h2>
               <p className="mt-5 max-w-2xl text-lg leading-8 text-[#C7C5CC]">{subject.description}</p>
             </div>
             <Card className="p-5" variant="subtle">

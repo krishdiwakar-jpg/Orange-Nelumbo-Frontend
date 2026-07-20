@@ -712,8 +712,15 @@ summary:focus-visible,
 }
 
 .ui-section-header__title {
-  font-size: clamp(2rem, 4vw, 3.5rem);
-  line-height: 1;
+  font-size: clamp(2rem, 3.4vw, 2.875rem);
+  line-height: 1.08;
+}
+
+/* Remove decorative micro-headlines that made every section feel like a template. */
+.section-heading .kicker,
+section > .mono-kicker,
+section > div > .mono-kicker {
+  display: none;
 }
 
 .ui-section-header__description {
