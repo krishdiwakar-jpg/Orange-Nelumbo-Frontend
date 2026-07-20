@@ -34,7 +34,7 @@ node_modules/
 dist/
 .env
 node_modules/
-.pnpm-store/
+# .pnpm-store/
 **/.pnpm-store/
 dist/
 build/
