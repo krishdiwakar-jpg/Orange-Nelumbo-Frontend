@@ -1,0 +1,19 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { ArrowLeft, ArrowRight, BarChart3, BookOpenCheck, Clock3, FileQuestion, ShieldCheck, Target, Trophy, Users } from "lucide-react";
+
+import { FrontendActionButton } from "@/components/ui/frontend-action-button";
+import { mockTests } from "@/data/platform";
+
+type Props = { params: Promise<{ slug: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> { const { slug } = await params; const mock = mockTests.find((item)=>item.slug===slug); return { title: mock?.name ?? "Mock test" }; }
+
+export default async function MockDetailPage({ params }: Props) {
+  const { slug } = await params;
+  const mock = mockTests.find((item) => item.slug === slug);
+  if (!mock) notFound();
+  const upcoming = mock.status === "upcoming";
+  return <div className="content-shell pb-28 pt-8 lg:pb-14 lg:pt-10"><Link className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-[#C7C5CC]/80 hover:text-white" href="/mocks"><ArrowLeft size={17}/> Back to mocks</Link><section className="brand-grid mt-4 border border-[#FF5A1F]/30 bg-[#161418] p-7 sm:p-10"><div className="flex flex-wrap items-start justify-between gap-5"><div><p className="mono-kicker">{mock.kind} · {mock.difficulty}</p><h2 className="mt-5 max-w-3xl font-display text-4xl font-bold sm:text-5xl">{mock.name}</h2><p className="mt-5 max-w-2xl text-lg leading-8 text-[#C7C5CC]">{mock.description}</p></div><div className="grid size-16 place-items-center border border-[#FF5A1F]/30 bg-[#0E0D10]"><Trophy className="text-[#F6C344]" size={28}/></div></div><div className="mt-9 grid grid-cols-2 border border-white/9 bg-[#0E0D10] sm:grid-cols-4">{[[FileQuestion,`${mock.questionCount}`,'Questions'],[Clock3,`${mock.durationMinutes} min`,'Duration'],[Target,`${mock.maxMarks}`,'Maximum marks'],[Users,mock.registeredCount?.toLocaleString('en-IN')??'Demo','Cohort']].map(([Icon,value,label])=>{const ItemIcon=Icon as typeof Clock3;return <div className="border-b border-r border-white/8 p-5 last:border-r-0 sm:border-b-0" key={label as string}><ItemIcon className="text-[#FF8A3D]" size={18}/><p className="mt-4 font-mono text-xl">{value as string}</p><p className="mt-1 text-xs text-[#C7C5CC]/70">{label as string}</p></div>})}</div><div className="mt-9 flex flex-wrap gap-3">{upcoming?<FrontendActionButton doneLabel="Registration saved on this device" idleLabel="Register for free"/>:mock.status==='completed'?<Link className="button-primary" href={`/results/${mock.slug}`}>Open result <ArrowRight size={17}/></Link>:<Link className="button-primary" href={`/mocks/${mock.slug}/attempt?demo=1`}>Start demo paper <ArrowRight size={17}/></Link>}<Link className="button-ghost" href="/help">Read test instructions</Link></div></section><div className="mt-7 grid gap-5 md:grid-cols-3">{[[BookOpenCheck,'Before you start','Use a stable connection, a quiet desk, and blank rough sheets. The demo autosaves answers in this browser.'],[ShieldCheck,'Exam rules','The full paper follows JEE-style marking. Do not refresh during a live ranked attempt.'],[BarChart3,'After submission','See marks, time use, subject accuracy, concept gaps, and a specific review sequence.']].map(([Icon,title,copy])=>{const ItemIcon=Icon as typeof Clock3;return <article className="border border-[#FF5A1F]/22 bg-[#161418] p-6" key={title as string}><ItemIcon className="text-[#FF8A3D]" size={22}/><h3 className="mt-7 font-display text-xl font-semibold">{title as string}</h3><p className="mt-3 text-sm leading-6 text-[#C7C5CC]/80">{copy as string}</p></article>})}</div><p className="mt-7 text-sm leading-6 text-[#C7C5CC]/70">Projected rank and percentile are model estimates, not predictions or guarantees. Orange Nelumbo is independent and not affiliated with NTA, IITs, or the JEE Apex Board.</p></div>;
+}

@@ -1,0 +1,911 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Up and down are mirror images — Orange Nelumbo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Varela+Round&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --carbon:#161418; --obsidian:#0E0D10; --graphite:#1E1B20; --steel:#2A262E;
+    --ignition:#FF5A1F; --ember:#FF8A3D; --titanium:#C7C5CC; --white:#F5F4F6;
+    --cyan:#3DE0D8; --success:#3DE08A; --error:#E0483C;
+    /* content palette v2.3 — saturated warm */
+    --terracotta:#E8784A; --honey:#F5B532; --marigold:#FFC96B; --sand:#F5E3C0;
+    --brick:#F0685A; --moss:#A9CF7F; --cocoa:#CDA98C;
+    --hairline:rgba(255,90,31,.25); --hairline-strong:rgba(255,90,31,.45);
+    --disp:"Quicksand",system-ui,sans-serif;
+    --body:"Varela Round",system-ui,sans-serif;
+    --lab-ease:cubic-bezier(.2,.8,.2,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{background:var(--carbon)}
+  body{
+    font-family:var(--body);color:var(--white);font-size:17px;line-height:1.75;
+    background:
+      radial-gradient(1100px 520px at 78% -160px, rgba(255,90,31,.14), transparent 62%),
+      repeating-linear-gradient(0deg, transparent 0 47px, rgba(255,255,255,.016) 47px 48px),
+      repeating-linear-gradient(90deg, transparent 0 47px, rgba(255,255,255,.016) 47px 48px),
+      var(--carbon);
+  }
+  .page{max-width:860px;margin:0 auto;padding:56px 24px 88px;position:relative}
+  .orbits{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+  .orbits i{position:absolute;border:1px solid rgba(255,90,31,.07);border-radius:50%}
+  .orbits i:nth-child(1){width:900px;height:900px;top:-620px;right:-260px}
+  .orbits i:nth-child(2){width:1300px;height:1300px;top:-880px;right:-420px}
+  main{position:relative;z-index:1}
+
+  /* ------------- headings system ------------- */
+  .eyebrow{font-family:var(--disp);font-weight:700;font-size:12.5px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--ignition);display:flex;justify-content:space-between;
+    gap:16px;flex-wrap:wrap}
+  .eyebrow .meta{color:var(--cocoa)}
+  h1{font-family:var(--disp);font-weight:700;font-size:clamp(30px,5vw,40px);
+    line-height:1.15;margin:14px 0 10px}
+  .lede{color:var(--titanium);max-width:60ch;line-height:1.7}
+  .rule{height:1px;background:linear-gradient(90deg,var(--hairline-strong),transparent 70%);margin:34px 0 0}
+
+  section{margin-top:52px}
+  h2{font-family:var(--disp);font-weight:700;font-size:25px;line-height:1.2;
+    display:flex;align-items:baseline;gap:14px;margin-bottom:6px}
+  h2 .n{color:var(--honey);font-size:20px;font-weight:700;letter-spacing:.05em}
+  .sec-sub{color:var(--cocoa);font-size:16px;margin-bottom:18px;max-width:60ch}
+  h3{font-family:var(--disp);font-weight:600;font-size:19px;color:var(--sand);margin:22px 0 8px}
+  p{max-width:64ch}
+  em{font-style:italic}
+  .m{font-style:italic;color:var(--white)}
+
+  /* ------------- diagram frame ------------- */
+  .fig{background:var(--obsidian);border:1px solid var(--hairline);padding:18px 18px 10px;margin:20px 0}
+  .fig svg{display:block;width:100%;height:auto}
+  .fig .cap{font-family:var(--disp);font-weight:600;font-size:13px;letter-spacing:.06em;
+    color:var(--cocoa);padding:10px 2px 6px;text-transform:uppercase}
+  .fig .cap b{color:var(--marigold)}
+
+  /* ------------- cards ------------- */
+  .card{background:var(--graphite);border:1px solid var(--hairline);padding:22px}
+  .defgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-top:14px}
+  .def{background:var(--graphite);border:1px solid var(--hairline);padding:16px 18px}
+  .def .sym{font-family:var(--disp);font-weight:700;font-size:21px;color:var(--marigold);font-style:italic}
+  .def p{font-size:16px;color:var(--titanium);margin-top:4px;line-height:1.6}
+  .def p b{color:var(--sand)}
+
+  .callout{border-left:3px solid var(--honey);background:var(--graphite);
+    border-top:1px solid var(--hairline);border-right:1px solid var(--hairline);
+    border-bottom:1px solid var(--hairline);padding:16px 20px;margin:20px 0;max-width:660px}
+  .callout .name{font-family:var(--disp);font-weight:700;font-size:13px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--honey)}
+  .callout.trap{border-left-color:var(--brick)}
+  .callout.trap .name{color:var(--brick)}
+  .callout p{margin-top:6px}
+
+  /* ------------- derivation ------------- */
+  .derive{border:1px solid var(--hairline);background:var(--graphite);padding:6px 22px 18px}
+  .step{display:grid;grid-template-columns:70px 1fr;gap:16px;padding:15px 0;
+    border-bottom:1px solid rgba(255,255,255,.06);align-items:baseline}
+  .step:last-child{border-bottom:0}
+  .sn{font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.1em;color:var(--cocoa);padding-top:5px}
+  .eq{font-style:italic;font-size:20px;line-height:1.6}
+  .eq .op{font-style:normal;color:var(--titanium);padding:0 .1em}
+  .eq .tag{font-style:normal;font-family:var(--disp);font-weight:700;font-size:12px;
+    color:var(--cocoa);letter-spacing:.08em;padding-left:10px}
+  .eq .hot{color:var(--ignition)}
+  .eq .star{color:var(--honey);font-style:normal}
+  .stepnote{color:var(--titanium);font-size:16.5px;margin-top:4px;font-style:normal;max-width:58ch}
+  .where{border-top:1px solid rgba(255,255,255,.07);margin-top:8px;padding:12px 0 2px;
+    color:var(--cocoa);font-size:16px}
+  .where b{font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.1em;color:var(--cocoa)}
+  .where i{font-style:italic;color:var(--sand)}
+
+  /* ------------- special cases ------------- */
+  .cases{background:var(--graphite);border:1px solid var(--hairline);padding:6px 22px}
+  .case{display:grid;grid-template-columns:96px 1fr;gap:18px;padding:16px 0;
+    border-bottom:1px solid rgba(255,255,255,.06)}
+  .case:last-child{border-bottom:0}
+  .case .cid{font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.08em;
+    color:var(--terracotta);padding-top:5px}
+  .case h3{font-size:17.5px;color:var(--honey);margin:0}
+  .case p{color:var(--titanium);font-size:16.5px;margin-top:3px;max-width:58ch}
+  .case p em{color:var(--white)}
+  .case .trig{font-family:var(--disp);font-weight:700;font-size:11.5px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--honey);display:block;margin-top:7px}
+
+  /* ------------- scenarios ------------- */
+  .scenario{background:var(--graphite);border:1px solid var(--hairline);padding:20px 22px;margin-bottom:16px}
+  .sc-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline}
+  .sc-head .cid{font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.08em;color:var(--terracotta)}
+  .sc-head .pyq{font-family:var(--disp);font-weight:700;font-size:11px;letter-spacing:.1em;color:var(--terracotta)}
+  .scenario h3{font-size:19.5px;margin:6px 0 10px;color:var(--white)}
+  .scenario .fig{margin:14px 0;background:var(--obsidian)}
+  .sc-row{margin-top:9px}
+  .sc-row .lab{font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--cocoa);display:block;margin-bottom:2px}
+  .sc-row.trap .lab{color:var(--brick)}
+  .sc-row.kill .lab{color:var(--moss)}
+  .sc-row p{max-width:62ch}
+  .sc-row p em{color:var(--marigold)}
+
+  /* ------------- lab ------------- */
+  .lab-shell{background:var(--obsidian);border:1px solid var(--hairline)}
+  .lab-head{display:flex;justify-content:space-between;align-items:center;gap:12px;
+    padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.06);flex-wrap:wrap}
+  .lab-head .t{font-family:var(--disp);font-weight:700;font-size:13px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--ignition)}
+  .model{font-family:var(--disp);font-weight:600;font-size:11px;letter-spacing:.1em;
+    color:var(--cocoa);text-transform:uppercase}
+  .btn{font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--titanium);background:transparent;
+    border:1px solid var(--steel);border-radius:999px;padding:12px 16px;min-height:44px;cursor:pointer;
+    transition:border-color 120ms var(--lab-ease),color 120ms var(--lab-ease)}
+  .btn:hover{border-color:var(--hairline-strong);color:var(--white)}
+  .btn:focus-visible{outline:2px solid var(--ignition);outline-offset:2px}
+  canvas{display:block;width:100%;height:300px}
+
+  .dock{border-top:1px solid rgba(255,255,255,.06);padding:16px 18px;display:flex;
+    gap:18px;align-items:center;flex-wrap:wrap}
+  .slider-wrap{flex:1 1 260px;min-width:240px}
+  .slider-wrap .lab{font-family:var(--disp);font-weight:700;font-size:11px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--cocoa);display:flex;justify-content:space-between}
+  .slider-wrap .val{color:var(--cyan);font-weight:700}
+  input[type=range]{width:100%;height:44px;background:transparent;-webkit-appearance:none;appearance:none;cursor:pointer}
+  input[type=range]::-webkit-slider-runnable-track{height:3px;background:var(--steel);border-radius:2px}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;
+    background:var(--ignition);margin-top:-8.5px;border:0}
+  input[type=range]:focus-visible{outline:2px solid var(--ignition);outline-offset:2px}
+  .ticks{display:flex;justify-content:space-between;font-family:var(--disp);font-weight:600;
+    font-size:10px;color:var(--cocoa);letter-spacing:.06em}
+  .go{font-family:var(--disp);font-weight:700;font-size:15px;color:#161418;border-radius:999px;
+    background:linear-gradient(180deg,var(--ember),var(--ignition));border:0;
+    padding:12px 30px;min-height:44px;cursor:pointer}
+  .go:focus-visible{outline:2px solid var(--ignition);outline-offset:2px}
+  .presets{display:flex;gap:8px;flex-wrap:wrap;padding:0 18px 16px}
+  .presets .btn[aria-pressed="true"]{border-color:var(--ignition);color:var(--ignition)}
+
+  .readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+    border-top:1px solid rgba(255,255,255,.06)}
+  .readout>div{padding:12px 18px;border-right:1px solid rgba(255,255,255,.05)}
+  .readout>div:last-child{border-right:0}
+  .readout .lab{font-family:var(--disp);font-weight:700;font-size:11px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--cocoa)}
+  .readout .val{font-family:var(--disp);font-weight:700;font-size:19px;color:var(--cyan);margin-top:4px}
+  .hotflash{color:var(--ember) !important;transition:color 150ms var(--lab-ease)}
+
+  .panel{border-top:1px solid rgba(255,255,255,.06);padding:18px;display:grid;gap:16px}
+  .panel .blk .lab{font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--cocoa);display:block;margin-bottom:6px}
+  .panel .blk p{font-size:16.5px;line-height:1.7;max-width:64ch}
+  .panel .eqx p{font-style:italic;font-size:19px}
+  .panel .eqx .num{color:var(--cyan);font-style:normal;font-family:var(--disp);font-weight:700;font-size:17px}
+  .pred{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .pred .btn{font-size:11.5px}
+  .pred .btn[aria-pressed="true"]{border-color:var(--ignition);color:var(--ignition)}
+  .reveal{margin-top:8px;color:var(--titanium)}
+  .reveal b{color:var(--moss);font-family:var(--disp);font-weight:700;font-size:12px;
+    letter-spacing:.1em;text-transform:uppercase}
+  @media (min-width:768px){
+    .panel{grid-template-columns:1fr 1fr}
+    .panel .eqx,.panel .checkx{grid-column:1/-1}
+  }
+
+  footer{margin-top:64px;padding-top:18px;border-top:1px solid rgba(255,255,255,.06);
+    display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+  footer .k{font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--cocoa)}
+  footer .k em{color:var(--ignition);font-style:normal}
+
+  /* ------------- print / A4 ------------- */
+  .print-bridge{display:none}
+  @page{size:A4;margin:14mm}
+  @media print{
+    html,body{background:var(--carbon) !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .page{max-width:none;padding:0}
+    .orbits{display:none}
+    .derive,.scenario,.callout,.cases,.def,.fig{break-inside:avoid}
+    section{margin-top:30px}
+    .dock,.presets,.panel .pred,.go{display:none !important}
+    .print-bridge{display:block;border:1px solid var(--hairline);background:var(--graphite);
+      padding:18px 22px}
+    .print-bridge .name{font-family:var(--disp);font-weight:700;font-size:13px;
+      letter-spacing:.12em;text-transform:uppercase;color:var(--ignition)}
+    .print-bridge p{color:var(--titanium);font-size:16px;margin-top:6px;max-width:66ch}
+    .print-bridge .p{font-family:var(--disp);font-weight:600;font-size:11.5px;color:var(--cocoa);letter-spacing:.06em}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none !important}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="orbits" aria-hidden="true"><i></i><i></i></div>
+  <main>
+
+    <header>
+      <div class="eyebrow">
+        <span>U02 · KINEMATICS — MOTION UNDER GRAVITY</span>
+        <span class="meta">KIN-006 – KIN-011 · 6 CONCEPTS</span>
+      </div>
+      <h1>Up and down are mirror images</h1>
+      <p class="lede">Throw a ball straight up. Gravity pulls it the same way through the whole flight — the same pull while going up, at the top, and while coming down. Once you fix your sign convention and trust this symmetry, every question of this section — graphs, tower throws, two stones, even a fall broken into two parts — becomes the same short calculation.</p>
+      <div class="rule"></div>
+    </header>
+
+    <!-- 01 BASIC THEORY ............................................. -->
+    <section aria-labelledby="s1">
+      <h2 id="s1"><span class="n">01</span> Basic theory</h2>
+      <p class="sec-sub">What actually happens when something moves up or down near the Earth.</p>
+
+      <p>Near the Earth's surface, every object in free flight feels one and only one thing: a constant pull towards the ground. We call its acceleration <span class="m">g = 9.80 m/s²</span>, and it does not care whether the object is a cricket ball or an iron ball, whether it is rising or falling. Air resistance is left out of this model, and the whole motion stays on one vertical line.</p>
+
+      <div class="fig">
+        <svg viewBox="0 0 760 300" role="img" aria-label="A ball at three moments of a vertical throw: going up with velocity upward, at the top with zero velocity, coming down with velocity downward — acceleration g points down in all three">
+          <defs>
+            <marker id="ah-c" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#3DE0D8"/></marker>
+            <marker id="ah-o" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#FF5A1F"/></marker>
+            <marker id="ah-t" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#C7C5CC"/></marker>
+          </defs>
+          <!-- ground -->
+          <line x1="40" y1="262" x2="720" y2="262" stroke="#2A262E" stroke-width="2"/>
+          <path d="M60 262 l-10 12 M110 262 l-10 12 M160 262 l-10 12 M210 262 l-10 12 M260 262 l-10 12 M310 262 l-10 12 M360 262 l-10 12 M410 262 l-10 12 M460 262 l-10 12 M510 262 l-10 12 M560 262 l-10 12 M610 262 l-10 12 M660 262 l-10 12 M710 262 l-10 12" stroke="#2A262E" stroke-width="1.5"/>
+          <!-- dashed flight path -->
+          <path d="M150 240 C150 120 150 70 150 62" stroke="rgba(199,197,204,.35)" stroke-width="1.5" stroke-dasharray="4 6" fill="none"/>
+          <path d="M610 62 C610 70 610 120 610 240" stroke="rgba(199,197,204,.35)" stroke-width="1.5" stroke-dasharray="4 6" fill="none"/>
+          <!-- phase 1: going up -->
+          <circle cx="150" cy="160" r="15" fill="#F5E3C0"/>
+          <line x1="150" y1="138" x2="150" y2="84" stroke="#3DE0D8" stroke-width="3" marker-end="url(#ah-c)"/>
+          <text x="168" y="105" fill="#3DE0D8" font-family="Varela Round" font-size="15" font-style="italic">v</text>
+          <line x1="112" y1="150" x2="112" y2="204" stroke="#FF5A1F" stroke-width="3" marker-end="url(#ah-o)"/>
+          <text x="86" y="185" fill="#FF5A1F" font-family="Varela Round" font-size="15" font-style="italic">g</text>
+          <text x="106" y="292" fill="#C7C5CC" font-family="Quicksand" font-weight="700" font-size="13">GOING UP</text>
+          <!-- phase 2: at the top -->
+          <circle cx="380" cy="62" r="15" fill="#F5E3C0"/>
+          <text x="360" y="34" fill="#F5B532" font-family="Varela Round" font-size="14" font-style="italic">v = 0</text>
+          <line x1="342" y1="52" x2="342" y2="106" stroke="#FF5A1F" stroke-width="3" marker-end="url(#ah-o)"/>
+          <text x="316" y="87" fill="#FF5A1F" font-family="Varela Round" font-size="15" font-style="italic">g</text>
+          <text x="330" y="292" fill="#C7C5CC" font-family="Quicksand" font-weight="700" font-size="13">AT THE TOP</text>
+          <text x="404" y="66" fill="#F0685A" font-family="Varela Round" font-size="13.5">g is NOT zero here</text>
+          <!-- phase 3: coming down -->
+          <circle cx="610" cy="160" r="15" fill="#F5E3C0"/>
+          <line x1="610" y1="182" x2="610" y2="236" stroke="#3DE0D8" stroke-width="3" marker-end="url(#ah-c)"/>
+          <text x="628" y="218" fill="#3DE0D8" font-family="Varela Round" font-size="15" font-style="italic">v</text>
+          <line x1="572" y1="150" x2="572" y2="204" stroke="#FF5A1F" stroke-width="3" marker-end="url(#ah-o)"/>
+          <text x="546" y="185" fill="#FF5A1F" font-family="Varela Round" font-size="15" font-style="italic">g</text>
+          <text x="558" y="292" fill="#C7C5CC" font-family="Quicksand" font-weight="700" font-size="13">COMING DOWN</text>
+          <!-- axis -->
+          <line x1="700" y1="230" x2="700" y2="120" stroke="#C7C5CC" stroke-width="2" marker-end="url(#ah-t)"/>
+          <text x="682" y="108" fill="#C7C5CC" font-family="Varela Round" font-size="14">+y</text>
+        </svg>
+        <div class="cap"><b>FIG 1</b> — one throw, three moments. Velocity (cyan) keeps changing; the pull of gravity (orange) never does.</div>
+      </div>
+
+      <p>Look at the middle of Fig 1 carefully — this is the heart of the whole section. At the highest point the ball is momentarily at rest, but gravity is still pulling it with full strength. The velocity becomes zero; the acceleration never does. Most wrong answers in this chapter are born exactly here.</p>
+    </section>
+
+    <!-- 02 DEFINITIONS .............................................. -->
+    <section aria-labelledby="s2">
+      <h2 id="s2"><span class="n">02</span> Definitions</h2>
+      <p class="sec-sub">Fix these five symbols and one convention before touching any formula.</p>
+
+      <div class="defgrid">
+        <div class="def"><span class="sym">u</span><p><b>Launch velocity</b> — velocity at t = 0, in m/s. Positive when thrown upward.</p></div>
+        <div class="def"><span class="sym">v</span><p><b>Velocity at time t</b> — in m/s. Positive while rising, zero at the top, negative while falling.</p></div>
+        <div class="def"><span class="sym">g</span><p><b>Acceleration due to gravity</b> — 9.80 m/s², always directed downward, same for every mass.</p></div>
+        <div class="def"><span class="sym">y</span><p><b>Height above launch point</b> — in metres. Negative when the object is below the point of throw.</p></div>
+        <div class="def"><span class="sym">t</span><p><b>Time from launch</b> — in seconds.</p></div>
+        <div class="def"><span class="sym">+</span><p><b>Sign convention</b> — take upward as positive. Then acceleration is −g everywhere: rising, top, falling.</p></div>
+      </div>
+
+      <div class="callout">
+        <div class="name">FIX THE CONVENTION FIRST</div>
+        <p>Half the marks lost in this chapter are sign mistakes. Write "up = positive, a = −g" at the top of your rough work — then every equation below works without any special case.</p>
+      </div>
+    </section>
+
+    <!-- 03 DERIVATION ............................................... -->
+    <section aria-labelledby="s3">
+      <h2 id="s3"><span class="n">03</span> Derivation</h2>
+      <p class="sec-sub">Everything comes from putting a = −g in the constant-acceleration equations.</p>
+
+      <div class="derive">
+        <div class="step">
+          <span class="sn">STEP 1</span>
+          <div>
+            <p class="eq"><var>v</var> <span class="op">=</span> <var>u</var> <span class="op">−</span> <var>g t</var><span class="tag">(A) <span class="star">★</span></span></p>
+            <p class="stepnote">Put a = −g in v = u + at. One straight line in time — this single equation is the whole velocity story.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="sn">STEP 2</span>
+          <div>
+            <p class="eq"><var>y</var> <span class="op">=</span> <var>u t</var> <span class="op">−</span> ½<var>g t</var>²<span class="tag">(B)</span></p>
+            <p class="stepnote">The same substitution in s = ut + ½at² gives the height measured from the launch point.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="sn">STEP 3</span>
+          <div>
+            <p class="eq"><var>v</var>² <span class="op">=</span> <var>u</var>² <span class="op">−</span> 2<var>g y</var><span class="tag">(C) <span class="star">★</span></span></p>
+            <p class="stepnote">Remove t between (A) and (B). Now speed depends only on height — time has left the equation.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="sn">STEP 4</span>
+          <div>
+            <p class="eq"><var>v</var> <span class="op">=</span> 0 <span class="op">⇒</span> <var>t</var><sub>up</sub> <span class="op">=</span> <var>u</var>/<var>g</var> <span class="op">,</span> <var>y</var><sub>max</sub> <span class="op">=</span> <var>u</var>²/2<var>g</var><span class="tag">apex</span></p>
+            <p class="stepnote">The top of the flight is where velocity crosses zero in (A). The acceleration there is still −g.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="sn">STEP 5</span>
+          <div>
+            <p class="eq"><var>y</var> <span class="op">=</span> 0 <span class="op">⇒</span> <var>t</var> <span class="op">=</span> 2<var>u</var>/<var>g</var> <span class="op">,</span> <span class="hot"><var>v</var> <span class="op">=</span> −<var>u</var></span><span class="tag">(D) <span class="star">★</span></span></p>
+            <p class="stepnote">Put y = 0 in (B), then substitute back in (A): the flight takes exactly double the up-time, and the ball returns with the same speed it left with. Up and down are mirror images — and mass appears nowhere.</p>
+          </div>
+        </div>
+        <div class="where">
+          <b>WHERE</b> — <i>u</i>: launch velocity (m/s, up positive) · <i>v</i>: velocity at time <i>t</i> (m/s) ·
+          <i>g</i>: 9.80 m/s² · <i>y</i>: height above launch (m) · <i>t</i>: time from launch (s) ·
+          ★ marks formula-sheet equations.
+        </div>
+      </div>
+
+      <div class="fig">
+        <svg viewBox="0 0 760 270" role="img" aria-label="Velocity-time graph of a vertical throw: a straight line starting at u, crossing zero at the apex time, reaching minus u at twice the apex time">
+          <defs>
+            <marker id="ah2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#C7C5CC"/></marker>
+          </defs>
+          <!-- axes -->
+          <line x1="80" y1="135" x2="700" y2="135" stroke="#C7C5CC" stroke-width="1.5" marker-end="url(#ah2)"/>
+          <line x1="80" y1="245" x2="80" y2="25" stroke="#C7C5CC" stroke-width="1.5" marker-end="url(#ah2)"/>
+          <text x="66" y="20" fill="#C7C5CC" font-family="Varela Round" font-size="14" font-style="italic">v</text>
+          <text x="706" y="152" fill="#C7C5CC" font-family="Varela Round" font-size="14" font-style="italic">t</text>
+          <!-- the line -->
+          <line x1="80" y1="55" x2="620" y2="215" stroke="#3DE0D8" stroke-width="3.5"/>
+          <!-- markers -->
+          <circle cx="80" cy="55" r="5" fill="#F5B532"/>
+          <text x="94" y="52" fill="#F5B532" font-family="Varela Round" font-size="14.5" font-style="italic">+u at t = 0</text>
+          <circle cx="350" cy="135" r="5" fill="#F5B532"/>
+          <text x="330" y="118" fill="#F5B532" font-family="Varela Round" font-size="14.5">APEX</text>
+          <text x="300" y="160" fill="#CDA98C" font-family="Varela Round" font-size="13.5" font-style="italic">t = u/g , v = 0</text>
+          <circle cx="620" cy="215" r="5" fill="#F5B532"/>
+          <text x="500" y="240" fill="#F5B532" font-family="Varela Round" font-size="14.5" font-style="italic">−u at t = 2u/g</text>
+          <!-- slope note -->
+          <line x1="430" y1="158" x2="490" y2="158" stroke="#FF5A1F" stroke-width="2" stroke-dasharray="3 4"/>
+          <line x1="490" y1="158" x2="490" y2="176" stroke="#FF5A1F" stroke-width="2" stroke-dasharray="3 4"/>
+          <text x="500" y="176" fill="#FF5A1F" font-family="Varela Round" font-size="14">slope = −g, everywhere</text>
+        </svg>
+        <div class="cap"><b>FIG 2</b> — equation (A) drawn: one straight line, through zero at the apex. It crosses zero — it never bends, never bounces.</div>
+      </div>
+
+      <div class="callout trap">
+        <div class="name">THE APEX TRAP</div>
+        <p>At the very top, velocity is zero — acceleration is not. It stays −9.80 m/s² through the turn. Any answer built on "a = 0 at the top" fails before it starts.</p>
+      </div>
+    </section>
+
+    <!-- 04 SPECIAL CASES ............................................ -->
+    <section aria-labelledby="s4">
+      <h2 id="s4"><span class="n">04</span> Special cases</h2>
+      <p class="sec-sub">Six ready-made forms of the same three equations. Learn the trigger, not just the formula.</p>
+      <div class="cases">
+        <div class="case">
+          <span class="cid">KIN-006</span>
+          <div><h3>Return-speed symmetry</h3>
+          <p>Speed at any level while coming down equals the speed at that level while going up — mass never enters.</p>
+          <span class="trig">TRIGGER: BACK TO THE LAUNCH LEVEL</span></div>
+        </div>
+        <div class="case">
+          <span class="cid">KIN-007</span>
+          <div><h3>Speed–height square root</h3>
+          <p>During a drop, <em>v = √(2g × drop)</em>. After a bounce to half the height, the same curve repeats at a smaller scale.</p>
+          <span class="trig">TRIGGER: SPEED AT A HEIGHT, NOT AT A TIME</span></div>
+        </div>
+        <div class="case">
+          <span class="cid">KIN-008</span>
+          <div><h3>Tower relation</h3>
+          <p>Total flight = n × time to the top, landing a height H below the launch: <em>2gH = nu²(n − 2)</em>.</p>
+          <span class="trig">TRIGGER: FLIGHT TIME GIVEN AS A MULTIPLE</span></div>
+        </div>
+        <div class="case">
+          <span class="cid">KIN-009</span>
+          <div><h3>The v–t line</h3>
+          <p><em>v = u − gt</em>: one straight line of slope −g, through zero at the apex, negative on the way down (Fig 2).</p>
+          <span class="trig">TRIGGER: ANY VERTICAL-THROW GRAPH</span></div>
+        </div>
+        <div class="case">
+          <span class="cid">KIN-010</span>
+          <div><h3>Linear separation</h3>
+          <p>Two bodies, both in the air: <em>y₂ − y₁ = (u₂ − u₁)t</em> — the ½gt² terms cancel, so the gap grows along a straight line.</p>
+          <span class="trig">TRIGGER: TWO BODIES, BOTH IN FLIGHT</span></div>
+        </div>
+        <div class="case">
+          <span class="cid">KIN-011</span>
+          <div><h3>The split-fall optimum</h3>
+          <p>A fall of H interrupted at height h: <em>t = √(2(H−h)/g) + √(2h/g)</em>, maximum at <em>h/H = 1/2</em>.</p>
+          <span class="trig">TRIGGER: MAXIMISE A TWO-PART FALL</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 EXAMPLES & PROBLEM TACKLING .............................. -->
+    <section aria-labelledby="s5">
+      <h2 id="s5"><span class="n">05</span> Examples &amp; problem tackling</h2>
+      <p class="sec-sub">Five real exam patterns. For each one: the setup, how to attack, the trap, and the line that finishes it.</p>
+
+      <div class="scenario">
+        <div class="sc-head"><span class="cid">KIN-006</span><span class="pyq">PYQ 1983-S1Q1</span></div>
+        <h3>Free-fall symmetry</h3>
+        <div class="fig">
+          <svg viewBox="0 0 760 210" role="img" aria-label="A light ball and a heavy ball thrown up with the same speed return with the same speed">
+            <defs><marker id="ah3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#3DE0D8"/></marker></defs>
+            <line x1="60" y1="170" x2="700" y2="170" stroke="#2A262E" stroke-width="2"/>
+            <circle cx="200" cy="140" r="12" fill="#F5E3C0"/>
+            <text x="182" y="200" fill="#C7C5CC" font-family="Quicksand" font-weight="700" font-size="13">LIGHT</text>
+            <line x1="200" y1="120" x2="200" y2="70" stroke="#3DE0D8" stroke-width="3" marker-end="url(#ah3)"/>
+            <text x="212" y="90" fill="#3DE0D8" font-family="Varela Round" font-size="14" font-style="italic">u</text>
+            <circle cx="420" cy="136" r="17" fill="#CDA98C"/>
+            <text x="398" y="200" fill="#C7C5CC" font-family="Quicksand" font-weight="700" font-size="13">HEAVY</text>
+            <line x1="420" y1="112" x2="420" y2="62" stroke="#3DE0D8" stroke-width="3" marker-end="url(#ah3)"/>
+            <text x="432" y="82" fill="#3DE0D8" font-family="Varela Round" font-size="14" font-style="italic">u</text>
+            <text x="530" y="95" fill="#F5B532" font-family="Varela Round" font-size="15">both return with</text>
+            <text x="530" y="118" fill="#F5B532" font-family="Varela Round" font-size="15" font-style="italic">speed u — equal</text>
+          </svg>
+          <div class="cap"><b>FIG 3</b> — same throw speed, different masses, same return speed.</div>
+        </div>
+        <div class="sc-row"><span class="lab">THE SETUP</span>
+          <p>Two balls of different mass are thrown up with the same speed. Compare their speeds when they come back to the launch level.</p></div>
+        <div class="sc-row"><span class="lab">HOW TO ATTACK</span>
+          <p>Look at equations (A) to (D) — mass appears nowhere. Apply the mirror result directly: each ball returns with the speed it left with.</p></div>
+        <div class="sc-row trap"><span class="lab">THE TRAP</span>
+          <p>Feeling that the heavier ball should come back faster. Gravity gives every mass the same acceleration — the feeling is wrong.</p></div>
+        <div class="sc-row kill"><span class="lab">THE LINE THAT FINISHES IT</span>
+          <p>Motion under gravity is mass-independent; speed depends only on height — <em>equal speeds, both balls</em>.</p></div>
+      </div>
+
+      <div class="scenario">
+        <div class="sc-head"><span class="cid">KIN-007 · KIN-009</span><span class="pyq">PYQ 2000-S1Q14 · 2017-S1Q21</span></div>
+        <h3>Reading the graphs</h3>
+        <div class="fig">
+          <svg viewBox="0 0 760 240" role="img" aria-label="Left: speed against height is a sideways parabola that repeats smaller after a bounce. Right: velocity against time is a straight line crossing zero.">
+            <defs><marker id="ah4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#C7C5CC"/></marker></defs>
+            <!-- left: v-h -->
+            <line x1="70" y1="200" x2="330" y2="200" stroke="#C7C5CC" stroke-width="1.5" marker-end="url(#ah4)"/>
+            <line x1="70" y1="200" x2="70" y2="35" stroke="#C7C5CC" stroke-width="1.5" marker-end="url(#ah4)"/>
+            <text x="56" y="30" fill="#C7C5CC" font-family="Varela Round" font-size="13" font-style="italic">v</text>
+            <text x="336" y="215" fill="#C7C5CC" font-family="Varela Round" font-size="13" font-style="italic">h</text>
+            <!-- v = sqrt(2g(d-h)): parabola sideways, v max at h=0 -->
+            <path d="M70 65 Q 200 85 285 200" stroke="#3DE0D8" stroke-width="3" fill="none"/>
+            <path d="M70 105 Q 140 118 178 200" stroke="rgba(61,224,216,.5)" stroke-width="3" fill="none"/>
+            <text x="230" y="70" fill="#3DE0D8" font-family="Varela Round" font-size="13.5" font-style="italic">first drop (from d)</text>
+            <text x="90" y="140" fill="rgba(61,224,216,.75)" font-family="Varela Round" font-size="13.5" font-style="italic">after bounce (d/2)</text>
+            <text x="80" y="228" fill="#CDA98C" font-family="Quicksand" font-weight="700" font-size="12">SPEED vs HEIGHT — SQUARE ROOT, NOT A LINE</text>
+            <!-- right: v-t -->
+            <line x1="430" y1="120" x2="700" y2="120" stroke="#C7C5CC" stroke-width="1.5" marker-end="url(#ah4)"/>
+            <line x1="430" y1="200" x2="430" y2="35" stroke="#C7C5CC" stroke-width="1.5" marker-end="url(#ah4)"/>
+            <text x="416" y="30" fill="#C7C5CC" font-family="Varela Round" font-size="13" font-style="italic">v</text>
+            <text x="706" y="135" fill="#C7C5CC" font-family="Varela Round" font-size="13" font-style="italic">t</text>
+            <line x1="430" y1="60" x2="650" y2="185" stroke="#3DE0D8" stroke-width="3"/>
+            <circle cx="536" cy="120" r="4.5" fill="#F5B532"/>
+            <text x="524" y="105" fill="#F5B532" font-family="Varela Round" font-size="13">apex</text>
+            <text x="440" y="228" fill="#CDA98C" font-family="Quicksand" font-weight="700" font-size="12">VELOCITY vs TIME — STRAIGHT, CROSSES ZERO</text>
+          </svg>
+          <div class="cap"><b>FIG 4</b> — the two graphs this section keeps asking for.</div>
+        </div>
+        <div class="sc-row"><span class="lab">THE SETUP</span>
+          <p>Two old favourites in one skill: sketch speed against height for a ball dropped from d that rebounds to d/2, and pick the correct velocity–time graph for a ball thrown straight up.</p></div>
+        <div class="sc-row"><span class="lab">HOW TO ATTACK</span>
+          <p>Against height, use (C): <em>v = √(2g(d − h))</em> while falling, and the same square-root shape at a smaller scale after the bounce. Against time, use (A): one straight line of slope −g crossing zero at the apex.</p></div>
+        <div class="sc-row trap"><span class="lab">THE TRAP</span>
+          <p>Drawing v as a straight line against h — it is a sideways parabola. And picking a v–t curve that bends or never changes sign — the true line crosses zero, it does not bounce off the axis.</p></div>
+        <div class="sc-row kill"><span class="lab">THE LINE THAT FINISHES IT</span>
+          <p><em>v ∝ √height</em> against height; <em>v = u − gt</em>, straight with slope −g, against time.</p></div>
+      </div>
+
+      <div class="scenario">
+        <div class="sc-head"><span class="cid">KIN-008</span><span class="pyq">PYQ 2014-S1Q19</span></div>
+        <h3>Throw from a tower</h3>
+        <div class="fig">
+          <svg viewBox="0 0 760 260" role="img" aria-label="A particle thrown up from a tower rises, comes back past the ledge and lands at the base, a height H below the launch point">
+            <defs><marker id="ah5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#F5B532"/></marker></defs>
+            <!-- ground + tower -->
+            <line x1="60" y1="230" x2="700" y2="230" stroke="#2A262E" stroke-width="2"/>
+            <rect x="150" y="110" width="70" height="120" fill="#1E1B20" stroke="#2A262E"/>
+            <!-- path: up from ledge, down to ground -->
+            <path d="M235 110 C235 60 235 40 250 40 C265 40 265 70 265 230" stroke="rgba(61,224,216,.8)" stroke-width="2.5" stroke-dasharray="5 5" fill="none"/>
+            <circle cx="235" cy="110" r="9" fill="#F5E3C0"/>
+            <text x="255" y="30" fill="#3DE0D8" font-family="Varela Round" font-size="14" font-style="italic">t_up = u/g</text>
+            <!-- H marker -->
+            <line x1="330" y1="110" x2="330" y2="230" stroke="#F5B532" stroke-width="2" marker-end="url(#ah5)"/>
+            <line x1="318" y1="110" x2="342" y2="110" stroke="#F5B532" stroke-width="2"/>
+            <text x="344" y="175" fill="#F5B532" font-family="Varela Round" font-size="15" font-style="italic">y = −H at landing</text>
+            <text x="430" y="90" fill="#F5E3C0" font-family="Varela Round" font-size="15">total flight t = n × (u/g)</text>
+            <text x="430" y="118" fill="#FF5A1F" font-family="Quicksand" font-weight="700" font-size="16" font-style="italic">2gH = nu²(n − 2)</text>
+          </svg>
+          <div class="cap"><b>FIG 5</b> — the landing is BELOW the launch, so the displacement enters with a minus sign.</div>
+        </div>
+        <div class="sc-row"><span class="lab">THE SETUP</span>
+          <p>From a tower of height H you throw a particle straight up. The total flight to the ground is n times the time taken to reach the top. Find the relation between H, u and n.</p></div>
+        <div class="sc-row"><span class="lab">HOW TO ATTACK</span>
+          <p>Time to the top is <em>t_up = u/g</em>, so landing happens at <em>t = nu/g</em>. Put this in (B) with the landing displacement <em>y = −H</em> (the base is below the launch). Simplify and you get <em>2gH = nu²(n − 2)</em>.</p></div>
+        <div class="sc-row trap"><span class="lab">THE TRAP</span>
+          <p>Writing y = +H. The particle finishes below the point of throw — with up as positive, the displacement must be −H, otherwise every sign after it goes wrong.</p></div>
+        <div class="sc-row kill"><span class="lab">THE LINE THAT FINISHES IT</span>
+          <p>Up positive, net displacement = −H at the base — then <em>2gH = nu²(n − 2)</em> comes out in two lines.</p></div>
+      </div>
+
+      <div class="scenario">
+        <div class="sc-head"><span class="cid">KIN-010</span><span class="pyq">PYQ 2015-S1Q20</span></div>
+        <h3>Two stones, one cliff</h3>
+        <div class="fig">
+          <svg viewBox="0 0 760 240" role="img" aria-label="Two stones thrown up from a cliff with different speeds; their separation grows linearly with time until the slower one lands">
+            <defs><marker id="ah6" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#C7C5CC"/></marker></defs>
+            <!-- cliff -->
+            <path d="M60 90 L200 90 L200 210 L60 210" fill="#1E1B20" stroke="#2A262E"/>
+            <circle cx="180" cy="78" r="8" fill="#F5E3C0"/>
+            <circle cx="150" cy="78" r="8" fill="#CDA98C"/>
+            <text x="120" y="60" fill="#C7C5CC" font-family="Varela Round" font-size="13" font-style="italic">u₁, u₂ from the same edge</text>
+            <!-- separation graph -->
+            <line x1="330" y1="200" x2="700" y2="200" stroke="#C7C5CC" stroke-width="1.5" marker-end="url(#ah6)"/>
+            <line x1="330" y1="200" x2="330" y2="40" stroke="#C7C5CC" stroke-width="1.5" marker-end="url(#ah6)"/>
+            <text x="300" y="38" fill="#C7C5CC" font-family="Varela Round" font-size="13">gap</text>
+            <text x="706" y="215" fill="#C7C5CC" font-family="Varela Round" font-size="13" font-style="italic">t</text>
+            <line x1="330" y1="200" x2="560" y2="80" stroke="#3DE0D8" stroke-width="3"/>
+            <path d="M560 80 C600 65 640 70 680 92" stroke="rgba(61,224,216,.5)" stroke-width="3" fill="none" stroke-dasharray="6 5"/>
+            <circle cx="560" cy="80" r="5" fill="#F5B532"/>
+            <text x="470" y="105" fill="#3DE0D8" font-family="Varela Round" font-size="14" font-style="italic">straight line: (u₂ − u₁)t</text>
+            <text x="575" y="60" fill="#F5B532" font-family="Varela Round" font-size="14">first stone lands — rule changes</text>
+          </svg>
+          <div class="cap"><b>FIG 6</b> — gravity cancels from the difference, so the gap grows on a straight line while both fly.</div>
+        </div>
+        <div class="sc-row"><span class="lab">THE SETUP</span>
+          <p>Two stones are thrown up from the same cliff with different speeds. Sketch their separation against time, keeping in mind that each stone eventually lands.</p></div>
+        <div class="sc-row"><span class="lab">HOW TO ATTACK</span>
+          <p>Write (B) for both and subtract: the −½gt² terms cancel, leaving <em>y₂ − y₁ = (u₂ − u₁)t</em>. While both are in the air the gap grows along a straight line; the graph changes its nature the moment the slower stone lands.</p></div>
+        <div class="sc-row trap"><span class="lab">THE TRAP</span>
+          <p>Drawing the separation as a curve during the shared flight. Gravity acts equally on both stones — it cannot bend their difference.</p></div>
+        <div class="sc-row kill"><span class="lab">THE LINE THAT FINISHES IT</span>
+          <p>While both fly, relative acceleration is zero: <em>gap = (u₂ − u₁)t</em>, a straight line — then watch for the first landing.</p></div>
+      </div>
+
+      <div class="scenario">
+        <div class="sc-head"><span class="cid">KIN-011</span><span class="pyq">PYQ 1986-S2Q3</span></div>
+        <h3>The fall that breaks in two</h3>
+        <div class="fig">
+          <svg viewBox="0 0 760 250" role="img" aria-label="A body falls a height H minus h, hits an incline at height h where its velocity turns horizontal, then falls the remaining height h">
+            <defs><marker id="ah7" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#F5B532"/></marker>
+            <marker id="ah8" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#3DE0D8"/></marker></defs>
+            <line x1="60" y1="220" x2="700" y2="220" stroke="#2A262E" stroke-width="2"/>
+            <!-- incline -->
+            <path d="M260 220 L430 120 L430 220 Z" fill="#1E1B20" stroke="#2A262E"/>
+            <!-- fall 1 -->
+            <circle cx="430" cy="40" r="9" fill="#F5E3C0"/>
+            <line x1="430" y1="55" x2="430" y2="106" stroke="#3DE0D8" stroke-width="3" marker-end="url(#ah8)"/>
+            <!-- bounce point -->
+            <circle cx="430" cy="120" r="6" fill="#F5B532"/>
+            <!-- horizontal velocity then projectile fall -->
+            <line x1="442" y1="120" x2="500" y2="120" stroke="#3DE0D8" stroke-width="3" marker-end="url(#ah8)"/>
+            <text x="452" y="108" fill="#3DE0D8" font-family="Varela Round" font-size="13.5" font-style="italic">v turns horizontal</text>
+            <path d="M442 122 C500 130 545 165 570 220" stroke="rgba(61,224,216,.7)" stroke-width="2.5" stroke-dasharray="5 5" fill="none"/>
+            <!-- markers H and h -->
+            <line x1="640" y1="40" x2="640" y2="220" stroke="#CDA98C" stroke-width="1.5"/>
+            <line x1="628" y1="40" x2="652" y2="40" stroke="#CDA98C" stroke-width="1.5"/>
+            <text x="655" y="130" fill="#CDA98C" font-family="Varela Round" font-size="15" font-style="italic">H</text>
+            <line x1="600" y1="120" x2="600" y2="220" stroke="#F5B532" stroke-width="2" marker-end="url(#ah7)"/>
+            <line x1="588" y1="120" x2="612" y2="120" stroke="#F5B532" stroke-width="2"/>
+            <text x="565" y="170" fill="#F5B532" font-family="Varela Round" font-size="15" font-style="italic">h</text>
+            <text x="80" y="70" fill="#F5E3C0" font-family="Varela Round" font-size="15">best split:</text>
+            <text x="80" y="98" fill="#FF5A1F" font-family="Quicksand" font-weight="700" font-size="17" font-style="italic">h/H = 1/2</text>
+          </svg>
+          <div class="cap"><b>FIG 7</b> — one fall, two parts: a drop of H − h, then a fresh fall from h.</div>
+        </div>
+        <div class="sc-row"><span class="lab">THE SETUP</span>
+          <p>A body falls a height H and strikes an incline at height h, where its velocity becomes horizontal. Find h/H so that the time still left to reach the ground is maximum.</p></div>
+        <div class="sc-row"><span class="lab">HOW TO ATTACK</span>
+          <p>Break the journey into two parts: a straight drop of H − h, then — velocity now horizontal — a fresh fall from height h. Add the two fall times, <em>t = √(2(H−h)/g) + √(2h/g)</em>, and maximise over h.</p></div>
+        <div class="sc-row trap"><span class="lab">THE TRAP</span>
+          <p>Maximising only one part. Raise h and the second fall gets longer while the first gets shorter — only the sum has the answer.</p></div>
+        <div class="sc-row kill"><span class="lab">THE LINE THAT FINISHES IT</span>
+          <p>Differentiate the sum, set it to zero: the symmetric split <em>h/H = 1/2</em> wins.</p></div>
+      </div>
+    </section>
+
+    <!-- 06 LAB ...................................................... -->
+    <section aria-labelledby="s6">
+      <h2 id="s6"><span class="n">06</span> Lab — vertical throw</h2>
+      <p class="sec-sub">Fig 1 and Fig 2, alive. Run the throw and watch the v–t line draw itself.</p>
+
+      <div class="print-bridge">
+        <div class="name">TRY THE SIM — VERTICAL THROW</div>
+        <p>The interactive version of this page draws the ball and its velocity–time line side by side as the flight runs: one straight line of slope −g, through zero at the apex, mirrored on the way down. Presets: Symmetric throw (KIN-006) · Faster throw (KIN-009) · Tower throw, n = 3 (KIN-008) · Two stones (KIN-010).</p>
+        <p class="p">OPEN: notes/ON_U02_Kinematics/motion-under-gravity.html</p>
+      </div>
+
+      <div class="lab-shell" id="lab">
+        <div class="lab-head">
+          <span class="t">VERTICAL THROW · v–t LIVE</span>
+          <span class="model">RUN-THE-PROCESS · a = −g CONSTANT · NO AIR RESISTANCE</span>
+          <button class="btn" id="reset">Reset · R</button>
+        </div>
+
+        <canvas id="stage" width="1568" height="600" tabindex="0"
+          aria-label="A ball thrown straight up beside its velocity-time graph, drawn live as the flight runs"></canvas>
+
+        <div class="readout" aria-live="polite">
+          <div><div class="lab">t</div><div class="val" id="r-t">0.00 s</div></div>
+          <div><div class="lab">v</div><div class="val" id="r-v">—</div></div>
+          <div><div class="lab">y</div><div class="val" id="r-y">—</div></div>
+          <div><div class="lab" id="r4lab">a</div><div class="val" id="r-a">−9.80 m/s²</div></div>
+        </div>
+
+        <div class="dock">
+          <div class="slider-wrap">
+            <div class="lab"><span>LAUNCH SPEED u</span><span class="val" id="u-val">9.80 m/s</span></div>
+            <input type="range" id="u" min="4.9" max="19.6" step="0.05" value="9.8"
+              aria-label="Launch speed in metres per second">
+            <div class="ticks"><span>4.9</span><span>9.8</span><span>14.7</span><span>19.6</span></div>
+          </div>
+          <button class="go" id="run">Run throw</button>
+        </div>
+        <div class="presets" role="group" aria-label="Presets — each isolates one concept">
+          <button class="btn" data-p="sym" aria-pressed="true">Symmetric throw · KIN-006</button>
+          <button class="btn" data-p="fast" aria-pressed="false">Faster throw · KIN-009</button>
+          <button class="btn" data-p="tower" aria-pressed="false">Tower throw, n = 3 · KIN-008</button>
+          <button class="btn" data-p="stones" aria-pressed="false">Two stones · KIN-010</button>
+        </div>
+
+        <div class="panel">
+          <div class="blk">
+            <span class="lab">WHAT YOU SEE</span>
+            <p id="see">A ball leaves your hand at u and climbs beside its own velocity–time graph, drawn live. The line never bends and never pauses — watch it pass straight through zero at the top of the flight.</p>
+          </div>
+          <div class="blk eqx">
+            <span class="lab">THE EQUATION — LIVE</span>
+            <p><var>v</var> = <var>u</var> − <var>g t</var> = <span class="num" id="live-u">9.80</span> − 9.80 × <span class="num" id="live-t">0.00</span> = <span class="num" id="live-v">9.80 m/s</span></p>
+          </div>
+          <div class="blk">
+            <span class="lab">WHY IT HAPPENS</span>
+            <p id="why">Gravity is the only force acting, and it never changes: a = −9.80 m/s² on the way up, at the top, and on the way down. That one constant slope forces the symmetry — up-time equals down-time, and the return speed equals the launch speed.</p>
+          </div>
+          <div class="blk checkx">
+            <span class="lab">PREDICT — THEN RUN</span>
+            <p>At the very top of the flight, the acceleration is:</p>
+            <div class="pred" role="group" aria-label="Prediction">
+              <button class="btn" data-pred="zero" aria-pressed="false">Zero — it stops</button>
+              <button class="btn" data-pred="g" aria-pressed="false">9.80 m/s², downward</button>
+            </div>
+            <p class="reveal" id="reveal" hidden><b>REVEALED —</b> <span id="reveal-txt"></span></p>
+            <p class="reveal" id="check" hidden><b>CHECK YOURSELF —</b> Set the tower preset: the flight lasts exactly 3 × the time to the top. With u = 9.80 m/s that means landing 14.7 m below the launch at t = 3.00 s — confirm 2gH = nu²(n − 2) holds on the readouts.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div style="margin-top:44px;padding:30px;border:1px solid var(--hairline);background:var(--obsidian);text-align:center">
+      <div style="font-family:var(--disp);font-weight:700;font-size:21px;color:var(--white)">Run the full simulation</div>
+      <p style="color:var(--titanium);margin:8px auto 18px;max-width:48ch">Open the vertical-throw lab full screen, with every control in the side panel.</p>
+      <button onclick="window.parent.postMessage({onOpenSim:true},'*')" style="font-family:var(--disp);font-weight:700;font-size:15px;color:#161418;border:0;border-radius:999px;background:linear-gradient(180deg,var(--ember),var(--ignition));padding:14px 34px;min-height:48px;cursor:pointer">Open full-screen simulation →</button>
+    </div>
+
+    <footer>
+      <span class="k">ORANGE NELUMBO — NOTES</span>
+      <span class="k"><em>IN PURSUIT OF MASTERY.</em></span>
+    </footer>
+  </main>
+</div>
+
+<script>
+(() => {
+  const G = 9.8;
+  const cv = document.getElementById('stage'), cx = cv.getContext('2d');
+  const DPR = 2, W = cv.width / DPR, H = cv.height / DPR;
+  cx.scale(DPR, DPR);
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const PRESETS = {
+    sym:    { u: 9.8,  ground: 0,    u2: null,
+      see: 'A ball leaves your hand at u and climbs beside its own velocity–time graph, drawn live. The line never bends and never pauses — watch it pass straight through zero at the top of the flight.',
+      why: 'Gravity is the only force acting, and it never changes: a = −9.80 m/s² up, at the top, and down. That one constant slope forces the symmetry — up-time equals down-time, and the return speed equals the launch speed.' },
+    fast:   { u: 14.7, ground: 0,    u2: null,
+      see: 'A faster throw — but the v–t line keeps exactly the same slope. Only the starting point moves up; the shape of the flight does not change.',
+      why: 'The slope of the v–t line is −g, fixed by gravity alone. Change u and you only slide the same line up or down — you can never tilt it.' },
+    tower:  { u: 9.8,  ground: 14.7, u2: null,
+      see: 'Thrown up from a tower ledge: the ball rises for 1.00 s, mirrors down past the launch level, and keeps falling to the base 14.7 m below — total flight 3.00 s, three times the up-time.',
+      why: 'The landing is BELOW the launch, so its displacement enters as −H. With t = nu/g in y = ut − ½gt², the relation 2gH = nu²(n − 2) follows — here n = 3, H = 14.7 m.' },
+    stones: { u: 9.8,  ground: 14.7, u2: 14.7,
+      see: 'Two stones leave the same cliff edge at different speeds. Watch the SEPARATION readout: while both fly, it grows along a straight line — gravity cancels out of their difference.',
+      why: 'Both stones carry the same −½gt² term, so subtracting positions leaves y₂ − y₁ = (u₂ − u₁)t. The gap is linear until the slower stone lands at t = 3.00 s — after that the rule changes.' },
+  };
+  let preset = 'sym', u = 9.8, state = null, raf = null, predicted = null, towerRunDone = false;
+
+  const $ = id => document.getElementById(id);
+  const fmt = (x, unit, dp=2) => (x < 0 ? '−' : '') + Math.abs(x).toFixed(dp) + ' ' + unit;
+
+  function flightTime(u0, ground) {
+    return (u0 + Math.sqrt(u0*u0 + 2*G*ground)) / G;
+  }
+  const y = (u0,t) => u0*t - .5*G*t*t;
+  const v = (u0,t) => u0 - G*t;
+
+  const TRACK_X = 90, GRAPH_L = 200, GRAPH_R = W-30, GRAPH_T = 40, GRAPH_B = H-52;
+
+  function scales() {
+    const p = PRESETS[preset];
+    const tMax = Math.max(flightTime(u, p.ground), p.u2 ? flightTime(p.u2, p.ground) : 0);
+    const yTop = Math.max(u, p.u2||0); const yMax = yTop*yTop/(2*G);
+    const vMax = Math.max(u, p.u2||0, Math.abs(v(u, flightTime(u,p.ground))), p.u2?Math.abs(v(p.u2,flightTime(p.u2,p.ground))):0);
+    return { tMax, yMax, yMin: -p.ground, vMax };
+  }
+
+  function draw(t) {
+    const p = PRESETS[preset], sc = scales();
+    cx.clearRect(0,0,W,H);
+    cx.strokeStyle = 'rgba(255,138,61,.05)';
+    for (let gx=0; gx<W; gx+=44){cx.beginPath();cx.moveTo(gx,0);cx.lineTo(gx,H);cx.stroke();}
+    for (let gy=0; gy<H; gy+=44){cx.beginPath();cx.moveTo(0,gy);cx.lineTo(W,gy);cx.stroke();}
+
+    const yPix = yy => {
+      const span = sc.yMax - sc.yMin || 1;
+      return GRAPH_T + (sc.yMax - yy) / span * (GRAPH_B - GRAPH_T);
+    };
+    cx.strokeStyle = 'rgba(255,255,255,.14)';
+    cx.beginPath(); cx.moveTo(TRACK_X-34, yPix(0)); cx.lineTo(TRACK_X+34, yPix(0)); cx.stroke();
+    if (p.ground > 0) {
+      cx.strokeStyle = 'rgba(255,255,255,.3)';
+      cx.beginPath(); cx.moveTo(TRACK_X-34, yPix(-p.ground)); cx.lineTo(TRACK_X+34, yPix(-p.ground)); cx.stroke();
+    }
+    cx.font = '700 10px "Quicksand", sans-serif';
+    cx.fillStyle = '#CDA98C';
+    cx.fillText('LAUNCH', TRACK_X-32, yPix(0)-6);
+    if (p.ground>0) cx.fillText('GROUND', TRACK_X-32, yPix(-p.ground)-6);
+
+    const drawBall = (u0, col) => {
+      const tEnd = flightTime(u0, p.ground), tc = Math.min(t, tEnd);
+      const by = yPix(y(u0, tc));
+      cx.fillStyle = col; cx.beginPath(); cx.arc(TRACK_X, by, 9, 0, 7); cx.fill();
+      const vv = tc < tEnd ? v(u0, tc) : 0;
+      if (Math.abs(vv) > .1) {
+        const L = Math.max(-40, Math.min(40, -vv*2.2));
+        cx.strokeStyle = '#3DE0D8'; cx.fillStyle = '#3DE0D8';
+        cx.beginPath(); cx.moveTo(TRACK_X+20, by); cx.lineTo(TRACK_X+20, by+L); cx.stroke();
+        cx.beginPath(); cx.moveTo(TRACK_X+20, by+L+Math.sign(L)*5);
+        cx.lineTo(TRACK_X+16, by+L); cx.lineTo(TRACK_X+24, by+L); cx.fill();
+      }
+    };
+    drawBall(u, '#F5E3C0');
+    if (p.u2) drawBall(p.u2, '#CDA98C');
+
+    const tx = tt => GRAPH_L + tt/sc.tMax * (GRAPH_R-GRAPH_L);
+    const vy = vv => { const m = (GRAPH_B-GRAPH_T)/2/sc.vMax; return GRAPH_T + (sc.vMax - vv)*m; };
+    cx.strokeStyle = 'rgba(255,255,255,.14)';
+    cx.beginPath(); cx.moveTo(GRAPH_L, vy(0)); cx.lineTo(GRAPH_R, vy(0)); cx.stroke();
+    cx.beginPath(); cx.moveTo(GRAPH_L, GRAPH_T); cx.lineTo(GRAPH_L, GRAPH_B); cx.stroke();
+    cx.fillStyle = '#CDA98C';
+    cx.fillText('v (m/s)', GRAPH_L+6, GRAPH_T+4);
+    cx.fillText('t (s)', GRAPH_R-30, vy(0)-8);
+
+    const drawLine = (u0, col) => {
+      const tEnd = Math.min(t, flightTime(u0, p.ground));
+      cx.strokeStyle = col; cx.lineWidth = 2; cx.beginPath();
+      cx.moveTo(tx(0), vy(u0)); cx.lineTo(tx(tEnd), vy(v(u0,tEnd))); cx.stroke(); cx.lineWidth = 1;
+      const tUp = u0/G;
+      if (t >= tUp) {
+        cx.fillStyle = col; cx.beginPath(); cx.arc(tx(tUp), vy(0), 3.5, 0, 7); cx.fill();
+        cx.fillStyle = '#CDA98C'; cx.fillText('APEX', tx(tUp)-14, vy(0)+16);
+      }
+    };
+    drawLine(u, '#3DE0D8');
+    if (p.u2) drawLine(p.u2, 'rgba(61,224,216,.5)');
+
+    cx.fillStyle = 'rgba(245,244,246,.4)';
+    const st = state ? state.phase : 'READY';
+    cx.fillText(`a = −9.80 m/s² · t = ${t.toFixed(2)} s · ${st}`, 20, H-16);
+    const span = (sc.yMax - sc.yMin) || 1;
+    cx.fillText(`TRACK SPAN = ${span.toFixed(1)} m`, GRAPH_R-150, H-16);
+  }
+
+  function setReadout(t) {
+    const p = PRESETS[preset];
+    $('r-t').textContent = fmt(t,'s');
+    const tEnd = flightTime(u, p.ground), tc = Math.min(t, tEnd);
+    $('r-v').textContent = fmt(tc<tEnd? v(u,tc) : v(u,tEnd), 'm/s');
+    $('r-y').textContent = fmt(y(u,tc),'m');
+    if (p.u2) {
+      $('r4lab').textContent = 'SEPARATION';
+      const t2 = Math.min(t, flightTime(p.u2,p.ground));
+      $('r-a').textContent = fmt(Math.abs(y(p.u2,t2)-y(u,tc)),'m');
+    } else {
+      $('r4lab').textContent = 'a';
+      $('r-a').textContent = '−9.80 m/s²';
+    }
+    $('live-u').textContent = u.toFixed(2);
+    $('live-t').textContent = tc.toFixed(2);
+    $('live-v').textContent = fmt(v(u,tc),'m/s');
+  }
+
+  function flash(el) {
+    el.classList.add('hotflash');
+    setTimeout(() => el.classList.remove('hotflash'), reduced ? 600 : 150);
+  }
+
+  function reset() {
+    cancelAnimationFrame(raf); state = null;
+    draw(0); setReadout(0);
+  }
+
+  function reveal() {
+    const r = $('reveal'), tx = $('reveal-txt');
+    if (predicted !== null) {
+      tx.textContent = predicted === 'g'
+        ? 'Correct — the line went straight through zero without a kink: velocity vanished for a moment, the pull never did.'
+        : 'See the graph — the line crossed zero without pausing or bending. If a were zero at the top, the slope would go flat there. It stayed −9.80 m/s² the whole way.';
+      r.hidden = false;
+    }
+    if (preset === 'tower' && !towerRunDone) {
+      towerRunDone = true;
+      $('check').hidden = false;
+    }
+  }
+
+  function run() {
+    cancelAnimationFrame(raf);
+    const p = PRESETS[preset];
+    const tEnd = Math.max(flightTime(u,p.ground), p.u2?flightTime(p.u2,p.ground):0);
+    state = { t: 0, phase: 'RUNNING', apexDone: false };
+    let last = performance.now();
+    const step = now => {
+      const dt = Math.min(.05,(now-last)/1000); last = now;
+      state.t += dt;
+      if (!state.apexDone && state.t >= u/G) {
+        state.apexDone = true;
+        flash($('r-v'));
+        setTimeout(() => { flash($('live-v')); }, reduced?0:100);
+      }
+      if (state.t >= tEnd) {
+        state.t = tEnd; state.phase = 'RESOLVED';
+        draw(state.t); setReadout(state.t); reveal(); return;
+      }
+      draw(state.t); setReadout(state.t);
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+  }
+
+  $('u').addEventListener('input', e => {
+    u = parseFloat(e.target.value);
+    for (const tick of [4.9, 9.8, 14.7, 19.6]) if (Math.abs(u-tick) < .2) u = tick;
+    $('u-val').textContent = fmt(u,'m/s');
+    reset();
+  });
+  document.querySelectorAll('.presets .btn').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('.presets .btn').forEach(x => x.setAttribute('aria-pressed','false'));
+    b.setAttribute('aria-pressed','true');
+    preset = b.dataset.p;
+    const p = PRESETS[preset];
+    u = p.u; $('u').value = u; $('u-val').textContent = fmt(u,'m/s');
+    $('see').textContent = p.see; $('why').textContent = p.why;
+    reset();
+  }));
+  document.querySelectorAll('.pred .btn').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('.pred .btn').forEach(x => x.setAttribute('aria-pressed','false'));
+    b.setAttribute('aria-pressed','true');
+    predicted = b.dataset.pred;
+  }));
+  $('run').addEventListener('click', run);
+  $('reset').addEventListener('click', reset);
+  document.getElementById('lab').addEventListener('keydown', e => {
+    if (e.key === 'r' || e.key === 'R') { reset(); return; }
+    if (e.target.tagName === 'BUTTON') return;
+    if (e.key === ' ') { e.preventDefault(); run(); }
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+      e.preventDefault();
+      const s = $('u'); s.value = parseFloat(s.value) + (e.key==='ArrowRight'?.25:-.25);
+      s.dispatchEvent(new Event('input'));
+    }
+  });
+
+  reset();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { ArrowRight, Check, Crosshair, Gauge, Sparkles, TrendingDown } from "lucide-react";
+
+import { analytics } from "@/data/platform";
+
+export const metadata: Metadata = { title: "Projected rank map" };
+
+const levers = [
+  { id: "01", topic: "Relative motion", subject: "Physics", accuracy: 46, marks: "+9", action: "12-question repair drill" },
+  { id: "02", topic: "Entropy & spontaneity", subject: "Chemistry", accuracy: 51, marks: "+6", action: "Sign-convention review" },
+  { id: "03", topic: "Conic sections", subject: "Mathematics", accuracy: 54, marks: "+8", action: "Focus-directrix conversion set" },
+];
+
+export default function RankMapPage() {
+  return (
+    <div className="content-shell pb-28 pt-8 lg:pb-14 lg:pt-10">
+      <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end"><div><p className="mono-kicker">07 — Projected AIR gauge</p><h2 className="mt-4 font-display text-3xl font-bold sm:text-4xl">See the shortest path from here.</h2><p className="mt-3 max-w-2xl text-[#C7C5CC]">A model estimate built from mock score, topic accuracy, attempt quality, and time behaviour.</p></div><Link className="button-outline" href="/mocks">Update with a mock <ArrowRight size={16}/></Link></div>
+
+      <section className="brand-grid relative mt-9 overflow-hidden border border-[#FF5A1F]/30 bg-[#161418] p-7 sm:p-10">
+        <div className="absolute -right-32 -top-32 size-96 rounded-full border border-[#FF5A1F]/15"/><div className="absolute -right-10 top-10 size-56 rounded-full border border-[#3DE0D0]/10"/>
+        <div className="relative grid gap-10 lg:grid-cols-[.72fr_1.28fr] lg:items-center">
+          <div><div className="flex items-center gap-3"><span className="size-2 bg-[#3DE08A] shadow-[0_0_12px_#3DE08A]"/><p className="mono-kicker text-[#3DE08A]">Model updated today</p></div><p className="mt-8 font-mono text-[11px] uppercase tracking-[.14em] text-[#C7C5CC]/70">Current projected AIR</p><p className="mt-3 font-mono text-5xl font-semibold text-[#FF8A3D]">4,281</p><div className="mt-7 grid grid-cols-2 border-y border-white/8 py-5"><div><p className="font-mono text-[11px] text-[#C7C5CC]/70">RANGE</p><p className="mt-2 font-mono text-sm text-[#C7C5CC]">3,740–4,890</p></div><div className="border-l border-white/8 pl-5"><p className="font-mono text-[11px] text-[#C7C5CC]/70">PERCENTILE</p><p className="mt-2 font-mono text-sm text-[#3DE0D0]">{analytics.summary.percentile}%</p></div></div></div>
+          <div className="border border-white/9 bg-[#0E0D10]/85 p-5 sm:p-7"><div className="flex items-center justify-between"><div><p className="mono-kicker">12-week trajectory</p><p className="mt-2 font-display text-xl font-semibold">If the three highest-value gaps close</p></div><TrendingDown className="text-[#3DE08A]" size={24}/></div><svg aria-label="Illustrative rank projection toward 890" className="mt-7 w-full" viewBox="0 0 680 300">{[45,105,165,225].map(y=><line key={y} x1="30" x2="650" y1={y} y2={y} stroke="#2A262E"/>)}<path d="M30 50 C140 78 185 94 245 130 S365 164 425 205 S560 238 650 252" fill="none" stroke="#FF5A1F" strokeWidth="4"/><path d="M30 92 C142 112 202 125 265 158 S392 194 458 225 S572 248 650 258" fill="none" stroke="#3DE0D0" strokeDasharray="7 9" strokeWidth="2"/><circle cx="650" cy="252" fill="#FF5A1F" r="6"/><text x="30" y="286" fill="#C7C5CC" fontFamily="JetBrains Mono" fontSize="10">NOW · 4,281</text><text x="650" y="286" fill="#3DE0D0" fontFamily="JetBrains Mono" fontSize="10" textAnchor="end">W12 · 890</text></svg><div className="mt-4 flex flex-wrap gap-5 font-mono text-[11px] uppercase tracking-[.1em] text-[#C7C5CC]/70"><span className="flex items-center gap-2"><span className="h-0.5 w-5 bg-[#FF5A1F]"/>Target path</span><span className="flex items-center gap-2"><span className="h-0.5 w-5 bg-[#3DE0D0]"/>Confidence floor</span></div></div>
+        </div>
+      </section>
+
+      <div className="mt-6 grid gap-6 xl:grid-cols-[1fr_330px]">
+        <section className="border border-[#FF5A1F]/22 bg-[#161418]"><div className="flex items-center justify-between border-b border-white/8 px-6 py-5"><div><p className="mono-kicker">Rank levers</p><h3 className="mt-2 font-display text-2xl font-semibold">The three gaps with the highest return</h3></div><Crosshair className="hidden text-[#FF8A3D] sm:block" size={23}/></div><div className="divide-y divide-white/8">{levers.map((lever)=><article className="grid gap-5 px-6 py-6 sm:grid-cols-[42px_1fr_auto] sm:items-center" key={lever.id}><span className="font-mono text-xs text-[#FF5A1F]">{lever.id}</span><div><div className="flex flex-wrap items-center gap-3"><h4 className="font-semibold">{lever.topic}</h4><span className="font-mono text-[11px] uppercase tracking-[.1em] text-[#C7C5CC]/70">{lever.subject}</span></div><p className="mt-2 text-sm text-[#C7C5CC]/80">{lever.action}</p><div className="mt-3 h-1 w-full max-w-sm bg-[#2A262E]"><div className="h-full bg-[#E0483C]" style={{width:`${lever.accuracy}%`}}/></div></div><div className="flex items-center justify-between gap-5 sm:block sm:text-right"><p className="font-mono text-xl text-[#3DE08A]">{lever.marks}</p><p className="mt-1 font-mono text-[11px] text-[#C7C5CC]/70">MARKS AVAILABLE</p></div></article>)}</div><div className="border-t border-white/8 px-6 py-5"><Link className="button-primary" href="/planner">Open planner <ArrowRight size={16}/></Link></div></section>
+        <aside className="space-y-5"><div className="border border-[#3DE0D0]/25 bg-[#161418] p-6"><div className="flex items-center justify-between"><p className="font-mono text-[11px] uppercase tracking-[.14em] text-[#3DE0D0]">Confidence band</p><Gauge className="text-[#3DE0D0]" size={20}/></div><p className="mt-6 font-display text-2xl font-semibold">720–1,180</p><p className="mt-3 text-sm leading-6 text-[#C7C5CC]/80">Illustrative range after 12 weeks if targeted work is completed and mock accuracy transfers.</p></div><div className="border border-[#FF5A1F]/22 bg-[#161418] p-6"><p className="mono-kicker">Model inputs</p><div className="mt-5 space-y-3">{['7 ranked mocks','412 recent questions','Subject time balance','Question selection errors'].map(item=><p className="flex items-center gap-3 text-sm text-[#C7C5CC]" key={item}><Check className="text-[#3DE08A]" size={15}/>{item}</p>)}</div></div><div className="border border-white/9 bg-[#0E0D10] p-5"><div className="flex items-center gap-3"><Sparkles className="text-[#F6C344]" size={18}/><p className="font-semibold">What this is not</p></div><p className="mt-3 text-sm leading-6 text-[#C7C5CC]/70">A promise of rank, score, admission, selection, or a substitute for official counselling.</p></div></aside>
+      </div>
+      <p className="mt-7 text-sm leading-6 text-[#C7C5CC]/70">Projected AIR is always a model estimate, not a prediction. Results are illustrative and not guaranteed. Orange Nelumbo is independent and not affiliated with NTA, IITs, or the JEE Apex Board.</p>
+    </div>
+  );
+}

@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style data-omelette-print-defaults>
+@media print {
+  @page { margin: 0.5in; }
+  h1, h2, h3, h4, h5, h6 { break-after: avoid; }
+  figure, table, pre, blockquote, img, svg, tr, [class~="card" i] { break-inside: avoid; }
+  img, svg { max-width: 100%; }
+  p { orphans: 3; widows: 3; }
+}
+</style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:#F3EEE6;color:#2C2723;font-family:'Nunito',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  a{color:#B05A3B;text-decoration:none}
+  a:hover{color:#94472C}
+  ::selection{background:#E7CDBE;color:#2C2723}
+  .on-scroll::-webkit-scrollbar{width:11px;height:11px}
+  .on-scroll::-webkit-scrollbar-thumb{background:#D8CFBF;border:3px solid #F3EEE6;border-radius:6px}
+  .on-scroll::-webkit-scrollbar-track{background:transparent}
+  input::placeholder{color:#A79C8B}
+  .serif{font-family:'DM Serif Display',Georgia,serif;font-weight:400}
+  .lbl{font-family:'Nunito',sans-serif;font-weight:800}
+</style>
+</helmet>
+<div style="display:flex;height:100vh;width:100%;overflow:hidden;background:#F3EEE6">
+
+  <!-- ===================== LEFT RAIL ===================== -->
+  <aside style="width:256px;flex:0 0 256px;background:#FCFAF5;border-right:1px solid #E4DCCE;display:flex;flex-direction:column;height:100%">
+    <div style="padding:24px 22px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #EDE7DB">
+      <div style="width:40px;height:40px;flex:0 0 auto;background:#231F1B;display:flex;align-items:center;justify-content:center;border-radius:5px"><img src="assets/lotus.png" alt="Orange Nelumbo" style="width:30px;height:26px;object-fit:contain"></div>
+      <div style="line-height:1.1">
+        <div class="serif" style="font-size:17px;letter-spacing:.01em;color:#2C2723">Orange Nelumbo</div>
+        <div class="lbl" style="font-size:10px;letter-spacing:.08em;color:#B05A3B;margin-top:4px">The JEE Notebook</div>
+      </div>
+    </div>
+
+    <nav style="padding:18px 16px;display:flex;flex-direction:column;gap:3px">
+      <button onClick="{{ goHome }}" style="{{ sHome }}">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="2" y="2" width="8.5" height="8.5"></rect><rect x="13.5" y="2" width="8.5" height="8.5"></rect><rect x="2" y="13.5" width="8.5" height="8.5"></rect><rect x="13.5" y="13.5" width="8.5" height="8.5"></rect></svg>
+        <span>Dashboard</span>
+      </button>
+      <button onClick="{{ goNotes }}" style="{{ sNotes }}">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="4" width="18" height="2.4"></rect><rect x="3" y="10.8" width="18" height="2.4"></rect><rect x="3" y="17.6" width="12" height="2.4"></rect></svg>
+        <span>Notes Library</span>
+      </button>
+      <button onClick="{{ goSims }}" style="{{ sSims }}">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><circle cx="20.5" cy="7.5" r="2" fill="currentColor" stroke="none"></circle></svg>
+        <span>Simulations</span>
+      </button>
+      <button onClick="{{ goPractice }}" style="{{ sPractice }}">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="4"></circle><circle cx="12" cy="12" r="1" fill="currentColor"></circle></svg>
+        <span>Practice &amp; Mocks</span>
+      </button>
+      <button onClick="{{ goPricing }}" style="{{ sPricing }}">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2 L22 12 L12 22 L2 12 Z"></path></svg>
+        <span>Packages</span>
+      </button>
+    </nav>
+
+    <div style="margin:8px 18px 16px;padding:16px;background:#F7F1E8;border:1px solid #E4DCCE;border-radius:5px">
+      <div class="lbl" style="font-size:10px;letter-spacing:.08em;color:#938A7D;text-transform:uppercase">Your plan</div>
+      <div class="serif" style="font-size:17px;color:#2C2723;margin-top:6px">Notes · Active</div>
+      <div class="lbl" style="font-size:11px;font-weight:600;color:#A79C8B;margin-top:2px">Practice — not unlocked</div>
+      <button onClick="{{ goPricing }}" style="margin-top:12px;width:100%;height:38px;border:1px solid #B05A3B;background:transparent;color:#B05A3B;font-family:'Nunito';font-weight:800;font-size:12px;border-radius:3px;cursor:pointer" style-hover="background:#EFE1D6">Unlock Practice →</button>
+    </div>
+
+    <div style="margin-top:auto;padding:16px 20px;border-top:1px solid #EDE7DB;display:flex;align-items:center;gap:12px">
+      <div style="width:38px;height:38px;flex:0 0 auto;background:#231F1B;color:#F3EEE6;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:16px;border-radius:5px">A</div>
+      <div style="min-width:0;line-height:1.25">
+        <div style="font-weight:800;font-size:13.5px;color:#2C2723;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Aarav Sharma</div>
+        <div class="lbl" style="font-size:11px;font-weight:600;color:#938A7D">JEE aspirant · 2027</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===================== MAIN ===================== -->
+  <main style="flex:1;min-width:0;display:flex;flex-direction:column;height:100%">
+    <header style="flex:0 0 auto;height:68px;background:#FCFAF5;border-bottom:1px solid #E4DCCE;display:flex;align-items:center;gap:22px;padding:0 30px">
+      <div style="flex:1;max-width:440px;position:relative;display:flex;align-items:center">
+        <input value="{{ query }}" onInput="{{ onSearch }}" placeholder="search a concept, chapter, formula…" style="width:100%;height:42px;background:#F3EEE6;border:1px solid #E4DCCE;color:#2C2723;font-family:'Nunito';font-weight:600;font-size:14px;padding:0 14px;outline:none;border-radius:3px" style-focus="border-color:#B05A3B">
+      </div>
+      <div style="margin-left:auto;display:flex;align-items:center;white-space:nowrap">
+        <div style="padding:0 22px;text-align:right">
+          <div class="lbl" style="font-size:10px;letter-spacing:.06em;color:#A79C8B;text-transform:uppercase">Reading streak</div>
+          <div style="font-family:'Nunito';font-weight:800;font-size:17px;color:#B05A3B;margin-top:2px">{{ streak }} <span style="font-size:11px;color:#A79C8B;font-weight:600">days</span></div>
+        </div>
+        <div style="padding:0 22px;text-align:right;border-left:1px solid #E4DCCE">
+          <div class="lbl" style="font-size:10px;letter-spacing:.06em;color:#A79C8B;text-transform:uppercase">Target</div>
+          <div style="font-family:'Nunito';font-weight:800;font-size:17px;color:#2C2723;margin-top:2px">JEE Adv <span style="color:#B05A3B">'27</span></div>
+        </div>
+        <div style="padding:0 22px;text-align:right;border-left:1px solid #E4DCCE">
+          <div class="lbl" style="font-size:10px;letter-spacing:.06em;color:#A79C8B;text-transform:uppercase">Days to go</div>
+          <div style="font-family:'Nunito';font-weight:800;font-size:17px;color:#4F7E77;margin-top:2px">{{ daysToExam }}</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="on-scroll" style="flex:1;min-height:0;overflow-y:auto;background:#F3EEE6">
+
+      <!-- ============ HOME ============ -->
+      <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+      <div style="max-width:1060px;margin:0 auto;padding:44px 44px 72px">
+        <div class="lbl" style="font-size:12px;letter-spacing:.1em;color:#B05A3B;text-transform:uppercase">Your notebook</div>
+        <h1 class="serif" style="font-size:40px;line-height:1.1;margin-top:12px;letter-spacing:-.005em">Good evening, Aarav.</h1>
+        <p style="color:#6B6358;margin-top:10px;font-size:16px;max-width:56ch;line-height:1.6;font-weight:600">You've read {{ topicsDone }} of {{ topicsTotal }} topics so far. Pick up <b style="color:#2C2723">Motion under gravity</b> where you left off, or open a new chapter.</p>
+
+        <!-- stat strip (binary tracking, no mastery/rank) -->
+        <div style="display:flex;background:#FCFAF5;border:1px solid #E4DCCE;border-radius:6px;margin-top:36px;overflow:hidden">
+          <div style="flex:1;padding:24px 26px">
+            <div class="lbl" style="font-size:11px;letter-spacing:.06em;color:#938A7D;text-transform:uppercase">Topics read</div>
+            <div style="font-family:'Nunito';font-weight:800;font-size:32px;margin-top:10px">{{ topicsDone }} <span style="font-size:17px;color:#A79C8B">/ {{ topicsTotal }}</span></div>
+          </div>
+          <div style="flex:1;padding:24px 26px;border-left:1px solid #EDE7DB">
+            <div class="lbl" style="font-size:11px;letter-spacing:.06em;color:#938A7D;text-transform:uppercase">Chapters completed</div>
+            <div style="font-family:'Nunito';font-weight:800;font-size:32px;margin-top:10px">{{ chaptersDone }} <span style="font-size:17px;color:#A79C8B">/ {{ chaptersTotal }}</span></div>
+          </div>
+          <div style="flex:1;padding:24px 26px;border-left:1px solid #EDE7DB">
+            <div class="lbl" style="font-size:11px;letter-spacing:.06em;color:#938A7D;text-transform:uppercase">Reading streak</div>
+            <div style="font-family:'Nunito';font-weight:800;font-size:32px;margin-top:10px">{{ streak }} <span style="font-size:17px;color:#A79C8B">days</span></div>
+          </div>
+          <div style="flex:1.3;padding:24px 26px;border-left:1px solid #EDE7DB">
+            <div class="lbl" style="font-size:11px;letter-spacing:.06em;color:#938A7D;text-transform:uppercase">Last opened</div>
+            <div style="font-family:'Nunito';font-weight:700;font-size:18px;margin-top:12px;line-height:1.2">Motion under gravity</div>
+          </div>
+        </div>
+
+        <!-- continue -->
+        <div style="margin-top:56px">
+          <div style="display:flex;align-items:baseline;justify-content:space-between">
+            <h2 class="serif" style="font-size:24px">Continue where you left off</h2>
+            <a onClick="{{ goNotes }}" class="lbl" style="font-size:12px;letter-spacing:.04em;cursor:pointer;text-transform:uppercase">All subjects →</a>
+          </div>
+          <div onClick="{{ resumeNote }}" style="margin-top:18px;background:#231F1B;border-radius:6px;padding:32px 34px;cursor:pointer;position:relative;overflow:hidden" style-hover="opacity:.96">
+            <div style="position:absolute;width:280px;height:280px;border:1px solid rgba(255,255,255,.06);border-radius:50%;bottom:-170px;right:60px"></div>
+            <div style="position:absolute;width:420px;height:420px;border:1px solid rgba(255,255,255,.04);border-radius:50%;bottom:-260px;right:0"></div>
+            <div style="position:relative">
+              <div class="lbl" style="font-size:11px;letter-spacing:.08em;color:#D98A5E;text-transform:uppercase">Physics · Kinematics · in progress</div>
+              <div class="serif" style="font-size:30px;color:#F3EEE6;margin-top:12px">Motion under gravity</div>
+              <p style="color:#B7AE9F;margin-top:8px;font-size:15px;max-width:52ch;line-height:1.6;font-weight:600">Up and down are mirror images. Read the derivation section and run the vertical-throw lab at the end.</p>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-top:24px;max-width:540px">
+                <span class="lbl" style="font-size:12px;font-weight:600;color:#8C8375">6 concepts · 1 lab · 5 PYQ patterns</span>
+                <span style="height:44px;padding:0 26px;display:inline-flex;align-items:center;background:#B05A3B;color:#FCFAF5;font-weight:800;font-size:14px;border-radius:3px">Open note →</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- subjects -->
+        <div style="margin-top:56px">
+          <div style="display:flex;align-items:baseline;justify-content:space-between">
+            <h2 class="serif" style="font-size:24px">Your subjects</h2>
+            <span class="lbl" style="font-size:12px;color:#A79C8B;text-transform:uppercase">Reading progress</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;margin-top:18px">
+            <sc-for list="{{ subjectCards }}" as="s" hint-placeholder-count="3">
+              <div onClick="{{ s.open }}" style="background:#FCFAF5;border:1px solid #E4DCCE;border-radius:6px;padding:22px;cursor:pointer;transition:.14s" style-hover="border-color:#D8B7A6;transform:translateY(-2px)">
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                  <span class="lbl" style="font-size:11px;letter-spacing:.06em;color:#B05A3B">{{ s.code }}</span>
+                  <span class="lbl" style="font-size:12px;font-weight:600;color:#8C8375">{{ s.doneLabel }}</span>
+                </div>
+                <div class="serif" style="font-size:21px;margin-top:14px">{{ s.name }}</div>
+                <div class="lbl" style="font-size:12px;font-weight:600;color:#A79C8B;margin-top:4px">{{ s.chaptersLabel }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <!-- reading plan + up next -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:56px">
+          <div>
+            <h2 class="serif" style="font-size:24px">Today's reading</h2>
+            <div style="background:#FCFAF5;border:1px solid #E4DCCE;border-radius:6px;margin-top:18px;padding:8px 22px">
+              <sc-for list="{{ readingPlan }}" as="t" hint-placeholder-count="3">
+                <div style="display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px solid #EDE7DB">
+                  <div style="width:18px;height:18px;flex:0 0 auto;margin-top:1px;border:1.6px solid {{ t.dot }};background:{{ t.fill }};border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:800">{{ t.check }}</div>
+                  <div style="min-width:0">
+                    <div style="font-size:15px;font-weight:700;color:{{ t.textColor }}">{{ t.title }}</div>
+                    <div class="lbl" style="font-size:11px;font-weight:600;color:#A79C8B;margin-top:2px">{{ t.meta }}</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div>
+            <h2 class="serif" style="font-size:24px">Up next</h2>
+            <div style="background:#FCFAF5;border:1px solid #E4DCCE;border-radius:6px;margin-top:18px;padding:8px 22px">
+              <sc-for list="{{ upNext }}" as="u" hint-placeholder-count="3">
+                <div onClick="{{ u.onOpen }}" style="display:flex;gap:14px;align-items:center;padding:16px 0;border-bottom:1px solid #EDE7DB;cursor:pointer" style-hover="opacity:.75">
+                  <div style="width:18px;height:18px;flex:0 0 auto;border:1.6px solid #C4B9A8;border-radius:50%"></div>
+                  <div style="flex:1;min-width:0">
+                    <div style="font-size:15px;font-weight:700">{{ u.name }}</div>
+                    <div class="lbl" style="font-size:11px;font-weight:600;color:#A79C8B;margin-top:2px">{{ u.meta }}</div>
+                  </div>
+                  <span class="lbl" style="font-size:12px;color:#B05A3B">Open →</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      </sc-if>
+
+      <!-- ============ NOTES ============ -->
+      <sc-if value="{{ isNotes }}" hint-placeholder-val="{{ false }}">
+      <div style="max-width:1000px;margin:0 auto;padding:44px 44px 72px">
+        <div class="lbl" style="font-size:12px;letter-spacing:.1em;color:#B05A3B;text-transform:uppercase">E-book library</div>
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-top:12px;flex-wrap:wrap;gap:16px">
+          <div>
+            <h1 class="serif" style="font-size:38px;line-height:1.1">Notes Library</h1>
+            <p style="color:#6B6358;margin-top:10px;font-size:16px;max-width:60ch;line-height:1.6;font-weight:600">Highly structured notes — theory, derivations, PYQ patterns and a live lab in every chapter. Expand a subject, drill into a chapter, open a topic. Tick a topic off when you've read it.</p>
+          </div>
+          <div style="display:flex;gap:20px">
+            <span class="lbl" style="display:flex;align-items:center;gap:8px;font-size:11px;font-weight:600;color:#6B6358"><span style="width:15px;height:15px;background:#6C8A56;border-radius:50%;color:#fff;font-size:9px;display:flex;align-items:center;justify-content:center">✓</span>COMPLETED</span>
+            <span class="lbl" style="display:flex;align-items:center;gap:8px;font-size:11px;font-weight:600;color:#6B6358"><span style="width:15px;height:15px;border:1.6px solid #C4B9A8;border-radius:50%"></span>NOT READ</span>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:16px;margin-top:32px">
+          <sc-for list="{{ notesTree }}" as="s" hint-placeholder-count="3">
+            <div style="background:#FCFAF5;border:1px solid #E4DCCE;border-radius:6px;overflow:hidden">
+              <div onClick="{{ s.toggle }}" style="display:flex;align-items:center;gap:18px;padding:20px 24px;cursor:pointer" style-hover="background:#F7F1E8">
+                <span class="lbl" style="font-size:22px;color:#B05A3B;width:20px;text-align:center">{{ s.chevron }}</span>
+                <div style="width:48px;height:48px;flex:0 0 auto;background:#231F1B;color:#E9C6B2;display:flex;align-items:center;justify-content:center;font-family:'Nunito';font-size:13px;font-weight:800;border-radius:5px">{{ s.code }}</div>
+                <div style="flex:1;min-width:0">
+                  <div class="serif" style="font-size:23px">{{ s.name }}</div>
+                  <div class="lbl" style="font-size:11px;font-weight:600;color:#A79C8B;margin-top:2px">{{ s.meta }}</div>
+                </div>
+                <div style="text-align:right">
+                  <div class="lbl" style="font-size:10px;letter-spacing:.06em;color:#A79C8B;text-transform:uppercase">Read</div>
+                  <div style="font-family:'Nunito';font-weight:800;font-size:18px;color:#6C8A56;margin-top:2px">{{ s.doneLabel }}</div>
+                </div>
+              </div>
+              <sc-if value="{{ s.open }}" hint-placeholder-val="{{ false }}">
+                <div style="border-top:1px solid #EDE7DB;padding:8px 24px 18px 64px">
+                  <sc-for list="{{ s.chapters }}" as="c" hint-placeholder-count="3">
+                    <div style="border-bottom:1px solid #EDE7DB">
+                      <div onClick="{{ c.toggle }}" style="display:flex;align-items:center;gap:16px;padding:16px 4px;cursor:pointer" style-hover="opacity:.8">
+                        <span class="lbl" style="font-size:16px;color:#938A7D;width:14px">{{ c.chevron }}</span>
+                        <div style="flex:1;min-width:0">
+                          <div style="font-family:'Nunito';font-weight:800;font-size:16px">{{ c.name }}</div>
+                          <div class="lbl" style="font-size:11px;font-weight:600;color:#A79C8B;margin-top:2px">{{ c.topicCount }}</div>
+                        </div>
+                        <span class="lbl" style="font-size:12px;font-weight:700;color:{{ c.doneColor }}">{{ c.doneLabel }}</span>
+                      </div>
+                      <sc-if value="{{ c.open }}" hint-placeholder-val="{{ false }}">
+                        <div style="padding:4px 0 16px 30px;display:flex;flex-direction:column;gap:4px">
+                          <sc-for list="{{ c.topics }}" as="t" hint-placeholder-count="3">
+                            <div onClick="{{ t.onOpen }}" style="display:flex;align-items:center;gap:14px;padding:11px 14px;cursor:pointer;border:1px solid transparent;border-radius:4px" style-hover="background:#F7F1E8;border-color:#E4DCCE">
+                              <button onClick="{{ t.toggleDone }}" title="Mark read" style="width:22px;height:22px;flex:0 0 auto;border:1.6px solid {{ t.checkBorder }};background:{{ t.checkBg }};color:#fff;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;padding:0">{{ t.check }}</button>
+                              <span style="flex:1;min-width:0;font-size:15px;font-weight:700;color:{{ t.nameColor }}">{{ t.name }}</span>
+                              <sc-if value="{{ t.live }}" hint-placeholder-val="{{ false }}"><span class="lbl" style="font-size:10px;font-weight:800;letter-spacing:.04em;color:#94472C;background:#F1E4DA;border:1px solid #E0C3B4;padding:4px 9px;border-radius:3px">SAMPLE · LIVE LAB</span></sc-if>
+                              <span class="lbl" style="font-size:12px;font-weight:700;color:#B05A3B">Open →</span>
+                            </div>
+                          </sc-for>
+                        </div>
+                      </sc-if>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ============ READER ============ -->
+      <sc-if value="{{ isReader }}" hint-placeholder-val="{{ false }}">
+      <div style="position:fixed;inset:0;z-index:60;background:#F3EEE6;display:flex;flex-direction:column;height:100vh">
+        <div style="flex:0 0 auto;background:#FCFAF5;border-bottom:1px solid #E4DCCE;padding:14px 30px;display:flex;align-items:center;gap:18px">
+          <button onClick="{{ backToNotes }}" style="height:38px;padding:0 16px;border:1px solid #E4DCCE;background:transparent;color:#2C2723;font-family:'Nunito';font-weight:700;font-size:13px;border-radius:3px;cursor:pointer;display:flex;align-items:center;gap:7px" style-hover="background:#F7F1E8">← Back</button>
+          <div style="min-width:0">
+            <div class="lbl" style="font-size:11px;font-weight:600;letter-spacing:.04em;color:#A79C8B;text-transform:uppercase">{{ reader.subject }} · {{ reader.chapter }}</div>
+            <div class="serif" style="font-size:18px;line-height:1.2;margin-top:2px">{{ reader.topic }}</div>
+          </div>
+          <div style="margin-left:auto;display:flex;gap:10px">
+            <button style="height:38px;padding:0 16px;border:1px solid #E4DCCE;background:transparent;color:#6B6358;font-family:'Nunito';font-weight:700;font-size:13px;border-radius:3px;cursor:pointer" style-hover="background:#F7F1E8">Print / PDF</button>
+            <button onClick="{{ markComplete }}" style="{{ markStyle }}">{{ markLabel }}</button>
+          </div>
+        </div>
+        <div style="display:flex;flex:1;min-height:0">
+          <aside style="width:252px;flex:0 0 auto;background:#FCFAF5;border-right:1px solid #E4DCCE;overflow-y:auto;padding:18px 14px">
+            <div class="lbl" style="font-size:10px;letter-spacing:.06em;color:#A79C8B;text-transform:uppercase;padding:0 8px">Chapter · topics</div>
+            <div class="serif" style="font-size:18px;padding:4px 8px 14px">{{ readerChapter }}</div>
+            <div style="display:flex;flex-direction:column;gap:2px">
+              <sc-for list="{{ readerTopics }}" as="t" hint-placeholder-count="4">
+                <div onClick="{{ t.onOpen }}" style="{{ t.rowStyle }}" style-hover="background:#F7F1E8">
+                  <span style="width:20px;height:20px;flex:0 0 auto;border:1.6px solid {{ t.checkBorder }};background:{{ t.checkBg }};color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800">{{ t.check }}</span>
+                  <span style="flex:1;min-width:0;font-size:13.5px;font-weight:700;color:{{ t.nameColor }}">{{ t.name }}</span>
+                  <span style="{{ t.badgeStyle }}">{{ t.badge }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </aside>
+          <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+            <sc-if value="{{ readerLive }}" hint-placeholder-val="{{ true }}">
+              <iframe src="{{ readerSrc }}" title="Note" style="flex:1;width:100%;border:0;background:#161418"></iframe>
+            </sc-if>
+            <sc-if value="{{ readerNotLive }}" hint-placeholder-val="{{ false }}">
+              <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:40px">
+                <div style="max-width:520px;text-align:center">
+                  <div style="width:64px;height:64px;margin:0 auto;background:#F1E4DA;border:1px solid #E0C3B4;border-radius:8px;display:flex;align-items:center;justify-content:center"><span class="serif" style="font-size:30px;color:#B05A3B">§</span></div>
+                  <h2 class="serif" style="font-size:26px;margin-top:24px">{{ reader.topic }}</h2>
+                  <p style="color:#6B6358;margin-top:12px;font-size:15px;line-height:1.7;font-weight:600">This chapter is being typeset by our subject leads — theory, faceted diagrams, the derivation ladder, PYQ patterns and an interactive lab. It joins your notebook shortly.</p>
+                  <div class="lbl" style="font-size:11px;font-weight:600;color:#A79C8B;margin-top:20px">Sample available now · Physics · Kinematics · Motion under gravity</div>
+                  <button onClick="{{ resumeNote }}" style="margin-top:22px;height:44px;padding:0 26px;border:1px solid #B05A3B;background:transparent;color:#B05A3B;font-family:'Nunito';font-weight:800;font-size:13px;border-radius:3px;cursor:pointer" style-hover="background:#EFE1D6">Open the sample chapter →</button>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ============ SIMS ============ -->
+      <sc-if value="{{ isSims }}" hint-placeholder-val="{{ false }}">
+      <div style="max-width:1060px;margin:0 auto;padding:44px 44px 72px">
+        <div class="lbl" style="font-size:12px;letter-spacing:.1em;color:#B05A3B;text-transform:uppercase">The Lab</div>
+        <h1 class="serif" style="font-size:38px;line-height:1.1;margin-top:12px">Simulations</h1>
+        <p style="color:#6B6358;margin-top:10px;font-size:16px;max-width:62ch;line-height:1.6;font-weight:600">Every simulation lives inside its note — this is the direct-launch gallery. Run a concept, change the inputs, and watch the physics or maths draw itself.</p>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:28px;flex-wrap:wrap;gap:14px">
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <sc-for list="{{ simChips }}" as="c" hint-placeholder-count="4">
+              <button onClick="{{ c.set }}" style="{{ c.style }}">{{ c.label }}</button>
+            </sc-for>
+          </div>
+          <span class="lbl" style="font-size:12px;font-weight:600;color:#A79C8B;text-transform:uppercase">{{ simCount }}</span>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin-top:26px">
+          <sc-for list="{{ simList }}" as="s" hint-placeholder-count="6">
+            <div style="background:#FCFAF5;border:1px solid #E4DCCE;border-radius:6px;overflow:hidden;display:flex;flex-direction:column;transition:.14s" style-hover="border-color:#D8B7A6;transform:translateY(-2px)">
+              <div style="height:132px;background:repeating-linear-gradient(135deg,#EEE7DA 0 11px,#F4EEE3 11px 22px);border-bottom:1px solid #E4DCCE;position:relative;display:flex;align-items:center;justify-content:center">
+                <span class="serif" style="font-size:38px;color:#C9BCA6">{{ s.abbr }}</span>
+                <sc-if value="{{ s.live }}" hint-placeholder-val="{{ false }}">
+                  <span class="lbl" style="position:absolute;top:10px;left:10px;font-size:10px;font-weight:800;letter-spacing:.04em;background:#B05A3B;color:#FCFAF5;padding:4px 9px;border-radius:2px">● LIVE</span>
+                </sc-if>
+              </div>
+              <div style="padding:18px 18px 20px;display:flex;flex-direction:column;flex:1">
+                <div class="lbl" style="font-size:10.5px;font-weight:700;letter-spacing:.04em;color:#B05A3B;text-transform:uppercase">{{ s.tag }}</div>
+                <div class="serif" style="font-size:19px;margin-top:8px;line-height:1.2">{{ s.title }}</div>
+                <p style="color:#6B6358;font-size:13.5px;margin-top:8px;line-height:1.55;flex:1;font-weight:600">{{ s.desc }}</p>
+                <button onClick="{{ s.launch }}" style="margin-top:16px;height:42px;border:1px solid #B05A3B;background:transparent;color:#B05A3B;font-family:'Nunito';font-weight:800;font-size:13px;border-radius:3px;cursor:pointer" style-hover="background:#EFE1D6">{{ s.ctaLabel }}</button>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ============ PRACTICE ============ -->
+      <sc-if value="{{ isPractice }}" hint-placeholder-val="{{ false }}">
+      <div style="max-width:1000px;margin:0 auto;padding:44px 44px 72px">
+        <div class="lbl" style="font-size:12px;letter-spacing:.1em;color:#B05A3B;text-transform:uppercase">Practice package</div>
+        <h1 class="serif" style="font-size:38px;line-height:1.1;margin-top:12px">Practice &amp; Mocks</h1>
+
+        <div style="display:flex;align-items:center;gap:18px;background:#231F1B;border-radius:6px;padding:18px 24px;margin-top:20px">
+          <div style="flex:1">
+            <div class="serif" style="font-size:18px;color:#F3EEE6">You're previewing the Practice package</div>
+            <div class="lbl" style="font-size:12px;font-weight:600;color:#B7AE9F;margin-top:4px">Topic practice below is a free sample · mocks &amp; ranked tests unlock with the upgrade</div>
+          </div>
+          <button onClick="{{ goPricing }}" style="height:44px;padding:0 24px;border:0;background:#B05A3B;color:#FCFAF5;font-family:'Nunito';font-weight:800;font-size:13px;border-radius:3px;cursor:pointer" style-hover="background:#C46A45">Unlock Practice →</button>
+        </div>
+
+        <div style="display:flex;border-bottom:1px solid #E4DCCE;margin-top:32px">
+          <sc-for list="{{ pracTabs }}" as="t" hint-placeholder-count="4">
+            <button onClick="{{ t.set }}" style="{{ t.style }}">{{ t.label }}</button>
+          </sc-for>
+        </div>
+
+        <!-- TOPIC PRACTICE -->
+        <sc-if value="{{ showTopic }}" hint-placeholder-val="{{ true }}">
+          <div style="margin-top:30px">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div class="lbl" style="font-size:12px;font-weight:700;letter-spacing:.04em;color:#B05A3B;text-transform:uppercase">{{ q.subject }}</div>
+              <div class="lbl" style="font-size:12px;font-weight:600;color:#A79C8B">QUESTION {{ qNum }} / {{ qTotal }}</div>
+            </div>
+            <div style="background:#FCFAF5;border:1px solid #E4DCCE;border-radius:6px;padding:32px;margin-top:14px">
+              <p style="font-size:19px;line-height:1.5;font-weight:700">{{ q.q }}</p>
+              <div style="display:flex;flex-direction:column;gap:12px;margin-top:24px">
+                <sc-for list="{{ qOpts }}" as="o" hint-placeholder-count="4">
+                  <button onClick="{{ o.onPick }}" style="{{ o.style }}">
+                    <span style="{{ o.markStyle }}">{{ o.mark }}</span>
+                    <span>{{ o.text }}</span>
+                  </button>
+                </sc-for>
+              </div>
+              <sc-if value="{{ qReveal }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top:22px;padding:18px 20px;background:#F3EEE6;border-left:3px solid #6C8A56;border-radius:0 4px 4px 0">
+                  <div class="lbl" style="font-size:11px;font-weight:700;letter-spacing:.04em;color:#6C8A56;text-transform:uppercase">Explanation</div>
+                  <p style="font-size:14.5px;line-height:1.6;margin-top:8px;color:#3F3A33;font-weight:600">{{ qExplain }}</p>
+                </div>
+                <div style="display:flex;justify-content:flex-end;margin-top:20px">
+                  <button onClick="{{ nextQ }}" style="height:44px;padding:0 26px;border:0;background:#B05A3B;color:#FCFAF5;font-family:'Nunito';font-weight:800;font-size:14px;border-radius:3px;cursor:pointer" style-hover="background:#94472C">Next question →</button>
+                </div>
+              </sc-if>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- PRACTICE MOCKS -->
+        <sc-if value="{{ showMocks }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:14px;margin-top:30px">
+            <sc-for list="{{ mocks }}" as="m" hint-placeholder-count="4">
+              <div style="display:flex;align-items:center;gap:22px;background:#FCFAF5;border:1px solid #E4DCCE;border-radius:6px;padding:22px 26px">
+                <div style="flex:1;min-width:0">
+                  <div class="lbl" style="font-size:10.5px;font-weight:700;letter-spacing:.04em;color:#B05A3B;text-transform:uppercase">{{ m.kind }}</div>
+                  <div class="serif" style="font-size:21px;margin-top:6px">{{ m.name }}</div>
+                  <div class="lbl" style="font-size:12px;font-weight:600;color:#A79C8B;margin-top:5px">{{ m.q }} · {{ m.dur }} · {{ m.diff }}</div>
+                </div>
+                <button onClick="{{ goPricing }}" style="height:44px;padding:0 24px;border:1px solid #E4DCCE;background:transparent;color:#6B6358;font-family:'Nunito';font-weight:800;font-size:13px;border-radius:3px;cursor:pointer;display:flex;align-items:center;gap:8px" style-hover="background:#F7F1E8">🔒 Start</button>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <!-- ALL INDIA MOCK -->
+        <sc-if value="{{ showAir }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:30px;display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start">
+            <div style="background:#231F1B;border-radius:6px;padding:30px;position:relative;overflow:hidden">
+              <div style="position:absolute;width:300px;height:300px;border:1px solid rgba(255,255,255,.05);border-radius:50%;top:-180px;right:-100px"></div>
+              <div class="lbl" style="font-size:11px;font-weight:700;letter-spacing:.06em;color:#D98A5E;text-transform:uppercase">Next All India Mock · #12</div>
+              <div class="serif" style="font-size:26px;color:#F3EEE6;margin-top:10px">Full syllabus · ranked</div>
+              <p style="color:#B7AE9F;font-size:14px;margin-top:8px;line-height:1.6;font-weight:600">54 questions · 3 hours · JEE Advanced pattern. Ranked against every aspirant in the cohort.</p>
+              <div class="lbl" style="font-size:11px;font-weight:600;letter-spacing:.06em;color:#8C8375;text-transform:uppercase;margin-top:22px">Registration closes in</div>
+              <div style="display:flex;gap:14px;margin-top:10px">
+                <div style="text-align:center"><div style="font-family:'Nunito';font-weight:800;font-size:30px;color:#F3EEE6">{{ cdD }}</div><div class="lbl" style="font-size:10px;font-weight:600;color:#8C8375">DAYS</div></div>
+                <div style="font-family:'Nunito';font-weight:800;font-size:30px;color:#5A534A">:</div>
+                <div style="text-align:center"><div style="font-family:'Nunito';font-weight:800;font-size:30px;color:#F3EEE6">{{ cdH }}</div><div class="lbl" style="font-size:10px;font-weight:600;color:#8C8375">HRS</div></div>
+                <div style="font-family:'Nunito';font-weight:800;font-size:30px;color:#5A534A">:</div>
+                <div style="text-align:center"><div style="font-family:'Nunito';font-weight:800;font-size:30px;color:#F3EEE6">{{ cdM }}</div><div class="lbl" style="font-size:10px;font-weight:600;color:#8C8375">MIN</div></div>
+                <div style="font-family:'Nunito';font-weight:800;font-size:30px;color:#5A534A">:</div>
+                <div style="text-align:center"><div style="font-family:'Nunito';font-weight:800;font-size:30px;color:#C46A45">{{ cdS }}</div><div class="lbl" style="font-size:10px;font-weight:600;color:#8C8375">SEC</div></div>
+              </div>
+              <div class="lbl" style="font-size:12px;font-weight:600;color:#B7AE9F;margin-top:22px">12,480 aspirants registered</div>
+              <button onClick="{{ goPricing }}" style="margin-top:16px;width:100%;height:46px;border:0;background:#B05A3B;color:#FCFAF5;font-family:'Nunito';font-weight:800;font-size:14px;border-radius:3px;cursor:pointer" style-hover="background:#C46A45">🔒 Register — unlock Practice</button>
+            </div>
+            <div style="background:#FCFAF5;border:1px solid #E4DCCE;border-radius:6px;padding:26px">
+              <div style="display:flex;align-items:baseline;justify-content:space-between">
+                <div class="serif" style="font-size:20px">Mock #11 · leaderboard</div>
+                <span class="lbl" style="font-size:11px;font-weight:600;color:#A79C8B">TOP 5</span>
+              </div>
+              <div style="margin-top:16px;display:flex;flex-direction:column">
+                <sc-for list="{{ leaderboard }}" as="r" hint-placeholder-count="5">
+                  <div style="display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid #EDE7DB">
+                    <span class="lbl" style="width:26px;font-size:14px;color:#B05A3B;font-weight:800">{{ r.rank }}</span>
+                    <span style="flex:1;font-size:14.5px;font-weight:700">{{ r.name }}</span>
+                    <span class="lbl" style="font-size:12px;font-weight:600;color:#4F7E77">{{ r.score }}/300</span>
+                  </div>
+                </sc-for>
+                <div style="display:flex;align-items:center;gap:14px;padding:14px 12px;margin-top:8px;background:#F1E4DA;border:1px solid #E0C3B4;border-radius:4px">
+                  <span class="lbl" style="width:40px;font-size:14px;color:#94472C;font-weight:800">4281</span>
+                  <span style="flex:1;font-size:14.5px;font-weight:800;color:#94472C">You · Aarav Sharma</span>
+                  <span class="lbl" style="font-size:12px;font-weight:600;color:#94472C">214/300</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ANALYTICS -->
+        <sc-if value="{{ showAnalytics }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:30px;display:grid;grid-template-columns:1fr 1fr;gap:22px">
+            <div style="background:#FCFAF5;border:1px solid #E4DCCE;border-radius:6px;padding:26px;grid-column:1 / -1">
+              <div style="display:flex;align-items:baseline;justify-content:space-between">
+                <div class="serif" style="font-size:20px">Mock rank — trend</div>
+                <span class="lbl" style="font-size:12px;font-weight:600;color:#6C8A56">▲ improving · 9,800 → 4,281</span>
+              </div>
+              <svg viewBox="0 0 580 170" style="width:100%;height:auto;margin-top:16px" data-om-raster="true">
+                <line x1="0" y1="150" x2="580" y2="150" stroke="#E4DCCE" stroke-width="1"></line>
+                <polyline points="10,140 105,118 200,96 290,82 380,58 470,40 560,20" fill="none" stroke="#B05A3B" stroke-width="2.5"></polyline>
+                <circle cx="560" cy="20" r="4.5" fill="#B05A3B"></circle>
+                <text x="520" y="15" font-family="Nunito" font-weight="700" font-size="12" fill="#94472C">4,281</text>
+              </svg>
+              <div class="lbl" style="display:flex;justify-content:space-between;font-size:10.5px;font-weight:600;color:#A79C8B;margin-top:4px"><span>JAN</span><span>FEB</span><span>MAR</span><span>APR</span><span>MAY</span><span>JUN</span><span>JUL</span></div>
+            </div>
+            <div style="background:#FCFAF5;border:1px solid #E4DCCE;border-radius:6px;padding:26px">
+              <div class="serif" style="font-size:20px">Accuracy by subject</div>
+              <div style="display:flex;flex-direction:column;gap:16px;margin-top:20px">
+                <sc-for list="{{ accuracySubjects }}" as="a" hint-placeholder-count="3">
+                  <div>
+                    <div style="display:flex;justify-content:space-between;font-size:14px"><span style="font-weight:700">{{ a.name }}</span><span class="lbl" style="font-size:13px;font-weight:700;color:#4F7E77">{{ a.pct }}</span></div>
+                    <div style="height:6px;background:#EDE7DB;margin-top:7px;border-radius:3px"><div style="height:100%;background:#4F7E77;width:{{ a.pct }};border-radius:3px"></div></div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="background:#FCFAF5;border:1px solid #E4DCCE;border-radius:6px;padding:26px">
+              <div class="serif" style="font-size:20px">Questions this week</div>
+              <div style="display:flex;align-items:flex-end;gap:10px;height:120px;margin-top:20px">
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:100%;height:48px;background:#DCCFBB;border-radius:3px 3px 0 0"></div><span class="lbl" style="font-size:10px;font-weight:600;color:#A79C8B">M</span></div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:100%;height:70px;background:#C88C5F;border-radius:3px 3px 0 0"></div><span class="lbl" style="font-size:10px;font-weight:600;color:#A79C8B">T</span></div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:100%;height:60px;background:#DCCFBB;border-radius:3px 3px 0 0"></div><span class="lbl" style="font-size:10px;font-weight:600;color:#A79C8B">W</span></div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:100%;height:90px;background:#B05A3B;border-radius:3px 3px 0 0"></div><span class="lbl" style="font-size:10px;font-weight:600;color:#A79C8B">T</span></div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:100%;height:54px;background:#DCCFBB;border-radius:3px 3px 0 0"></div><span class="lbl" style="font-size:10px;font-weight:600;color:#A79C8B">F</span></div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:100%;height:78px;background:#C88C5F;border-radius:3px 3px 0 0"></div><span class="lbl" style="font-size:10px;font-weight:600;color:#A79C8B">S</span></div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:100%;height:36px;background:#DCCFBB;border-radius:3px 3px 0 0"></div><span class="lbl" style="font-size:10px;font-weight:600;color:#A79C8B">S</span></div>
+              </div>
+              <div class="lbl" style="font-size:12px;font-weight:600;color:#A79C8B;margin-top:14px">412 questions attempted · +12% vs last week</div>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+      </sc-if>
+
+      <!-- ============ PRICING ============ -->
+      <sc-if value="{{ isPricing }}" hint-placeholder-val="{{ false }}">
+      <div style="max-width:1040px;margin:0 auto;padding:44px 44px 72px">
+        <div style="text-align:center">
+          <div class="lbl" style="font-size:12px;letter-spacing:.1em;color:#B05A3B;text-transform:uppercase">Packages</div>
+          <h1 class="serif" style="font-size:40px;line-height:1.1;margin-top:12px">Choose your preparation</h1>
+          <p style="color:#6B6358;margin-top:12px;font-size:16px;max-width:56ch;margin-left:auto;margin-right:auto;line-height:1.6;font-weight:600">Notes and Practice are separate packages — take one, or pair them for the full loop of learn, simulate, drill and rank.</p>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin-top:44px;align-items:start">
+          <div style="background:#FCFAF5;border:1px solid #E4DCCE;border-radius:8px;padding:30px;display:flex;flex-direction:column">
+            <div class="lbl" style="font-size:11px;font-weight:700;letter-spacing:.06em;color:#B05A3B;text-transform:uppercase">Notes</div>
+            <div style="display:flex;align-items:baseline;gap:6px;margin-top:14px">
+              <span class="serif" style="font-size:38px">₹4,999</span><span class="lbl" style="font-size:12px;font-weight:600;color:#A79C8B">/ year</span>
+            </div>
+            <p style="color:#6B6358;font-size:14px;margin-top:8px;line-height:1.5;font-weight:600">The full structured e-book with a live lab in every chapter.</p>
+            <div style="height:1px;background:#EDE7DB;margin:22px 0"></div>
+            <div style="display:flex;flex-direction:column;gap:12px;font-size:14px;font-weight:600">
+              <div style="display:flex;gap:11px"><span style="color:#6C8A56">✓</span><span>All subjects — Physics, Chemistry, Maths</span></div>
+              <div style="display:flex;gap:11px"><span style="color:#6C8A56">✓</span><span>Structured notes: theory, derivations, PYQ patterns</span></div>
+              <div style="display:flex;gap:11px"><span style="color:#6C8A56">✓</span><span>Interactive simulation in every chapter</span></div>
+              <div style="display:flex;gap:11px"><span style="color:#6C8A56">✓</span><span>Mark chapters complete as you read</span></div>
+              <div style="display:flex;gap:11px"><span style="color:#C4B9A8">—</span><span style="color:#A79C8B">Practice, mocks &amp; ranking</span></div>
+            </div>
+            <button style="margin-top:26px;height:46px;border:1px solid #6C8A56;background:#EDF1E5;color:#415730;font-family:'Nunito';font-weight:800;font-size:14px;border-radius:3px;cursor:default">✓ Your active plan</button>
+          </div>
+
+          <div style="background:#231F1B;border:1px solid #231F1B;border-radius:8px;padding:30px;display:flex;flex-direction:column;position:relative;box-shadow:0 12px 40px rgba(43,39,35,.18)">
+            <span class="lbl" style="position:absolute;top:-11px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:800;letter-spacing:.06em;background:#B05A3B;color:#FCFAF5;padding:5px 14px;border-radius:3px">RECOMMENDED</span>
+            <div class="lbl" style="font-size:11px;font-weight:700;letter-spacing:.06em;color:#D98A5E;text-transform:uppercase">Complete</div>
+            <div style="display:flex;align-items:baseline;gap:6px;margin-top:14px">
+              <span class="serif" style="font-size:38px;color:#F3EEE6">₹9,999</span><span class="lbl" style="font-size:12px;font-weight:600;color:#8C8375">/ year</span>
+            </div>
+            <p style="color:#B7AE9F;font-size:14px;margin-top:8px;line-height:1.5;font-weight:600">Notes + Practice together. The full learn → drill → rank loop.</p>
+            <div style="height:1px;background:rgba(255,255,255,.1);margin:22px 0"></div>
+            <div style="display:flex;flex-direction:column;gap:12px;font-size:14px;color:#E6DFD2;font-weight:600">
+              <div style="display:flex;gap:11px"><span style="color:#D98A5E">✓</span><span>Everything in Notes</span></div>
+              <div style="display:flex;gap:11px"><span style="color:#D98A5E">✓</span><span>Unlimited topic practice &amp; question bank</span></div>
+              <div style="display:flex;gap:11px"><span style="color:#D98A5E">✓</span><span>Practice mocks — full, part &amp; chapter tests</span></div>
+              <div style="display:flex;gap:11px"><span style="color:#D98A5E">✓</span><span>All India ranked mock tests</span></div>
+              <div style="display:flex;gap:11px"><span style="color:#D98A5E">✓</span><span>Rank &amp; performance analytics</span></div>
+            </div>
+            <button style="margin-top:26px;height:46px;border:0;background:#B05A3B;color:#FCFAF5;font-family:'Nunito';font-weight:800;font-size:14px;border-radius:3px;cursor:pointer" style-hover="background:#C46A45">Upgrade to Complete →</button>
+            <div class="lbl" style="font-size:11px;font-weight:600;color:#8C8375;text-align:center;margin-top:10px">Save ₹1,999 vs buying separately</div>
+          </div>
+
+          <div style="background:#FCFAF5;border:1px solid #E4DCCE;border-radius:8px;padding:30px;display:flex;flex-direction:column">
+            <div class="lbl" style="font-size:11px;font-weight:700;letter-spacing:.06em;color:#B05A3B;text-transform:uppercase">Practice</div>
+            <div style="display:flex;align-items:baseline;gap:6px;margin-top:14px">
+              <span class="serif" style="font-size:38px">₹6,999</span><span class="lbl" style="font-size:12px;font-weight:600;color:#A79C8B">/ year</span>
+            </div>
+            <p style="color:#6B6358;font-size:14px;margin-top:8px;line-height:1.5;font-weight:600">Drill, test and rank yourself against the whole cohort.</p>
+            <div style="height:1px;background:#EDE7DB;margin:22px 0"></div>
+            <div style="display:flex;flex-direction:column;gap:12px;font-size:14px;font-weight:600">
+              <div style="display:flex;gap:11px"><span style="color:#6C8A56">✓</span><span>Topic practice &amp; full question bank</span></div>
+              <div style="display:flex;gap:11px"><span style="color:#6C8A56">✓</span><span>Practice mocks — full, part &amp; chapter</span></div>
+              <div style="display:flex;gap:11px"><span style="color:#6C8A56">✓</span><span>All India ranked mock tests</span></div>
+              <div style="display:flex;gap:11px"><span style="color:#6C8A56">✓</span><span>Rank &amp; performance analytics</span></div>
+              <div style="display:flex;gap:11px"><span style="color:#C4B9A8">—</span><span style="color:#A79C8B">Notes &amp; simulations</span></div>
+            </div>
+            <button style="margin-top:26px;height:46px;border:1px solid #B05A3B;background:transparent;color:#B05A3B;font-family:'Nunito';font-weight:800;font-size:14px;border-radius:3px;cursor:pointer" style-hover="background:#EFE1D6">Add Practice →</button>
+          </div>
+        </div>
+
+        <div class="lbl" style="text-align:center;font-size:12px;font-weight:600;color:#A79C8B;margin-top:32px">All plans billed annually · 7-day refund · prices incl. GST</div>
+      </div>
+      </sc-if>
+
+      <!-- ============ SIMULATION INTRO ============ -->
+      <sc-if value="{{ isSimIntro }}" hint-placeholder-val="{{ false }}">
+      <div style="max-width:1000px;margin:0 auto;padding:44px 44px 72px">
+        <button onClick="{{ backToSims }}" style="height:36px;padding:0 14px;border:1px solid #E4DCCE;background:transparent;color:#6B6358;font-family:'Nunito';font-weight:700;font-size:13px;border-radius:3px;cursor:pointer" style-hover="background:#F7F1E8">← All simulations</button>
+        <div class="lbl" style="font-size:12px;letter-spacing:.1em;color:#B05A3B;text-transform:uppercase;margin-top:22px">The Lab · {{ sim.tag }}</div>
+        <h1 class="serif" style="font-size:38px;line-height:1.1;margin-top:10px">{{ sim.title }}</h1>
+
+        <div style="display:grid;grid-template-columns:1.25fr 1fr;gap:26px;margin-top:26px;align-items:start">
+          <div>
+            <p style="color:#3F3A33;font-size:16px;line-height:1.7;font-weight:600">{{ simAbout }}</p>
+            <div class="lbl" style="font-size:11px;letter-spacing:.06em;color:#938A7D;text-transform:uppercase;margin-top:26px">What you'll explore</div>
+            <div style="display:flex;flex-direction:column;gap:12px;margin-top:14px">
+              <sc-for list="{{ simPoints }}" as="p" hint-placeholder-count="4">
+                <div style="display:flex;gap:12px;align-items:flex-start">
+                  <span style="width:7px;height:7px;flex:0 0 auto;margin-top:7px;background:#B05A3B;border-radius:50%"></span>
+                  <span style="font-size:15px;font-weight:600;color:#2C2723">{{ p }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <button onClick="{{ openSim }}" style="{{ simOpenBtnStyle }}">{{ simOpenLabel }}</button>
+          </div>
+          <div style="background:#231F1B;border-radius:8px;height:300px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center">
+            <div style="position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,138,61,.05) 0 12px,transparent 12px 24px)"></div>
+            <div style="position:absolute;width:220px;height:220px;border:1px solid rgba(255,138,61,.14);border-radius:50%"></div>
+            <span class="serif" style="font-size:56px;color:#5A534A">{{ sim.abbr }}</span>
+            <sc-if value="{{ sim.live }}" hint-placeholder-val="{{ true }}"><span class="lbl" style="position:absolute;top:14px;left:14px;font-size:10px;font-weight:800;letter-spacing:.06em;background:#B05A3B;color:#FCFAF5;padding:5px 10px;border-radius:2px">● LIVE LAB</span></sc-if>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ============ SIMULATION RUN (fullscreen) ============ -->
+      <sc-if value="{{ isSimRun }}" hint-placeholder-val="{{ false }}">
+      <div style="position:fixed;inset:0;z-index:60;background:#F3EEE6;display:flex;height:100vh;min-height:0">
+        <aside style="width:300px;flex:0 0 auto;background:#FCFAF5;border-right:1px solid #E4DCCE;display:flex;flex-direction:column;overflow-y:auto">
+          <div style="padding:18px 20px;border-bottom:1px solid #EDE7DB">
+            <button onClick="{{ backToSimIntro }}" style="height:34px;padding:0 12px;border:1px solid #E4DCCE;background:transparent;color:#6B6358;font-family:'Nunito';font-weight:700;font-size:12.5px;border-radius:3px;cursor:pointer" style-hover="background:#F7F1E8">← Back</button>
+          </div>
+          <div style="padding:22px 20px;flex:1">
+            <div class="lbl" style="font-size:10px;letter-spacing:.08em;color:#B05A3B;text-transform:uppercase">Simulation controls</div>
+            <div class="serif" style="font-size:20px;margin-top:6px;line-height:1.2">{{ sim.title }}</div>
+
+            <div style="margin-top:28px">
+              <div style="display:flex;justify-content:space-between;align-items:baseline">
+                <span class="lbl" style="font-size:11px;letter-spacing:.04em;color:#6B6358;text-transform:uppercase">Launch speed u</span>
+                <span class="lbl" style="font-size:13px;font-weight:800;color:#B05A3B">{{ simULabel }}</span>
+              </div>
+              <input type="range" min="4.9" max="19.6" step="0.1" value="{{ simU }}" onInput="{{ onSimU }}" style="width:100%;margin-top:12px;accent-color:#B05A3B;height:24px;cursor:pointer">
+              <div class="lbl" style="display:flex;justify-content:space-between;font-size:10px;font-weight:600;color:#A79C8B;margin-top:2px"><span>4.9</span><span>19.6 m/s</span></div>
+            </div>
+
+            <div style="margin-top:24px">
+              <div class="lbl" style="font-size:11px;letter-spacing:.04em;color:#6B6358;text-transform:uppercase">Presets</div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">
+                <sc-for list="{{ simPresets }}" as="p" hint-placeholder-count="4"><button onClick="{{ p.set }}" style="{{ p.style }}">{{ p.label }}</button></sc-for>
+              </div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:10px;margin-top:24px">
+              <button onClick="{{ runSim }}" style="height:48px;border:0;background:#B05A3B;color:#FCFAF5;font-family:'Nunito';font-weight:800;font-size:15px;border-radius:3px;cursor:pointer" style-hover="background:#94472C">▶  Run throw</button>
+              <button onClick="{{ resetSim }}" style="height:44px;border:1px solid #E4DCCE;background:transparent;color:#6B6358;font-family:'Nunito';font-weight:700;font-size:13px;border-radius:3px;cursor:pointer" style-hover="background:#F7F1E8">Reset</button>
+            </div>
+
+            <div style="margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#E4DCCE;border:1px solid #E4DCCE;border-radius:5px;overflow:hidden">
+              <div style="background:#FCFAF5;padding:12px 14px"><div class="lbl" style="font-size:10px;color:#938A7D;text-transform:uppercase">t</div><div style="font-family:'Nunito';font-weight:800;font-size:18px;color:#4F7E77;margin-top:3px">{{ simRead.t }} s</div></div>
+              <div style="background:#FCFAF5;padding:12px 14px"><div class="lbl" style="font-size:10px;color:#938A7D;text-transform:uppercase">v</div><div style="font-family:'Nunito';font-weight:800;font-size:18px;color:#4F7E77;margin-top:3px">{{ simRead.v }} m/s</div></div>
+              <div style="background:#FCFAF5;padding:12px 14px"><div class="lbl" style="font-size:10px;color:#938A7D;text-transform:uppercase">y</div><div style="font-family:'Nunito';font-weight:800;font-size:18px;color:#4F7E77;margin-top:3px">{{ simRead.y }} m</div></div>
+              <div style="background:#FCFAF5;padding:12px 14px"><div class="lbl" style="font-size:10px;color:#938A7D;text-transform:uppercase">a</div><div style="font-family:'Nunito';font-weight:800;font-size:18px;color:#B05A3B;margin-top:3px">{{ simRead.a }} m/s²</div></div>
+            </div>
+
+            <div style="margin-top:24px;padding:16px;background:#F7F1E8;border:1px solid #E4DCCE;border-radius:5px">
+              <div class="lbl" style="font-size:10px;letter-spacing:.06em;color:#938A7D;text-transform:uppercase">The model</div>
+              <p style="font-size:13px;line-height:1.6;color:#3F3A33;margin-top:8px;font-weight:600">Constant acceleration a = −g. No air resistance. The v–t line has slope −g and crosses zero at the apex.</p>
+            </div>
+          </div>
+        </aside>
+        <div style="flex:1;min-width:0;background:#161418;position:relative;display:flex;flex-direction:column">
+          <div style="padding:14px 22px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:12px">
+            <span class="lbl" style="font-size:11px;font-weight:800;letter-spacing:.06em;color:#FF5A1F;text-transform:uppercase">Vertical Throw · v–t Live</span>
+            <span class="lbl" style="font-size:11px;font-weight:600;color:#8C8375;margin-left:auto">a = −g constant · no air resistance</span>
+          </div>
+          <div style="flex:1;min-height:0;padding:20px">
+            <canvas id="simCanvas" width="1040" height="600" style="width:100%;height:100%;display:block"></canvas>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:&quot;100%&quot;}}">
+class Component extends DCLogic {
+  state = {
+    view: 'home', query: '',
+    openSub: { PHY: true }, openCh: { 'PHY:Kinematics': true },
+    reader: null, readerLive: false,
+    pracTab: 'topic', simSubject: 'all',
+    qIndex: 0, qPicked: null, qReveal: false,
+    now: Date.now(), sim: null, simU: 9.8, simRead: { t: '0.00', v: '9.80', y: '0.00', a: '−9.80' },
+    done: {
+      'Physics|Kinematics|Motion in a straight line': true,
+      'Physics|Laws of Motion|Newton\'s laws': true,
+      'Physics|Laws of Motion|Friction': true,
+      'Chemistry|Chemical Bonding|VSEPR & geometry': true,
+      'Chemistry|Chemical Bonding|Hybridisation': true,
+      'Chemistry|Chemical Bonding|Molecular orbital theory': true,
+      'Chemistry|Thermodynamics|First law': true,
+      'Mathematics|Calculus|Limits & continuity': true,
+      'Mathematics|Calculus|Differentiation': true,
+      'Mathematics|Algebra|Complex numbers': true,
+      'Mathematics|Algebra|Quadratic equations': true,
+      'Mathematics|Algebra|Sequences & series': true
+    }
+  };
+  componentDidMount() { this._t = setInterval(() => this.setState({ now: Date.now() }), 1000); this._msg = (e) => { if (e && e.data && e.data.onOpenSim) this.openFullSim(); }; window.addEventListener('message', this._msg); }
+  componentWillUnmount() { clearInterval(this._t); if (this._raf) cancelAnimationFrame(this._raf); window.removeEventListener('message', this._msg); }
+  componentDidUpdate(pp, ps) { if (this.state.view === 'simrun' && !this._raf) this.drawSim(this._simT || 0); }
+
+  SUBJECTS = [
+    { code: 'PHY', name: 'Physics', chapters: [
+      { name: 'Kinematics', topics: ['Motion in a straight line', 'Motion under gravity', 'Relative motion', 'Projectile motion'] },
+      { name: 'Laws of Motion', topics: ["Newton's laws", 'Friction', 'Circular dynamics'] },
+      { name: 'Rotational Motion', topics: ['Torque & moment of inertia', 'Angular momentum', 'Rolling motion'] },
+      { name: 'Electrostatics', topics: ["Coulomb's law", 'Electric field & potential', "Gauss's law"] } ] },
+    { code: 'CHM', name: 'Chemistry', chapters: [
+      { name: 'Chemical Bonding', topics: ['VSEPR & geometry', 'Hybridisation', 'Molecular orbital theory'] },
+      { name: 'Thermodynamics', topics: ['First law', 'Entropy & spontaneity', 'Gibbs free energy'] },
+      { name: 'Organic Basics', topics: ['General organic chemistry', 'Isomerism', 'Reaction mechanisms'] } ] },
+    { code: 'MAT', name: 'Mathematics', chapters: [
+      { name: 'Calculus', topics: ['Limits & continuity', 'Differentiation', 'Integration', 'Differential equations'] },
+      { name: 'Coordinate Geometry', topics: ['Straight lines', 'Circles', 'Conic sections'] },
+      { name: 'Algebra', topics: ['Complex numbers', 'Quadratic equations', 'Sequences & series'] } ] } ];
+
+  SIMS = [
+    { title: 'Vertical Throw · v–t Live', subject: 'Physics', chapter: 'Kinematics', desc: 'Run a vertical throw and watch the velocity–time line draw itself straight through zero at the apex.', live: true },
+    { title: 'Projectile Range', subject: 'Physics', chapter: 'Kinematics', desc: 'Vary launch angle and speed; trace the parabola and find the range maximise at 45°.' },
+    { title: 'Simple Harmonic Motion', subject: 'Physics', chapter: 'Oscillations', desc: 'Spring–mass phase with live energy exchange between kinetic and potential.' },
+    { title: 'Rolling vs Sliding', subject: 'Physics', chapter: 'Rotational Motion', desc: 'Race a disc, ring and sphere down an incline and compare accelerations.' },
+    { title: 'Electric Field Mapper', subject: 'Physics', chapter: 'Electrostatics', desc: 'Place charges and watch field lines and equipotentials update in real time.' },
+    { title: 'Titration Curve', subject: 'Chemistry', chapter: 'Ionic Equilibrium', desc: 'Strong and weak acid–base curves with live pH and the equivalence point.' },
+    { title: "Le Chatelier's Shift", subject: 'Chemistry', chapter: 'Equilibrium', desc: 'Perturb pressure, temperature and concentration; watch equilibrium respond.' },
+    { title: 'Orbital Shapes 3D', subject: 'Chemistry', chapter: 'Atomic Structure', desc: 'Rotate s, p and d orbital probability clouds in three dimensions.' },
+    { title: 'Function Grapher', subject: 'Mathematics', chapter: 'Calculus', desc: 'Plot f(x) alongside its derivative and integral, then scrub the tangent.' },
+    { title: 'Conic Explorer', subject: 'Mathematics', chapter: 'Coordinate Geometry', desc: 'Slice a cone and morph between ellipse, parabola and hyperbola.' } ];
+
+  MOCKS = [
+    { name: 'Full Syllabus Mock #08', kind: 'FULL LENGTH', q: '54 questions', dur: '3 hours', diff: 'JEE Advanced' },
+    { name: 'Mechanics Part Test', kind: 'PART TEST', q: '25 questions', dur: '1 hour', diff: 'Advanced' },
+    { name: 'Chemical Bonding Chapter Test', kind: 'CHAPTER', q: '20 questions', dur: '45 min', diff: 'Mains + Adv' },
+    { name: 'Calculus Speed Drill', kind: 'DRILL', q: '30 questions', dur: '40 min', diff: 'Mains' } ];
+
+  QUESTIONS = [
+    { subject: 'Physics · Kinematics', q: 'A ball is thrown vertically upward with speed u. Neglecting air resistance, its speed when it returns to the launch point is:', opts: ['u ⁄ 2', 'u', '2u', '0'], correct: 1, exp: 'Motion under gravity is mass-independent and symmetric in time — the ball returns to the launch level with the same speed u it left with.' },
+    { subject: 'Physics · Kinematics', q: 'At the highest point of a vertical throw, the acceleration of the ball is:', opts: ['Zero', 'g, directed downward', 'g, directed upward', '2g, downward'], correct: 1, exp: 'Velocity is momentarily zero at the apex, but gravity never switches off: acceleration stays g downward through the entire flight.' },
+    { subject: 'Chemistry · Bonding', q: 'The hybridisation of each carbon atom in ethyne (C₂H₂) is:', opts: ['sp³', 'sp²', 'sp', 'sp³d'], correct: 2, exp: 'Each carbon forms two sigma bonds with no lone pairs → sp hybridisation, giving the molecule its linear geometry.' },
+    { subject: 'Mathematics · Calculus', q: 'The derivative of sin(x) with respect to x is:', opts: ['cos(x)', '−cos(x)', '−sin(x)', 'sec²(x)'], correct: 0, exp: 'A standard result: d⁄dx [ sin x ] = cos x.' } ];
+
+  LEADERBOARD = [
+    { rank: 1, name: 'Ishaan Gupta', score: 298 },
+    { rank: 2, name: 'Ananya Rao', score: 291 },
+    { rank: 3, name: 'Vivaan Mehta', score: 288 },
+    { rank: 4, name: 'Diya Nair', score: 284 },
+    { rank: 5, name: 'Kabir Shah', score: 279 } ];
+
+  ACCURACY = [ { name: 'Physics', pct: 71 }, { name: 'Chemistry', pct: 78 }, { name: 'Mathematics', pct: 69 } ];
+
+  key(sub, ch, top) { return sub + '|' + ch + '|' + top; }
+  isDone(sub, ch, top) { return !!this.state.done[this.key(sub, ch, top)]; }
+
+  navStyle(v) {
+    const active = this.state.view === v || (v === 'notes' && this.state.view === 'reader') || (v === 'sims' && (this.state.view === 'sim' || this.state.view === 'simrun'));
+    const base = "display:flex;align-items:center;gap:13px;width:100%;height:44px;padding:0 12px 0 13px;border:0;border-left:3px solid transparent;cursor:pointer;font-family:'Nunito';font-weight:700;font-size:14px;text-align:left;border-radius:0 4px 4px 0;transition:background .12s,color .12s;";
+    return base + (active
+      ? "background:#F1E4DA;color:#94472C;border-left-color:#B05A3B;"
+      : "background:transparent;color:#6B6358;");
+  }
+  go(v) { this.setState({ view: v }); const sc = document.querySelector('.on-scroll'); if (sc) sc.scrollTop = 0; }
+  toggleSub(code) { this.setState(s => ({ openSub: { ...s.openSub, [code]: !s.openSub[code] } })); }
+  toggleCh(key) { this.setState(s => ({ openCh: { ...s.openCh, [key]: !s.openCh[key] } })); }
+  toggleDone(e, sub, ch, top) {
+    if (e && e.stopPropagation) e.stopPropagation();
+    const k = this.key(sub, ch, top);
+    this.setState(s => { const d = { ...s.done }; if (d[k]) delete d[k]; else d[k] = true; return { done: d }; });
+  }
+  openTopic(subject, chapter, top) {
+    this.setState({ view: 'reader', reader: { subject, chapter, topic: top }, readerLive: top === 'Motion under gravity' });
+    const sc = document.querySelector('.on-scroll'); if (sc) sc.scrollTop = 0;
+  }
+  markComplete() {
+    const r = this.state.reader; if (!r) return;
+    const k = this.key(r.subject, r.chapter, r.topic);
+    this.setState(s => { const d = { ...s.done }; if (d[k]) delete d[k]; else d[k] = true; return { done: d }; });
+  }
+  launchSim(sim) {
+    this.setState({ view: 'sim', sim, simU: 9.8 });
+    const sc = document.querySelector('.on-scroll'); if (sc) sc.scrollTop = 0;
+  }
+  pad(n) { return (n < 10 ? '0' : '') + n; }
+  openSimRun() { this.setState({ view: 'simrun' }, () => setTimeout(() => this.drawSim(0), 60)); }
+  openFullSim() { this.setState({ view: 'simrun', sim: { title: 'Vertical Throw · v–t Live', subject: 'Physics', chapter: 'Kinematics', live: true }, simU: 9.8 }, () => setTimeout(() => this.drawSim(0), 60)); }
+  backToSimIntro() { if (this._raf) { cancelAnimationFrame(this._raf); this._raf = null; } this.setState({ view: 'sim' }); }
+  setSimU(e) { const u = parseFloat(e.target.value); this.setState({ simU: u, simRead: { t: '0.00', v: u.toFixed(2), y: '0.00', a: '−9.80' } }, () => { if (!this._raf) this.drawSim(0); }); }
+  resetSim() { if (this._raf) { cancelAnimationFrame(this._raf); this._raf = null; } this.setState({ simRead: { t: '0.00', v: this.state.simU.toFixed(2), y: '0.00', a: '−9.80' } }); this.drawSim(0); }
+  runSim() {
+    if (this._raf) cancelAnimationFrame(this._raf);
+    const g = 9.8, u = this.state.simU, flight = 2 * u / g; const t0 = performance.now();
+    const step = now => { const t = (now - t0) / 1000, tc = Math.min(t, flight), v = u - g * tc, y = u * tc - 0.5 * g * tc * tc; this.setState({ simRead: { t: tc.toFixed(2), v: v.toFixed(2), y: y.toFixed(2), a: '−9.80' } }); if (t >= flight) { this.drawSim(flight); this._raf = null; return; } this.drawSim(t); this._raf = requestAnimationFrame(step); };
+    this._raf = requestAnimationFrame(step);
+  }
+  drawSim(t) {
+    this._simT = t; const cv = document.getElementById('simCanvas') || this.canvas; if (!cv) return; this.canvas = cv; const cx = cv.getContext('2d');
+    const W = cv.width, H = cv.height, g = 9.8, u = this.state.simU, flight = 2 * u / g, ymax = u * u / (2 * g);
+    cx.clearRect(0, 0, W, H); cx.fillStyle = '#161418'; cx.fillRect(0, 0, W, H);
+    cx.strokeStyle = 'rgba(255,138,61,.06)';
+    for (let x = 0; x < W; x += 44) { cx.beginPath(); cx.moveTo(x, 0); cx.lineTo(x, H); cx.stroke(); }
+    for (let y = 0; y < H; y += 44) { cx.beginPath(); cx.moveTo(0, y); cx.lineTo(W, y); cx.stroke(); }
+    const trackX = 150, top = 60, bot = H - 100, yPix = yy => bot - (yy / (ymax || 1)) * (bot - top);
+    cx.strokeStyle = 'rgba(255,255,255,.18)'; cx.beginPath(); cx.moveTo(trackX - 44, bot); cx.lineTo(trackX + 44, bot); cx.stroke();
+    cx.fillStyle = '#CDA98C'; cx.font = "600 11px Nunito, sans-serif"; cx.fillText('LAUNCH', trackX - 40, bot + 20);
+    const tc = Math.min(t, flight), yb = yPix(u * tc - 0.5 * g * tc * tc), vv = u - g * tc;
+    if (Math.abs(vv) > 0.1) { const L = Math.max(-70, Math.min(70, -vv * 5)); cx.strokeStyle = '#3DE0D8'; cx.lineWidth = 3; cx.beginPath(); cx.moveTo(trackX + 22, yb); cx.lineTo(trackX + 22, yb + L); cx.stroke(); cx.lineWidth = 1; }
+    cx.fillStyle = '#F5E3C0'; cx.beginPath(); cx.arc(trackX, yb, 12, 0, 7); cx.fill();
+    const gl = 360, gr = W - 50, gt = 60, gb = H - 100;
+    const tx = tt => gl + tt / (flight || 1) * (gr - gl), vy = vvv => { const m = (gb - gt) / 2 / (u || 1); return gt + (u - vvv) * m; };
+    cx.strokeStyle = 'rgba(255,255,255,.25)'; cx.beginPath(); cx.moveTo(gl, vy(0)); cx.lineTo(gr, vy(0)); cx.stroke(); cx.beginPath(); cx.moveTo(gl, gt); cx.lineTo(gl, gb); cx.stroke();
+    cx.fillStyle = '#8C8375'; cx.font = "700 11px Nunito, sans-serif"; cx.fillText('v (m/s)', gl + 6, gt + 2); cx.fillText('t (s)', gr - 28, vy(0) - 8);
+    cx.strokeStyle = '#3DE0D8'; cx.lineWidth = 3; cx.beginPath(); cx.moveTo(tx(0), vy(u)); cx.lineTo(tx(tc), vy(u - g * tc)); cx.stroke(); cx.lineWidth = 1;
+    if (tc >= u / g) { cx.fillStyle = '#F5B532'; cx.beginPath(); cx.arc(tx(u / g), vy(0), 4, 0, 7); cx.fill(); cx.fillStyle = '#CDA98C'; cx.fillText('APEX', tx(u / g) - 14, vy(0) + 18); }
+    cx.fillStyle = '#C7C5CC'; cx.font = "800 14px Nunito, sans-serif";
+    cx.fillText('t = ' + tc.toFixed(2) + ' s', gl, gb + 36);
+    cx.fillText('v = ' + vv.toFixed(2) + ' m/s', gl + 150, gb + 36);
+    cx.fillStyle = '#FF8A3D'; cx.fillText('a = −9.80 m/s²', gr - 150, gb + 36);
+  }
+  canvasRef = el => { this.canvas = el; if (el) requestAnimationFrame(() => this.drawSim(0)); };
+
+  renderVals() {
+    const st = this.state;
+    const examDate = new Date('2027-05-16T00:00:00').getTime();
+    const daysToExam = Math.max(0, Math.ceil((examDate - st.now) / 86400000));
+
+    // completion counts
+    let topicsTotal = 0, topicsDone = 0, chaptersTotal = 0, chaptersDone = 0;
+    this.SUBJECTS.forEach(s => s.chapters.forEach(c => {
+      chaptersTotal++; let cd = 0;
+      c.topics.forEach(t => { topicsTotal++; if (this.isDone(s.name, c.name, t)) { topicsDone++; cd++; } });
+      if (cd === c.topics.length) chaptersDone++;
+    }));
+
+    const subjectCards = this.SUBJECTS.map(s => {
+      let tot = 0, dn = 0;
+      s.chapters.forEach(c => c.topics.forEach(t => { tot++; if (this.isDone(s.name, c.name, t)) dn++; }));
+      return {
+        code: s.code, name: s.name,
+        doneLabel: dn + ' / ' + tot + ' read',
+        chaptersLabel: s.chapters.length + ' chapters',
+        open: () => { this.setState({ view: 'notes', openSub: { ...st.openSub, [s.code]: true } }); const sc = document.querySelector('.on-scroll'); if (sc) sc.scrollTop = 0; }
+      };
+    });
+
+    // reading plan (a to-read checklist; check = done state where applicable)
+    const readingPlan = [
+      { title: 'Motion under gravity', meta: 'Physics · Kinematics', sub: 'Physics', ch: 'Kinematics', top: 'Motion under gravity' },
+      { title: 'Electric field & potential', meta: 'Physics · Electrostatics', sub: 'Physics', ch: 'Electrostatics', top: 'Electric field & potential' },
+      { title: 'Entropy & spontaneity', meta: 'Chemistry · Thermodynamics', sub: 'Chemistry', ch: 'Thermodynamics', top: 'Entropy & spontaneity' }
+    ].map(t => {
+      const done = this.isDone(t.sub, t.ch, t.top);
+      return { title: t.title, meta: t.meta, check: done ? '✓' : '',
+        dot: done ? '#6C8A56' : '#C4B9A8', fill: done ? '#6C8A56' : 'transparent',
+        textColor: '#2C2723' };
+    });
+
+    // up next — first not-read topics across the book
+    const upNext = [];
+    for (const s of this.SUBJECTS) { for (const c of s.chapters) { for (const t of c.topics) {
+      if (!this.isDone(s.name, c.name, t) && upNext.length < 4) {
+        upNext.push({ name: t, meta: s.name + ' · ' + c.name, onOpen: () => this.openTopic(s.name, c.name, t) });
+      }
+    }}}
+
+    // notes tree (binary completion, no mastery/bars)
+    const notesTree = this.SUBJECTS.map(s => {
+      const sOpen = !!st.openSub[s.code];
+      let tot = 0, dn = 0;
+      s.chapters.forEach(c => c.topics.forEach(t => { tot++; if (this.isDone(s.name, c.name, t)) dn++; }));
+      return {
+        code: s.code, name: s.name,
+        meta: s.chapters.length + ' chapters · ' + tot + ' topics',
+        doneLabel: dn + ' / ' + tot,
+        open: sOpen, chevron: sOpen ? '–' : '+', toggle: () => this.toggleSub(s.code),
+        chapters: s.chapters.map(c => {
+          const ckey = s.code + ':' + c.name; const cOpen = !!st.openCh[ckey];
+          let cdn = 0; c.topics.forEach(t => { if (this.isDone(s.name, c.name, t)) cdn++; });
+          const allDone = cdn === c.topics.length;
+          return {
+            name: c.name, topicCount: c.topics.length + ' topics',
+            doneLabel: allDone ? 'All read ✓' : (cdn + ' / ' + c.topics.length),
+            doneColor: allDone ? '#6C8A56' : '#A79C8B',
+            open: cOpen, chevron: cOpen ? '–' : '+', toggle: () => this.toggleCh(ckey),
+            topics: c.topics.map(t => {
+              const done = this.isDone(s.name, c.name, t);
+              return {
+                name: t, live: t === 'Motion under gravity',
+                check: done ? '✓' : '',
+                checkBg: done ? '#6C8A56' : 'transparent',
+                checkBorder: done ? '#6C8A56' : '#C4B9A8',
+                nameColor: '#2C2723',
+                toggleDone: (e) => this.toggleDone(e, s.name, c.name, t),
+                onOpen: () => this.openTopic(s.name, c.name, t)
+              };
+            })
+          };
+        })
+      };
+    });
+
+    // sims
+    const simChips = ['all', 'Physics', 'Chemistry', 'Mathematics'].map(k => ({
+      key: k, label: k === 'all' ? 'All subjects' : k, active: st.simSubject === k,
+      style: "font-family:'Nunito';font-weight:700;font-size:13px;height:36px;padding:0 18px;border-radius:3px;cursor:pointer;transition:.12s;" + (st.simSubject === k ? "background:#231F1B;color:#F3EEE6;border:1px solid #231F1B;" : "background:#FCFAF5;color:#6B6358;border:1px solid #E4DCCE;"),
+      set: () => this.setState({ simSubject: k })
+    }));
+    const simList = this.SIMS.filter(s => st.simSubject === 'all' || s.subject === st.simSubject).map(s => ({
+      title: s.title, desc: s.desc, tag: s.subject + ' · ' + s.chapter,
+      live: !!s.live, ctaLabel: s.live ? 'Launch lab →' : 'Open →',
+      abbr: s.title.split(' ').map(w => w[0]).join('').slice(0, 3).toUpperCase(),
+      launch: () => this.launchSim(s)
+    }));
+
+    // practice tabs
+    const tabDef = [ ['topic', 'Topic Practice'], ['mocks', 'Practice Mocks'], ['air', 'All India Mock'], ['analytics', 'Analytics'] ];
+    const pracTabs = tabDef.map(([k, label]) => ({
+      key: k, label, active: st.pracTab === k,
+      style: "font-family:'Nunito';font-weight:700;font-size:14px;height:42px;padding:0 4px;margin-right:26px;background:none;border:0;border-bottom:2px solid " + (st.pracTab === k ? '#B05A3B' : 'transparent') + ";color:" + (st.pracTab === k ? '#2C2723' : '#938A7D') + ";cursor:pointer;",
+      set: () => this.setState({ pracTab: k })
+    }));
+
+    const q = this.QUESTIONS[st.qIndex % this.QUESTIONS.length];
+    const qOpts = q.opts.map((o, i) => {
+      let bg = '#FCFAF5', border = '#E4DCCE', color = '#2C2723', mark = String.fromCharCode(65 + i), markBg = '#F3EEE6', markColor = '#6B6358';
+      if (st.qReveal) {
+        if (i === q.correct) { bg = '#EDF1E5'; border = '#8CA871'; color = '#415730'; markBg = '#6C8A56'; markColor = '#fff'; }
+        else if (i === st.qPicked) { bg = '#F6E4DF'; border = '#C88A79'; color = '#8A3B2A'; markBg = '#A94E3C'; markColor = '#fff'; }
+      }
+      return { text: o, mark, onPick: () => this.setState({ qPicked: i, qReveal: true }),
+        style: "display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:15px 16px;border:1px solid " + border + ";background:" + bg + ";color:" + color + ";border-radius:4px;cursor:" + (st.qReveal ? 'default' : 'pointer') + ";font-family:'Nunito';font-size:15px;font-weight:700;transition:.12s;",
+        markStyle: "width:26px;height:26px;flex:0 0 auto;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'Nunito';font-size:12px;font-weight:800;background:" + markBg + ";color:" + markColor + ";" };
+    });
+
+    const nextTest = new Date('2026-07-13T09:00:00').getTime();
+    let diff = Math.max(0, nextTest - st.now);
+    const cd = { d: Math.floor(diff / 86400000), h: Math.floor(diff / 3600000) % 24, m: Math.floor(diff / 60000) % 60, s: Math.floor(diff / 1000) % 60 };
+
+    // reader side topic menu
+    let readerTopics = [], readerChapter = '';
+    if (st.reader && !st.reader.isSim) {
+      const subj = this.SUBJECTS.find(x => x.name === st.reader.subject);
+      const ch = subj && subj.chapters.find(x => x.name === st.reader.chapter);
+      if (ch) {
+        readerChapter = ch.name;
+        readerTopics = ch.topics.map(t => {
+          const done = this.isDone(subj.name, ch.name, t);
+          const active = t === st.reader.topic, live = t === 'Motion under gravity';
+          const clickable = active || done || live, soon = !clickable;
+          return {
+            name: t, check: done ? '✓' : '',
+            checkBg: done ? '#6C8A56' : 'transparent',
+            checkBorder: active ? '#B05A3B' : (done ? '#6C8A56' : '#C4B9A8'),
+            nameColor: active ? '#94472C' : (soon ? '#A79C8B' : '#2C2723'),
+            rowStyle: "display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:4px;border:1px solid " + (active ? '#E0C3B4' : 'transparent') + ";background:" + (active ? '#F1E4DA' : 'transparent') + ";cursor:" + (clickable ? 'pointer' : 'default') + ";" + (soon ? 'opacity:.6;' : ''),
+            badge: active ? 'Reading' : (soon ? 'Soon' : ''),
+            badgeStyle: "font-family:'Nunito';font-weight:800;font-size:9.5px;letter-spacing:.04em;text-transform:uppercase;padding:3px 8px;border-radius:3px;white-space:nowrap;" + (active ? 'background:#B05A3B;color:#FCFAF5;' : (soon ? 'background:#EDE7DB;color:#A79C8B;' : 'color:transparent;')),
+            onOpen: () => { if (clickable) this.openTopic(subj.name, ch.name, t); }
+          };
+        });
+      }
+    }
+    // simulation intro
+    const sim = st.sim || {};
+    const canOpenSim = !!sim.live;
+    const simPoints = sim.live
+      ? ['Set the launch speed, then press Run', 'Watch the ball rise, pause at the apex, and fall', 'The velocity–time line draws itself, straight through zero', 'Read t, v and a update live as it runs']
+      : ['A guided, interactive model of this concept', 'Change the inputs and watch the result update live', 'Built to sit right alongside the chapter notes'];
+    const simAbout = sim.live
+      ? 'A vertical throw, alive. Launch a ball straight up and watch its velocity–time graph draw itself — one straight line of slope −g, passing through zero exactly at the apex. Up and down are mirror images.'
+      : (sim.desc || 'This simulation is being built by our subject leads and joins the lab shortly.');
+
+    // reader mark-complete button
+    const r = st.reader;
+    const readerDone = r ? this.isDone(r.subject, r.chapter, r.topic) : false;
+    const markStyle = "height:38px;padding:0 18px;border:0;font-family:'Nunito';font-weight:800;font-size:13px;border-radius:3px;cursor:pointer;" +
+      (readerDone ? "background:#EDF1E5;color:#415730;border:1px solid #8CA871;" : "background:#B05A3B;color:#FCFAF5;");
+
+    return {
+      goHome: () => this.go('home'), goNotes: () => this.go('notes'), goSims: () => this.go('sims'),
+      goPractice: () => this.go('practice'), goPricing: () => this.go('pricing'),
+      sHome: this.navStyle('home'), sNotes: this.navStyle('notes'), sSims: this.navStyle('sims'),
+      sPractice: this.navStyle('practice'), sPricing: this.navStyle('pricing'),
+      query: st.query, onSearch: e => this.setState({ query: e.target.value }),
+      streak: 47, daysToExam: daysToExam.toLocaleString('en-IN'),
+      isHome: st.view === 'home', isNotes: st.view === 'notes', isReader: st.view === 'reader',
+      isSims: st.view === 'sims', isPractice: st.view === 'practice', isPricing: st.view === 'pricing',
+      topicsDone, topicsTotal, chaptersDone, chaptersTotal,
+      subjectCards, readingPlan, upNext,
+      resumeNote: () => this.setState({ view: 'reader', reader: { subject: 'Physics', chapter: 'Kinematics', topic: 'Motion under gravity' }, readerLive: true }),
+      notesTree,
+      reader: st.reader || {}, readerLive: st.readerLive, readerNotLive: st.reader && !st.readerLive,
+      readerSrc: 'notes/motion-under-gravity.html', readerTopics, readerChapter,
+      backToNotes: () => this.setState({ view: 'notes' }),
+      // sim intro + run
+      isSimIntro: st.view === 'sim', isSimRun: st.view === 'simrun',
+      sim: { title: sim.title || '', tag: (sim.subject ? sim.subject + ' · ' + sim.chapter : ''), abbr: (sim.title ? sim.title.split(' ').map(w => w[0]).join('').slice(0, 3).toUpperCase() : ''), live: !!sim.live },
+      simAbout, simPoints, canOpenSim, simOpenLabel: canOpenSim ? 'Open simulation →' : 'Coming soon',
+      simOpenBtnStyle: "margin-top:28px;height:48px;padding:0 30px;border:0;font-family:'Nunito';font-weight:800;font-size:15px;border-radius:3px;" + (canOpenSim ? "background:#B05A3B;color:#FCFAF5;cursor:pointer;" : "background:#EDE7DB;color:#A79C8B;cursor:not-allowed;"),
+      openSim: () => { if (canOpenSim) this.openSimRun(); },
+      backToSims: () => this.go('sims'), backToSimIntro: () => this.backToSimIntro(),
+      runSim: () => this.runSim(), resetSim: () => this.resetSim(),
+      simU: st.simU, simULabel: st.simU.toFixed(2) + ' m/s', onSimU: e => this.setSimU(e), canvasRef: this.canvasRef,
+      simRead: st.simRead,
+      simPresets: [['Slow', 4.9], ['Standard', 9.8], ['Fast', 14.7], ['Max', 19.6]].map(([label, val]) => ({ label, set: () => this.setState({ simU: val, simRead: { t: '0.00', v: val.toFixed(2), y: '0.00', a: '−9.80' } }, () => { if (!this._raf) this.drawSim(0); }), style: "font-family:'Nunito';font-weight:700;font-size:12.5px;height:34px;padding:0 14px;border-radius:3px;cursor:pointer;" + (Math.abs(st.simU - val) < 0.05 ? 'background:#231F1B;color:#F3EEE6;border:1px solid #231F1B;' : 'background:#FCFAF5;color:#6B6358;border:1px solid #E4DCCE;') })),
+      markComplete: () => this.markComplete(), markStyle,
+      markLabel: readerDone ? 'Completed ✓' : 'Mark complete',
+      simChips, simList, simCount: simList.length + ' simulations',
+      pracTabs, showTopic: st.pracTab === 'topic', showMocks: st.pracTab === 'mocks',
+      showAir: st.pracTab === 'air', showAnalytics: st.pracTab === 'analytics',
+      q, qOpts, qNum: (st.qIndex % this.QUESTIONS.length) + 1, qTotal: this.QUESTIONS.length,
+      qReveal: st.qReveal, qExplain: q.exp,
+      nextQ: () => this.setState(s => ({ qIndex: (s.qIndex + 1) % this.QUESTIONS.length, qPicked: null, qReveal: false })),
+      mocks: this.MOCKS, leaderboard: this.LEADERBOARD, accuracySubjects: this.ACCURACY.map(a => ({ name: a.name, pct: a.pct + '%' })),
+      cdD: cd.d, cdH: this.pad(cd.h), cdM: this.pad(cd.m), cdS: this.pad(cd.s)
+    };
+  }
+}
+</script>
+<script>
+(async () => {
+  if (!document.title || !document.title.trim()) document.title = "JEE Prep Platform";
+  // rAF raced with a short timeout: inside a cross-origin iframe (PrintMode),
+  // rAF can be throttled or paused even while the tab is focused, which would
+  // hang the scroll loop and never reach print(). Same pattern as
+  // buildExportSettleScript (export/shared.ts).
+  var raf = function () {
+    return Promise.race([
+      new Promise(function (r) { requestAnimationFrame(r); }),
+      new Promise(function (r) { setTimeout(r, 50); }),
+    ]);
+  };
+  var t0 = performance.now();
+  var mark = function (phase) {
+    var ms = Math.round(performance.now() - t0);
+    console.info('[autoprint]', phase, ms + 'ms');
+    try { parent.postMessage({ __omelette_autoprint: { phase: phase, ms: ms } }, '*'); } catch (e) {}
+  };
+  mark('start');
+  // Prepend so page-supplied @page / break rules (deck-stage's margin:0,
+  // author CSS) keep source-order precedence over the baseline.
+  const baseCss = document.createElement('style');
+  baseCss.textContent = "@media print {\n  figure, table { break-inside: avoid; }\n  *, *::before, *::after {\n    print-color-adjust: exact; -webkit-print-color-adjust: exact;\n    backdrop-filter: none !important; -webkit-backdrop-filter: none !important;\n    animation-delay: -99s !important; animation-duration: .001s !important;\n    animation-iteration-count: 1 !important; animation-fill-mode: both !important;\n    animation-play-state: running !important; transition-duration: 0s !important;\n  }\n}";
+  document.head.prepend(baseCss);
+  if (document.readyState === 'loading') {
+    await new Promise((r) => document.addEventListener('DOMContentLoaded', r, { once: true }));
+  }
+  let ds = document.querySelector('deck-stage');
+  // whenDefined never resolves when nothing registers the element, so only
+  // await it when a <deck-stage> tag exists (and race a timeout regardless).
+  if (ds && !customElements.get('deck-stage')) {
+    try {
+      await Promise.race([
+        customElements.whenDefined('deck-stage'),
+        new Promise((r) => setTimeout(r, 3000)),
+      ]);
+    } catch (e) {}
+    ds = document.querySelector('deck-stage');
+  }
+  // dc-runtime assigns window.DCLogic at init and mounts into #dc-root on
+  // DOMContentLoaded; settle on that subtree so React has rendered before
+  // print(). Non-DC pages fall through to weighing body.
+  const isDc = !ds && 'DCLogic' in window;
+  const settleRoot = ds || (isDc ? document.getElementById('dc-root') : null) || document.body;
+  if (settleRoot) {
+    // Weigh only content children — skip script/style/template so inline
+    // Babel/CSS doesn't register as stable "content" before the framework
+    // has mounted anything.
+    const MEDIA = 'img,svg,canvas,video,picture,iframe,embed,object';
+    const weigh = () => {
+      let text = 0, media = 0;
+      for (const c of settleRoot.children) {
+        const t = c.tagName;
+        if (t === 'SCRIPT' || t === 'STYLE' || t === 'TEMPLATE') continue;
+        text += (c.textContent || '').trim().length;
+        media += c.querySelectorAll(MEDIA).length + (c.matches(MEDIA) ? 1 : 0);
+      }
+      return text + media * 100;
+    };
+    // "Non-zero and stable" alone is not sufficient to mean rendered: generic
+    // body can carry a static shell while async main content is pending, and
+    // #dc-root can carry the root DC's static text while child refs are still
+    // .sc-placeholder boxes. Gate generic on readyState 'complete', and never
+    // accept stability while a dc-runtime placeholder is present.
+    const isGeneric = settleRoot === document.body;
+    // A placeholder whose fetch failed (.sc-placeholder-error inside) keeps
+    // .sc-placeholder forever — don't wait on it. JS loop, not :has(), so an
+    // engine without :has() support can't throw out of the while and skip
+    // print() entirely.
+    var pendingPlaceholders = function () {
+      var all = settleRoot.querySelectorAll('.sc-placeholder'), n = 0;
+      for (var i = 0; i < all.length; i++)
+        if (!all[i].querySelector('.sc-placeholder-error')) n++;
+      return n;
+    };
+    const deadline = Date.now() + 15000;
+    let last = -1, stable = 0;
+    while (Date.now() < deadline) {
+      const n = weigh();
+      const ready =
+        (!isGeneric || document.readyState === 'complete') &&
+        pendingPlaceholders() === 0;
+      if (n > 0 && n === last && ready) { if (++stable >= 2) break; } else { stable = 0; }
+      last = n;
+      await new Promise((r) => setTimeout(r, 250));
+    }
+  }
+  mark('settle-done' + (settleRoot ? ' (errs=' + settleRoot.querySelectorAll('.sc-placeholder-error').length + ' pending=' + pendingPlaceholders() + ')' : ''));
+  // Project support.js may predate runtime default-seeding; push via bridge.
+  if (isDc && window.__dcSetProps && window.__dcRootName) {
+    try {
+      const dpEl = document.querySelector('script[data-dc-script]');
+      const meta = JSON.parse((dpEl && dpEl.getAttribute('data-props')) || '{}');
+      const bag = {};
+      for (const k in meta)
+        if (k[0] !== '$' && meta[k] && meta[k].default !== undefined)
+          bag[k] = meta[k].default;
+      if (Object.keys(bag).length) {
+        window.__dcSetProps(window.__dcRootName(), bag);
+        await new Promise((r) => setTimeout(r, 50));
+      }
+    } catch (e) {}
+  }
+  // Reveal content gated on scroll or visibility before printing. Lazy <img>,
+  // IntersectionObserver fade-ins, and collapsed <details> don't render while
+  // off-screen, so a long page would print with them blank or closed. Open
+  // every <details>, force native-lazy images eager, and scroll the document
+  // through its full height to trip lazy-load + IO; then wait (bounded) for the
+  // newly-triggered images. Inert for deck-stage (slides aren't scroll-gated).
+  try {
+    for (const d of document.querySelectorAll('details')) d.open = true;
+    for (const img of document.querySelectorAll('img[loading="lazy"]'))
+      img.loading = 'eager';
+    const scroller = document.scrollingElement || document.documentElement;
+    const full = Math.max(scroller.scrollHeight, document.body.scrollHeight);
+    const step = window.innerHeight || 800;
+    var scrollDeadline = Date.now() + 4000;
+    for (let y = 0; y <= full && Date.now() < scrollDeadline; y += step) {
+      window.scrollTo(0, y);
+      await raf();
+    }
+    window.scrollTo(0, 0);
+    await Promise.race([
+      Promise.all(
+        [...document.images].map((img) =>
+          img.complete
+            ? null
+            : new Promise((res) => {
+                img.addEventListener('load', res, { once: true });
+                img.addEventListener('error', res, { once: true });
+              })
+        )
+      ),
+      new Promise((r) => setTimeout(r, 4000)),
+    ]);
+  } catch (e) {}
+  mark('scroll-done');
+  try { await Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 3000))]); } catch (e) {}
+  mark('fonts-done');
+  // Jump every animation to its end state so print() never captures a slide
+  // mid-entrance. Ordering matters: the 0s-transition style must be live
+  // BEFORE data-deck-active is set so attribute-keyed transitions don't
+  // start a (now-0s) run from the pre-active base.
+  const st = document.createElement('style');
+  st.textContent = '*,*::before,*::after{animation-delay:-99s !important;animation-duration:.001s !important;animation-iteration-count:1 !important;animation-fill-mode:both !important;animation-play-state:running !important;transition-duration:0s !important}';
+  document.head.appendChild(st);
+  for (const d of document.querySelectorAll('deck-stage')) {
+    for (const c of d.children) {
+      const t = c.tagName;
+      if (t === 'SCRIPT' || t === 'STYLE' || t === 'TEMPLATE') continue;
+      c.setAttribute('data-deck-active', '');
+    }
+  }
+  // Re-append deck-stage's @page last so no author @page can add a margin and
+  // spill each full-bleed slide onto two sheets. Backstop for old copies.
+  if (ds) {
+    let pg = document.getElementById('deck-stage-print-page');
+    if (!pg) {
+      pg = document.createElement('style');
+      pg.textContent = '@page{size:' + (+ds.getAttribute('width') || 1920) +
+        'px ' + (+ds.getAttribute('height') || 1080) + 'px;margin:0}';
+    }
+    document.body.appendChild(pg);
+  }
+  try {
+    const sweep = () => {
+      for (const a of document.getAnimations()) {
+        try { a.finish(); } catch (e) {
+          try { a.currentTime = (a.effect && a.effect.getComputedTiming().duration) || 0; a.pause(); } catch (e2) {}
+        }
+      }
+    };
+    sweep();
+    await raf();
+    sweep();
+    await raf();
+  } catch (e) {}
+  // A document that owns its print CSS (the doc-page starter injects the
+  // meta at runtime; hand-rolled print designs author it) gets no automatic
+  // page geometry and keeps its forced breaks: strip the injected default
+  // @page — write time cannot see a runtime-injected meta — skip the frame
+  // override below, and skip the fakepage-flattening further down. What
+  // still applies: the print baseline and break-hygiene defaults (no @page
+  // in either; low specificity, so the document's own print CSS wins) and
+  // the break-inside relaxation on >page elements (avoid on those cannot
+  // be honored whoever authored it).
+  var ownsPrint = !!document.querySelector('meta[name="omelette-owns-print" i]');
+  if (ownsPrint) {
+    var dst = document.querySelector('style[data-omelette-print-defaults]');
+    if (dst && dst.textContent) {
+      dst.textContent = dst.textContent.replace(/@page\b[^{}]*\{[^}]*\}/, '');
+    }
+  }
+  // Size the PDF page to the rendered design unless the file opted into
+  // standard paper via @page{size:letter|A4|…} or declared print ownership
+  // via the meta above. Decks own their own @page.
+  // Wrappers (body, …) lose padding+margin so the frame sits at (0,0); the
+  // frame itself loses only margin — its padding is INSIDE the measured
+  // rect and must stay, or content shifts and leaves a gap at bottom/right.
+  var __m = null;
+  try { __m = (() => {
+  var STAMP = true;
+  var docEl = document.documentElement;
+  var doc = { width: docEl.scrollWidth, height: docEl.scrollHeight };
+  // Name-presence check, case-insensitive — the same contract as the
+  // instant-PDF path's runtime check in deck-stage-export.ts. The name is
+  // a string literal here because that file interpolates this script into
+  // its print script, so importing a shared constant from it would be a
+  // cycle; measure.test.ts pins the literal so the two cannot drift apart
+  // silently.
+  var ownsPrint = !!document.querySelector('meta[name="omelette-owns-print" i]');
+
+  var ds = document.querySelector('deck-stage');
+  if (ds) {
+    var dw = Number(ds.getAttribute('width')) || 1920;
+    var dh = Number(ds.getAttribute('height')) || 1080;
+    var n = typeof ds.length === 'number' ? ds.length : ds.children.length;
+    var idx = typeof ds.index === 'number' ? ds.index : 0;
+    var frames = [];
+    for (var i = 0; i < n; i++) frames.push({ left: 0, top: 0, width: dw, height: dh });
+    return { kind: 'deck', source: 'declared', doc: doc, frames: frames,
+      authored: frames.map(function(){return{width:true,height:true}}),
+      deck: { width: dw, height: dh, slideCount: n, index: idx },
+      signals: { paperPage: false, pxPage: false, ownsPrint: ownsPrint } };
+  }
+
+  // Declared kind: a doc-page tag names the kind outright, so no signal
+  // heuristics run (like the deck branch above, signals report false —
+  // they describe inferred classifications only). The tag alone is not
+  // trusted: the element must have upgraded (shadowRoot present), so a
+  // leftover tag whose script was deleted falls through to the heuristics
+  // that handle plain markup.
+  var stageSx = window.scrollX || 0, stageSy = window.scrollY || 0;
+  var dp = document.querySelector('doc-page');
+  if (dp && dp.shadowRoot) {
+    // Crop to the sheet, not the host — the desk around it is screen-only
+    // chrome that must not land in PNG exports.
+    var sheet = dp.shadowRoot.querySelector('.sheet');
+    var sr = (sheet || dp).getBoundingClientRect();
+    return { kind: 'paper-doc', source: 'declared', doc: doc,
+      frames: [{ left: sr.left + stageSx, top: sr.top + stageSy,
+        width: sr.width, height: sr.height }],
+      authored: [{ width: false, height: false }],
+      signals: { paperPage: false, pxPage: false, ownsPrint: ownsPrint } };
+  }
+  var paperPage = false, pxPage = false;
+  var eachRule = function (fn) {
+    for (var s = 0; s < document.styleSheets.length; s++) {
+      var rs; try { rs = document.styleSheets[s].cssRules; } catch (e) { continue; }
+      for (var r = 0; r < rs.length; r++) {
+        fn(rs[r]);
+        if (rs[r].cssRules) for (var n = 0; n < rs[r].cssRules.length; n++) fn(rs[r].cssRules[n]);
+      }
+    }
+  };
+  eachRule(function (r) {
+    if (r.type !== 6) return;
+    var m = /\bsize\s*:\s*([^;}]+)/i.exec(r.cssText || '');
+    if (!m) return;
+    if (/\b(letter|a[3-5]|legal|ledger)\b/i.test(m[1])) paperPage = true;
+    if (/\d+(?:\.\d+)?px\b/i.test(m[1])) pxPage = true;
+  });
+  var signals = { paperPage: paperPage, pxPage: pxPage, ownsPrint: ownsPrint };
+
+  var pxVal = function (v) {
+    var m = /^(\d+(?:\.\d+)?)px$/.exec(v || ''); return m ? +m[1] : 0;
+  };
+  var authoredPx = function (el, prop) {
+    if (pxVal(el.style[prop])) return true;
+    var attr = el.getAttribute(prop);
+    if (attr && /^\d+$/.test(attr)) return true;
+    var hit = false;
+    eachRule(function (r) {
+      if (hit || r.type !== 1 || !r.style) return;
+      try { if (el.matches(r.selectorText) && pxVal(r.style[prop])) hit = true; } catch (e) {}
+    });
+    return hit;
+  };
+
+  var el = document.body, rootPxW = false;
+  for (;;) {
+    var kids = [];
+    for (var c = 0; c < el.children.length; c++) {
+      var t = el.children[c].tagName;
+      if (t !== 'SCRIPT' && t !== 'STYLE' && t !== 'TEMPLATE') kids.push(el.children[c]);
+    }
+    if (kids.length !== 1 || !(kids[0] instanceof HTMLElement)) break;
+    if (STAMP) el.setAttribute('data-om-frame-wrap', '');
+    el = kids[0];
+    rootPxW = authoredPx(el, 'width');
+    if (rootPxW) break;
+  }
+  if (!rootPxW) rootPxW = authoredPx(el, 'width');
+
+  // @page{size:letter} alone is a flowing doc; with a px-width root it's a
+  // fixed sheet pretending to be paper — fall through and size to render.
+  if (paperPage && !rootPxW) {
+    return { kind: 'paper-doc', source: 'inferred', doc: doc, signals: signals,
+      frames: [{ left: 0, top: 0, width: doc.width, height: doc.height }],
+      authored: [{ width: false, height: false }] };
+  }
+
+  var sx = window.scrollX || 0, sy = window.scrollY || 0;
+  var rectOf = function (e) {
+    var r = e.getBoundingClientRect();
+    var oy; try { oy = getComputedStyle(e).overflowY; } catch (err) {}
+    var h = oy === 'visible' ? Math.max(r.height, e.scrollHeight || 0) : r.height;
+    return { left: r.left + sx, top: r.top + sy, width: r.width, height: h };
+  };
+
+  // Multi-frame: off unless the page opts in via data-om-multi-frame on the
+  // stop element — the explicit opt-in is what guards against card grids
+  // and pricing tables that match the geometry but aren't separate
+  // canvases. Two ways to name the frames, explicit first:
+  // 1. Descendants marked data-om-frame-export (the social-frames starter
+  //    marks each asset frame; shells/panels around them are presentation,
+  //    so nesting is expected). Document order.
+  // 2. Fallback, no marked descendants: direct children with an authored px
+  //    width AND height (the original geometry heuristic).
+  // Frames may be different sizes (a gallery mixes 1080×1920 stories with
+  // 728×90 banners); data-om-frame-label rides along for export filenames.
+  if (el.hasAttribute('data-om-multi-frame')) {
+    var visOk = function (e) {
+      var cs; try { cs = getComputedStyle(e); } catch (err) { return false; }
+      return cs.display !== 'none' && cs.visibility !== 'hidden' && cs.position !== 'fixed';
+    };
+    // A frame's crop is its VISUAL box — never the scrollHeight-inflated
+    // rect that rectOf computes for page roots. Shadow-DOM hover controls
+    // (image-slot's Replace bar parks 29px below its host) and similar
+    // escaping UI contribute scrollable overflow to the frame, and the
+    // inflated height both squashes the nominal-size resize and drags
+    // content below the frame into the crop. Zoom-independent; bit every
+    // slot-bearing frame.
+    var frameRectOf = function (e) {
+      var r = e.getBoundingClientRect();
+      return { left: r.left + sx, top: r.top + sy, width: r.width, height: r.height };
+    };
+    var pushCand = function (list, e) {
+      if (!visOk(e)) return;
+      var rc = frameRectOf(e);
+      if (rc.width < 2 || rc.height < 2) return;
+      var lbl = e.getAttribute('data-om-frame-label');
+      if (lbl) rc.label = lbl;
+      list.push(rc);
+    };
+    var cands = [];
+    var marked = el.querySelectorAll('[data-om-frame-export]');
+    if (marked.length) {
+      for (var mk = 0; mk < marked.length; mk++) pushCand(cands, marked[mk]);
+    } else {
+      for (var k = 0; k < el.children.length; k++) {
+        var ch = el.children[k];
+        if (!authoredPx(ch, 'width') || !authoredPx(ch, 'height')) continue;
+        pushCand(cands, ch);
+      }
+    }
+    if (cands.length >= 2) {
+      return { kind: 'multi-frame', source: 'inferred', doc: doc, signals: signals,
+        frames: cands, authored: cands.map(function(){return{width:true,height:true}}) };
+    }
+  }
+
+  if (STAMP) el.setAttribute('data-om-frame', '');
+  return { kind: 'single-canvas', source: 'inferred', doc: doc, signals: signals,
+    frames: [rectOf(el)],
+    authored: [{ width: rootPxW, height: authoredPx(el, 'height') }] };
+})(); } catch (e) {}
+  var frame = null;
+  if (!ownsPrint && __m && __m.kind === 'single-canvas') {
+    var f = __m.frames && __m.frames[0];
+    if (f && f.width >= 200 && f.height >= 200) {
+      frame = f;
+      var fst = document.createElement('style');
+      fst.textContent = '@media print{@page{size:' + Math.ceil(f.width) + 'px ' +
+        Math.ceil(f.height) + 'px;margin:0}' +
+        'html,body,[data-om-frame-wrap]{padding:0!important;margin:0!important;background:none!important}' +
+        '[data-om-frame]{margin:0!important}}';
+      document.body.appendChild(fst);
+    }
+  }
+  // Relax break-inside on oversized elements. An element taller than a
+  // printable page can't honor break-inside: avoid — browsers either overflow
+  // it or push it whole to the next page, leaving a blank gap, then break it
+  // anyway at an arbitrary point. After the final layout (content revealed,
+  // animations jumped), find elements taller than a page that still compute
+  // break-inside: avoid and reset them to auto, so the browser breaks them at
+  // their children's boundaries instead (children keep their own avoid). PAGE_PX
+  // is a conservative portrait estimate at 96 CSS px/in — Letter/A4 usable
+  // height minus our 0.5in margins — so only clearly-oversized elements are
+  // touched and under-page elements still stay whole. Skipped for decks (slides
+  // are sized to the page) and for fixed-size canvases (frame set, or an author
+  // px-based @page) — runs as before for flowing docs on letter/A4.
+  try {
+    if (!ds && !frame && !(__m && __m.signals && __m.signals.pxPage)) {
+      const PAGE_PX = 1024;
+      // Our print defaults add a real @page margin only when the source has
+      // no @page of its own; computed style can't tell us (it reports screen
+      // media), so read the injected rule directly.
+      const defaults = document.querySelector('style[data-omelette-print-defaults]');
+      const pageInset = /@page\s*\{[^}]*margin/.test(defaults ? defaults.textContent || '' : '');
+      const SEL = 'section,article,figure,table,pre,blockquote,[class~="card" i],[class~="page" i],[class~="sheet" i]';
+      for (const el of document.body.querySelectorAll(SEL)) {
+        if (el instanceof HTMLElement && el.offsetHeight > PAGE_PX) {
+          el.setAttribute('data-om-oversized', '');
+          // Fake-paged docs simulate sheets with over-tall break-after:page
+          // boxes; honoring the break spills half-blank pages and ends a
+          // colored box mid-sheet. Flow them, and (only when we own the page
+          // inset) drop the redundant padding/background via the rule below.
+          const cs = getComputedStyle(el);
+          // An owns-print doc's forced breaks are intentional sheet
+          // boundaries, never fake-paged simulation — don't strip them.
+          // The break-inside relaxation above still applies: avoid on a
+          // >page element is impossible to honor whoever authored it.
+          if (
+            !ownsPrint &&
+            (cs.breakAfter === 'page' || cs.pageBreakAfter === 'always')
+          ) {
+            el.setAttribute('data-om-fakepage', '');
+          }
+        }
+      }
+      const ost = document.createElement('style');
+      ost.textContent = '@media print{' +
+        '[data-om-oversized]{break-inside:auto !important;page-break-inside:auto !important}' +
+        '[data-om-fakepage]{break-after:auto !important;page-break-after:auto !important}' +
+        (pageInset ? '[data-om-fakepage]{padding:0 !important;background:none !important}' : '') +
+        '}';
+      document.head.appendChild(ost);
+    }
+  } catch (e) {}
+  // macOS Preview renders Skia-PDF Luminosity soft-masks as opaque grey boxes;
+  // swap the CSS that triggers them for Preview-safe forms.
+  try {
+    for (const el of document.body.querySelectorAll('*')) {
+      const cs = getComputedStyle(el);
+
+      if (cs.boxShadow !== 'none' && cs.filter === 'none') {
+        const outs = [], kept = [];
+        for (const s of cs.boxShadow.split(/,(?![^(]*[)])/)) {
+          const t = s.trim();
+          const m = t.match(/^(rgba?[(][^)]+[)]) (-?[0-9.]+px) (-?[0-9.]+px) ([0-9.]+px) -?[0-9.]+px$/);
+          if (m && parseFloat(m[4]) > 0) outs.push('drop-shadow(' + m[2] + ' ' + m[3] + ' ' + m[4] + ' ' + m[1] + ')');
+          else kept.push(t);
+        }
+        if (outs.length) {
+          el.style.setProperty('filter', outs.join(' '), 'important');
+          el.style.setProperty('box-shadow', kept.join(', ') || 'none', 'important');
+        }
+      }
+
+      const mask = cs.maskImage && cs.maskImage !== 'none' ? cs.maskImage : cs.webkitMaskImage;
+      if (mask && mask !== 'none' && cs.filter === 'none') el.style.setProperty('filter', 'opacity(1)', 'important');
+    }
+  } catch (e) {}
+  mark('print-calling');
+  setTimeout(() => { try { window.print(); } catch (e) {} }, 200);
+})();
+</script>
+</body>
+</html>
