@@ -2,9 +2,29 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Check, Clock3, FlaskConical, LockKeyhole } from "lucide-react";
+
+import { FreeSimulationPlayground } from "@/components/marketing/free-simulation-playground";
 import { SimulationLab } from "@/components/platform/simulation-lab";
 import { FrontendActionButton } from "@/components/ui/frontend-action-button";
 import { getSimulation } from "@/data/platform";
-type Props={params:Promise<{slug:string}>};
-export async function generateMetadata({params}:Props):Promise<Metadata>{const{slug}=await params;return{title:getSimulation(slug)?.shortTitle??'Simulation'};}
-export default async function SimulationPage({params}:Props){const{slug}=await params;const simulation=getSimulation(slug);if(!simulation)notFound();if(simulation.availability==='live')return <SimulationLab simulation={simulation}/>;return <div className="content-shell pb-28 pt-8 lg:pb-14 lg:pt-10"><Link className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-[#C7C5CC]/80 hover:text-white" href="/simulations"><ArrowLeft size={17}/> All simulations</Link><section className="brand-grid mt-4 border border-[#FF5A1F]/25 bg-[#161418] p-7 sm:p-10"><div className="grid max-w-4xl gap-8 lg:grid-cols-[1fr_auto]"><div><p className="mono-kicker">{simulation.subjectId} · Coming soon</p><h2 className="mt-5 font-display text-4xl font-bold sm:text-5xl">{simulation.title}</h2><p className="mt-5 text-lg leading-8 text-[#C7C5CC]">{simulation.description}</p></div><div className="grid size-20 place-items-center border border-[#FF5A1F]/25 bg-[#0E0D10]"><LockKeyhole className="text-[#FF8A3D]" size={30}/></div></div><div className="mt-9 grid gap-3 md:grid-cols-3">{simulation.learningObjectives.map((objective)=><div className="flex gap-3 border border-white/9 bg-[#0E0D10] p-4" key={objective}><Check className="mt-1 shrink-0 text-[#3DE08A]" size={15}/><p className="text-sm leading-6 text-[#C7C5CC]">{objective}</p></div>)}</div><div className="mt-9 flex flex-wrap items-center gap-4"><FrontendActionButton doneLabel="Notification saved on this device" idleLabel="Notify me when live"/><span className="flex items-center gap-2 font-mono text-[11px] text-[#C7C5CC]/70"><Clock3 size={14}/>{simulation.estimatedMinutes} min lab</span></div></section><div className="mt-6 border border-white/9 bg-[#0E0D10] p-5"><p className="flex items-center gap-3 font-semibold"><FlaskConical className="text-[#3DE0D0]" size={19}/> Meanwhile, try the live Vertical Throw lab.</p><Link className="mt-3 inline-flex text-sm font-bold text-[#FF8A3D]" href="/simulations/vertical-throw">Launch lab →</Link></div></div>;}
+
+type Props = { params: Promise<{ slug: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  return { title: getSimulation(slug)?.shortTitle ?? "Simulation" };
+}
+
+export default async function SimulationPage({ params }: Props) {
+  const { slug } = await params;
+  const simulation = getSimulation(slug);
+  if (!simulation) notFound();
+
+  if (simulation.availability === "live" && slug === "vertical-throw") return <SimulationLab simulation={simulation}/>;
+
+  if (simulation.availability === "live") {
+    return <div className="content-shell pb-24 pt-8"><Link className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-[#C7C5CC]/80 hover:text-white" href="/simulations"><ArrowLeft size={17}/> All simulations</Link><div className="mt-5"><FreeSimulationPlayground initialSlug={slug}/></div></div>;
+  }
+
+  return <div className="content-shell pb-28 pt-8 lg:pb-14 lg:pt-10"><Link className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-[#C7C5CC]/80 hover:text-white" href="/simulations"><ArrowLeft size={17}/> All simulations</Link><section className="brand-grid mt-4 border border-[#FF5A1F]/25 bg-[#161418] p-7 sm:p-10"><div className="grid max-w-4xl gap-8 lg:grid-cols-[1fr_auto]"><div><p className="mono-kicker">{simulation.subjectId} · Coming soon</p><h2 className="mt-5 font-display text-4xl font-bold sm:text-5xl">{simulation.title}</h2><p className="mt-5 text-lg leading-8 text-[#C7C5CC]">{simulation.description}</p></div><div className="grid size-20 place-items-center border border-[#FF5A1F]/25 bg-[#0E0D10]"><LockKeyhole className="text-[#FF8A3D]" size={30}/></div></div><div className="mt-9 grid gap-3 md:grid-cols-3">{simulation.learningObjectives.map((objective) => <div className="flex gap-3 border border-white/9 bg-[#0E0D10] p-4" key={objective}><Check className="mt-1 shrink-0 text-[#3DE08A]" size={15}/><p className="text-sm leading-6 text-[#C7C5CC]">{objective}</p></div>)}</div><div className="mt-9 flex flex-wrap items-center gap-4"><FrontendActionButton doneLabel="Notification saved on this device" idleLabel="Notify me when live"/><span className="flex items-center gap-2 font-mono text-[11px] text-[#C7C5CC]/70"><Clock3 size={14}/>{simulation.estimatedMinutes} min lab</span></div></section><div className="mt-6 border border-white/9 bg-[#0E0D10] p-5"><p className="flex items-center gap-3 font-semibold"><FlaskConical className="text-[#3DE0D0]" size={19}/> Meanwhile, try any of the five live demos.</p><Link className="mt-3 inline-flex text-sm font-bold text-[#FF8A3D]" href="/free-simulations">Open free simulations →</Link></div></div>;
+}

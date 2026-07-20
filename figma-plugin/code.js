@@ -88,8 +88,9 @@
   function publicHeader(root) {
     const node = frame(root, "Global / Marketing Header", 0, 0, 1440, 74, C.bg, C.line);
     lotus(node, 56, 17); text(node, "Brand", "ORANGE NELUMBO", 112, 28, { font: F.displayBold, size: 17 });
-    ["Visual notes", "Simulations", "Educators", "Videos", "FAQs"].forEach(function (label, i) {
-      text(node, "Nav / " + label, label, 572 + i * 105, 28, { font: F.displayBold, size: 13, color: C.muted });
+    const navX = [520, 620, 695, 810, 880, 985];
+    ["Simulations", "Notes", "Concept map", "Pricing", "Educators", "FAQs"].forEach(function (label, i) {
+      text(node, "Nav / " + label, label, navX[i], 28, { font: F.displayBold, size: 12, color: C.muted });
     });
     button(node, "Sign in", 1170, 14, 98, "ghost"); button(node, "Explore free", 1280, 14, 112, "outline");
   }
@@ -98,7 +99,7 @@
     lotus(node, 56, 64); text(node, "Brand", "ORANGE NELUMBO", 112, 75, { font: F.displayBold, size: 18 });
     text(node, "Description", "Visual JEE notes and interactive simulations that make difficult ideas easier to see and understand.", 56, 129, { font: F.display, size: 15, color: C.muted, width: 390, lineHeight: 27 });
     button(node, "Explore free", 56, 224, 154, "primary");
-    const cols = [["Learn", "Visual notes\nSimulation Lab\nVideo lectures"], ["Support", "FAQs\nEducator login\nContact"], ["Legal", "Privacy\nTerms"]];
+    const cols = [["Learn", "Free simulations\nSample notes\nPricing"], ["Support", "FAQs\nEducator login\nContact"], ["Legal", "Privacy\nTerms"]];
     cols.forEach(function (col, i) {
       text(node, "Column / " + col[0], col[0], 674 + i * 220, 68, { font: F.displayBold, size: 14 });
       text(node, "Links / " + col[0], col[1], 674 + i * 220, 106, { font: F.display, size: 14, color: C.muted, lineHeight: 30 });
@@ -276,7 +277,7 @@
     text(card, "Detail", detail, 28, 323, { font: F.display, size: 13, color: C.muted });
   }
 
-  function homeFrame(page, index) {
+  function legacyHomeFrame(page, index) {
     const root = frame(page, "Frame / " + String(index).padStart(2, "0") + " / Home / /", 0, 0, 1440, 4822, C.bg);
     root.clipsContent = true; root.setPluginData("route", "/"); publicHeader(root);
 
@@ -360,6 +361,117 @@
     });
 
     publicFooter(root, 4378); return root;
+  }
+
+  function homeFrame(page, index) {
+    const root = frame(page, "Frame / " + String(index).padStart(2, "0") + " / Home / /", 0, 0, 1440, 7072, C.bg);
+    root.clipsContent = true; root.setPluginData("route", "/"); publicHeader(root);
+
+    const hero = frame(root, "Section / 01 / Hero", 0, 74, 1440, 720, C.bg, C.line);
+    grid(hero, "Hero grid", 0, 0, 1440, 720, 46, C.orange, 0.055);
+    text(hero, "Heading / Line 1", "JEE concepts", 56, 175, { font: F.displayBold, size: 72, width: 650, lineHeight: 76 });
+    text(hero, "Heading / Line 2", "made", 56, 262, { font: F.displayBold, size: 72, width: 230, lineHeight: 76 });
+    text(hero, "Heading / Accent", "visible.", 286, 262, { font: F.displayBold, size: 72, color: C.orange, width: 320, lineHeight: 76 });
+    text(hero, "Description", "Learn Physics, Chemistry, and Mathematics through visual notes and interactive simulations built for understanding—not information overload.", 56, 375, { font: F.display, size: 20, color: C.muted, width: 660, lineHeight: 32 });
+    button(hero, "Explore free simulations  →", 56, 485, 250, "primary"); button(hero, "Preview visual notes", 318, 485, 190, "ghost");
+    [["Visual notes", 56], ["Interactive simulations", 208], ["Videos in future", 408]].forEach(function (value) { text(hero, "Proof / Check / " + value[0], "✓", value[1], 570, { font: F.bold, size: 14, color: C.green }); text(hero, "Proof / " + value[0], value[0], value[1] + 23, 570, { font: F.display, size: 14, color: C.muted }); });
+    const canvas = frame(hero, "Hero visual / Live concept canvas", 760, 76, 624, 568, C.surface, C.line); grid(canvas, "Canvas grid", 0, 0, 624, 568, 46, C.orange, 0.035);
+    text(canvas, "Live indicator", "■  LIVE CONCEPT CANVAS", 20, 18, { font: F.mono, size: 10, color: C.green }); text(canvas, "Model count", "05 MODELS / LOOP", 482, 18, { font: F.mono, size: 10, color: C.ember }); rule(canvas, "Header divider", 0, 48, 624, C.hair);
+    const canvasItems = [
+      ["01 / KINEMATICS", "Vertical throw", C.ember, "↑\n●\n↓"],
+      ["02 / WAVES", "Interference", C.cyan, "∿  ∿"],
+      ["03 / ATOMIC", "Orbital probability", "#B48CFF", "⊙"],
+      ["04 / CALCULUS", "Function transform", C.green, "∫  ↗"]
+    ];
+    canvasItems.forEach(function (value, i) {
+      const item = frame(canvas, "Looping model / " + value[1], (i % 2) * 312, 49 + Math.floor(i / 2) * 236, 312, 236, C.bg, C.hair);
+      text(item, "Code", value[0], 18, 18, { font: F.mono, size: 9, color: value[2] });
+      text(item, "Visual", value[3], 0, 64, { font: F.mono, size: i === 2 ? 58 : 30, color: value[2], width: 312, align: "CENTER", lineHeight: 39 });
+      text(item, "Title", value[1], 18, 198, { font: F.displayBold, size: 15 });
+    });
+    rule(canvas, "Ticker divider", 0, 521, 624, C.hair); text(canvas, "Ticker", "PHY-01 VERTICAL THROW    CHM-01 ORBITALS    MAT-01 FUNCTION TRANSFORM", 20, 539, { font: F.mono, size: 9, color: C.muted });
+
+    const simulations = frame(root, "Section / 02 / Simulations Lab", 0, 794, 1440, 735, C.bg);
+    text(simulations, "Heading", "A lab that turns formulas into behaviour.", 56, 104, { font: F.displayBold, size: 46, width: 690, lineHeight: 54 });
+    text(simulations, "Description", "Play with five free simulations. Change one input, predict the outcome, and see the relationship respond.", 856, 112, { font: F.display, size: 18, color: C.muted, width: 500, lineHeight: 31 }); button(simulations, "Explore free simulations  →", 856, 228, 238, "outline");
+    const simNames = [["Vertical throw", "Physics", C.ember], ["Projectile range", "Physics", C.amber], ["Spring oscillator", "Physics", C.cyan], ["Electric field", "Physics", C.green], ["Function grapher", "Mathematics", "#B48CFF"]];
+    simNames.forEach(function (value, i) {
+      const w = 1312 / 5, card = frame(simulations, "Demo / " + value[0], 56 + i * w, 330, w, 314, C.surface, C.line);
+      text(card, "Number", "0" + (i + 1), 20, 20, { font: F.mono, size: 10, color: C.muted }); text(card, "Icon", i === 4 ? "Σ" : i === 2 ? "∿" : "⊙", w - 44, 20, { font: F.mono, size: 17, color: value[2] });
+      text(card, "Subject", value[1].toUpperCase(), 20, 156, { font: F.mono, size: 9, color: C.muted }); text(card, "Title", value[0], 20, 184, { font: F.displayBold, size: 19, width: w - 40 });
+      text(card, "Action", "Play demo  →", 20, 258, { font: F.displayBold, size: 13, color: C.ember });
+    });
+
+    const notes = frame(root, "Section / 03 / Sample notes", 0, 1529, 1440, 711, C.surface, C.hair);
+    text(notes, "Heading", "Preview the logic before opening the full note.", 56, 92, { font: F.displayBold, size: 46, width: 710, lineHeight: 54 });
+    text(notes, "Description", "Five sample notes show how diagrams, relationships, and retention points fit together across all three subjects.", 856, 100, { font: F.display, size: 18, color: C.muted, width: 500, lineHeight: 31 }); button(notes, "Browse sample notes  →", 856, 212, 212, "primary");
+    const noteNames = [["Motion under gravity", "PHYSICS · KINEMATICS", "v² = u² + 2as", C.ember], ["Electric field & potential", "PHYSICS · ELECTROSTATICS", "E = −dV / dr", C.cyan], ["Chemical bonding", "CHEMISTRY · INORGANIC", "SN = σ + LP", C.green], ["Entropy & spontaneity", "CHEMISTRY · THERMODYNAMICS", "ΔG = ΔH − TΔS", C.yellow], ["Integration as accumulation", "MATHEMATICS · CALCULUS", "∫ f(x)dx", "#B48CFF"]];
+    noteNames.forEach(function (value, i) {
+      const w = 250, card = frame(notes, "Note preview / " + value[0], 56 + i * 266, 314, w, 318, C.paper, C.hair); rect(card, "Accent", 0, 0, w, 7, value[3]);
+      text(card, "Icon", i < 2 ? "⊗" : i < 4 ? "△" : "Σ", 20, 28, { font: F.mono, size: 18, color: value[3] }); text(card, "Meta", value[1], 20, 104, { font: F.mono, size: 8, color: C.soft });
+      text(card, "Title", value[0], 20, 135, { font: F.displayBold, size: 18, color: C.surface, width: 210, lineHeight: 24 }); const formula = frame(card, "Formula", 20, 206, 210, 56, "#FFF5EE"); rect(formula, "Formula accent", 0, 0, 2, 56, C.orange); text(formula, "Relationship", value[2], 14, 16, { font: F.displayBold, size: 17, color: C.surface }); text(card, "Action", "Open preview  →", 20, 282, { font: F.displayBold, size: 12, color: "#8A2F0A" });
+    });
+
+    const utility = frame(root, "Section / 04 / Marginal utility", 0, 2240, 1440, 870, C.bg);
+    const curve = frame(utility, "Marginal utility / Visual", 56, 111, 620, 620, C.surface, C.line); grid(curve, "Visual grid", 0, 0, 620, 620, 46, C.orange, 0.04); text(curve, "Title", "Useful understanding", 28, 28, { font: F.displayBold, size: 23 }); text(curve, "Label", "NEXT ACTION", 494, 33, { font: F.mono, size: 9, color: C.green });
+    rect(curve, "Y axis", 55, 115, 1, 410, C.muted, null, 0, 0.45); rect(curve, "X axis", 55, 524, 510, 1, C.muted, null, 0, 0.45);
+    const bars = [52, 112, 176, 236, 292, 338, 373, 397, 414, 425]; bars.forEach(function (height, i) { rect(curve, "Utility curve / " + i, 74 + i * 47, 524 - height, 30, height, C.orange, null, 0, 0.12 + i * 0.055); });
+    rect(curve, "Focus line", 196, 114, 1, 410, C.cyan, null, 0, 0.65); ellipse(curve, "Focus point", 190, 285, 13, 13, C.cyan); const callout = frame(curve, "Next action callout", 224, 216, 280, 98, C.bg, C.hair); text(callout, "Copy", "The next focused connection adds more than another hour of passive rereading.", 16, 15, { font: F.display, size: 13, color: C.muted, width: 248, lineHeight: 21 }); text(curve, "Axis label", "STUDY EFFORT  →", 436, 545, { font: F.mono, size: 9, color: C.muted });
+    text(utility, "Heading", "Make every extra minute earn its place.", 760, 118, { font: F.displayBold, size: 46, width: 610, lineHeight: 54 }); text(utility, "Description", "Marginal utility is the usefulness of your next study action. It is not an adaptive score—it is a way to move from seeing, to testing, to remembering.", 760, 258, { font: F.display, size: 18, color: C.muted, width: 580, lineHeight: 31 });
+    ["See the mechanism", "Change one variable", "Retrieve the idea", "Revisit the weak link"].forEach(function (label, i) { const row = frame(utility, "Utility step / " + label, 760, 408 + i * 86, 608, 86, null); rule(row, "Divider", 0, 0, 608, C.line); text(row, "Index", "0" + (i + 1), 0, 32, { font: F.mono, size: 10, color: C.ember }); text(row, "Title", label, 52, 27, { font: F.displayBold, size: 19 }); text(row, "Toggle", i === 0 ? "−" : "+", 574, 24, { font: F.display, size: 23, color: C.ember }); });
+
+    const concept = frame(root, "Section / 05 / Concept map heat map", 0, 3110, 1440, 763, C.surface, C.hair);
+    text(concept, "Heading", "See the chapter before you enter it.", 56, 124, { font: F.displayBold, size: 46, width: 520, lineHeight: 54 }); text(concept, "Description", "A concept map exposes the dependencies between topics. The heat view makes strong connections visible, so a chapter feels like a system rather than a list.", 56, 268, { font: F.display, size: 18, color: C.muted, width: 480, lineHeight: 31 });
+    [[C.orange, "Strong dependency"], ["#9A421F", "Supporting link"], ["#49271F", "Light connection"]].forEach(function (value, i) { rect(concept, "Legend / " + value[1], 56 + i * 166, 430, 12, 12, value[0]); text(concept, "Legend label / " + value[1], value[1], 76 + i * 166, 428, { font: F.display, size: 11, color: C.muted }); });
+    const heat = frame(concept, "Concept map / Heat map", 590, 92, 778, 580, C.bg, C.line); const columns = ["CONCEPT", "FOUNDATION", "CONNECT", "APPLY", "REVISIT"]; columns.forEach(function (label, i) { text(heat, "Column / " + label, label, i === 0 ? 22 : 180 + (i - 1) * 145, 24, { font: F.mono, size: 8, color: C.muted }); });
+    const rowsData = [["Motion", [1, .75, .55, .28]], ["Forces", [.72, 1, .78, .36]], ["Energy", [.48, .82, 1, .52]], ["Rotation", [.28, .56, .86, 1]], ["Electrostatics", [.62, .92, .64, .42]], ["Optics", [.36, .58, .74, .88]]];
+    rowsData.forEach(function (value, r) { const y = 64 + r * 81; rule(heat, "Row divider / " + r, 18, y, 742, C.hair); text(heat, "Row index / " + r, "0" + (r + 1), 22, y + 31, { font: F.mono, size: 9, color: C.ember }); text(heat, "Row label / " + value[0], value[0], 54, y + 27, { font: F.displayBold, size: 14 }); value[1].forEach(function (strength, c) { const cell = rect(heat, "Heat / " + value[0] + " / " + c, 176 + c * 145, y + 12, 124, 58, C.orange, C.line, 0, 0.08 + strength * 0.78); text(heat, "Heat value / " + value[0] + " / " + c, Math.round(strength * 100), 176 + c * 145, y + 33, { font: F.mono, size: 9, color: C.paper, width: 124, align: "CENTER" }); }); });
+
+    const pricing = frame(root, "Section / 06 / Pricing", 0, 3873, 1440, 970, C.bg);
+    text(pricing, "Heading", "Choose how much of the visual library you need.", 56, 102, { font: F.displayBold, size: 46, width: 720, lineHeight: 54 }); text(pricing, "Description", "Three clear annual plans. No adaptive engine, no unrelated test-prep features, and no hidden product layer.", 856, 112, { font: F.display, size: 18, color: C.muted, width: 500, lineHeight: 31 });
+    const planData = [["Notes", "₹4,999", "A focused visual notebook across Physics, Chemistry, and Mathematics.", ["Complete visual note library", "Five public sample notes", "Protected full-page reader", "Bookmarks and reading progress"]], ["Notes + Simulations", "₹6,999", "Connect every important relationship with a model you can control.", ["Everything in Notes", "Complete simulation library", "Variable controls and live graphs", "New labs added through the year"]], ["Complete Library", "₹9,999", "The full visual collection, including lectures as they are released.", ["Everything in Notes + Simulations", "Video lectures as released", "Educator-curated visual sequences", "All future library additions this year"]]];
+    planData.forEach(function (value, i) { const plan = frame(pricing, "Plan / " + value[0], 56 + i * 444, 298, 424, 574, i === 1 ? C.raised : C.surface, i === 1 ? C.orange : C.hair); if (i === 1) { const tag = frame(plan, "Most visual", 290, 0, 134, 32, C.orange); text(tag, "Label", "MOST VISUAL", 0, 10, { font: F.mono, size: 8, color: C.bg, width: 134, align: "CENTER" }); } text(plan, "Name", value[0], 28, 34, { font: F.displayBold, size: 24 }); text(plan, "Price", value[1], 28, 106, { font: F.displayBold, size: 39 }); text(plan, "Period", "/ year", 182, 127, { font: F.display, size: 13, color: C.muted }); text(plan, "Description", value[2], 28, 178, { font: F.display, size: 15, color: C.muted, width: 360, lineHeight: 25 }); value[3].forEach(function (feature, f) { text(plan, "Check / " + f, "✓", 28, 296 + f * 45, { font: F.bold, size: 12, color: C.green }); text(plan, "Feature / " + f, feature, 54, 294 + f * 45, { font: F.display, size: 13, color: C.muted, width: 330 }); }); button(plan, "Choose " + value[0], 28, 502, 368, i === 1 ? "primary" : "outline"); });
+
+    const educators = frame(root, "Section / 07 / Educator login", 0, 4843, 1440, 278, C.orange);
+    const educatorIcon = frame(educators, "Educator icon", 56, 86, 56, 56, null, C.bg); text(educatorIcon, "Glyph", "△", 0, 15, { font: F.mono, size: 22, color: C.bg, width: 56, align: "CENTER" }); text(educators, "Heading", "Educators get a separate door.", 142, 67, { font: F.displayBold, size: 42, color: C.bg }); text(educators, "Description", "Use educator login for exclusive academic content, contributor resources, and material prepared for invited teachers.", 142, 130, { font: F.display, size: 17, color: C.bg, width: 800, lineHeight: 28, opacity: 0.75 }); const educatorButton = frame(educators, "Button / Educator login", 1105, 104, 238, 52, C.bg); text(educatorButton, "Label", "Educator login  →", 0, 17, { font: F.bold, size: 14, width: 238, align: "CENTER" });
+
+    const testimonials = frame(root, "Section / 08 / Student testimonials", 0, 5121, 1440, 787, C.bg);
+    text(testimonials, "Heading", "What changes when the concept becomes visible.", 56, 103, { font: F.displayBold, size: 46, width: 720, lineHeight: 54 }); text(testimonials, "Description", "Students describe the shift from memorising isolated results to seeing how the ideas connect.", 856, 112, { font: F.display, size: 18, color: C.muted, width: 500, lineHeight: 31 });
+    quoteCard(testimonials, 56, 304, 424, "Meera Iyer", "JEE 2027 aspirant · Chennai", "The derivation ladders show me exactly where each result comes from. I revise faster because I am no longer memorising disconnected formulas."); quoteCard(testimonials, 500, 304, 424, "Aryan Kapoor", "Class 11 · Jaipur", "The simulations make a difficult graph feel obvious. I can change one variable, predict the result and immediately test my reasoning."); quoteCard(testimonials, 944, 304, 424, "Sana Khan", "JEE 2026 aspirant · Hyderabad", "I like that progress means finishing the work, not collecting points. The notebook stays calm even when my week is busy.");
+
+    const faqs = frame(root, "Section / 09 / FAQs and final CTA", 0, 5908, 1440, 720, C.surface, C.hair);
+    text(faqs, "Icon", "✦", 56, 82, { font: F.displayBold, size: 26, color: C.ember }); text(faqs, "Heading", "Questions answered.\nTry the idea next.", 56, 131, { font: F.displayBold, size: 46, width: 520, lineHeight: 54 }); text(faqs, "Description", "Start with five simulations and five note previews. No sign-in is needed for either.", 56, 269, { font: F.display, size: 18, color: C.muted, width: 430, lineHeight: 31 }); button(faqs, "Start with a simulation  →", 56, 382, 226, "primary"); button(faqs, "Open a note", 294, 382, 142, "ghost");
+    const faqNames = ["What can I use on Orange Nelumbo today?", "Can I try anything without signing in?", "Are these resources for JEE Main and Advanced?", "Is there an adaptive engine or test platform?", "How does educator access work?", "Do notes open inside the dashboard?"];
+    let homeFaqY = 78; faqNames.forEach(function (label, i) { const h = i === 0 ? 128 : 76, item = frame(faqs, "FAQ / " + String(i + 1).padStart(2, "0"), 590, homeFaqY, 778, h, null); rule(item, "Divider", 0, 0, 778, C.line); text(item, "Question", label, 0, 24, { font: F.displayBold, size: 18, width: 710 }); text(item, "Toggle", i === 0 ? "−" : "+", 744, 22, { font: F.display, size: 22, color: C.ember }); if (i === 0) text(item, "Answer", "Visual notes and interactive simulations are available today. Video lectures are planned for a future release.", 0, 65, { font: F.display, size: 13, color: C.muted, width: 720, lineHeight: 21 }); homeFaqY += h; });
+
+    publicFooter(root, 6628); return root;
+  }
+
+  function freeSimulationsFrame(page, route, index) {
+    const root = frame(page, "Frame / " + String(index).padStart(2, "0") + " / Free Simulations / /free-simulations", 0, 0, 1440, 1958, C.bg);
+    root.clipsContent = true; root.setPluginData("route", route.route); publicHeader(root);
+    const hero = frame(root, "Section / 01 / Free simulations hero", 0, 74, 1440, 420, C.bg, C.line); grid(hero, "Hero grid", 0, 0, 1440, 420, 46, C.orange, 0.055);
+    text(hero, "Availability", "FREE · NO SIGN-IN", 56, 72, { font: F.mono, size: 10, color: C.green }); text(hero, "Heading", "Five ideas you can move, test, and see.", 56, 112, { font: F.displayBold, size: 55, width: 970, lineHeight: 62 }); text(hero, "Description", "Change one variable, predict what happens, and use the visual response to connect the formula with its behaviour.", 56, 260, { font: F.display, size: 18, color: C.muted, width: 720, lineHeight: 31 });
+    const lab = frame(root, "Section / 02 / Playable simulation lab", 0, 494, 1440, 800, C.bg);
+    const nav = frame(lab, "Demo navigation", 56, 82, 280, 616, C.surface, C.line); ["Vertical throw", "Projectile range", "Spring oscillator", "Electric field", "Function grapher"].forEach(function (label, i) { const row = frame(nav, "Demo / " + label, 8, 8 + i * 120, 264, 112, i === 0 ? C.raised : null, i === 0 ? C.orange : C.hair); text(row, "Index", "0" + (i + 1) + " / " + (i === 4 ? "MATHEMATICS" : "PHYSICS"), 18, 20, { font: F.mono, size: 8, color: C.muted }); text(row, "Title", label, 18, 55, { font: F.displayBold, size: 16 }); text(row, "Arrow", "→", 228, 50, { font: F.display, size: 18, color: C.ember }); });
+    const player = frame(lab, "Simulation player / Vertical throw", 356, 82, 1028, 616, C.surface, C.line); text(player, "Status", "PLAYABLE DEMO · NO SIGN-IN", 28, 25, { font: F.mono, size: 9, color: C.green }); text(player, "Title", "Vertical throw", 28, 55, { font: F.displayBold, size: 28 }); button(player, "Replay", 884, 26, 116, "ghost"); rule(player, "Header divider", 0, 112, 1028, C.hair);
+    const visual = frame(player, "Animated model", 0, 113, 720, 503, C.bg); grid(visual, "Model grid", 0, 0, 720, 503, 46, C.orange, 0.035); rect(visual, "Flight path", 359, 66, 1, 320, C.muted, null, 0, 0.45); ellipse(visual, "Ball", 346, 96, 28, 28, C.amber); rule(visual, "Ground", 120, 400, 480, C.hair); text(visual, "Apex", "v = 0 at apex", 400, 88, { font: F.mono, size: 10, color: C.cyan });
+    const controls = frame(player, "Control panel", 720, 113, 308, 503, C.surface, C.hair); text(controls, "Label", "CONTROL ONE VARIABLE", 24, 28, { font: F.mono, size: 9, color: C.ember }); text(controls, "Name", "Launch speed", 24, 78, { font: F.displayBold, size: 15 }); text(controls, "Value", "10 m/s", 224, 80, { font: F.mono, size: 12, color: C.cyan }); rect(controls, "Slider", 24, 125, 260, 6, C.soft); rect(controls, "Slider fill", 24, 125, 143, 6, C.orange); const tip = frame(controls, "Try this", 24, 185, 260, 128, C.bg, C.hair); rect(tip, "Accent", 0, 0, 2, 128, C.cyan); text(tip, "Title", "Try this", 16, 16, { font: F.displayBold, size: 13, color: C.cyan }); text(tip, "Copy", "Move the control slowly. Predict the change before the visual catches up.", 16, 47, { font: F.display, size: 13, color: C.muted, width: 224, lineHeight: 21 }); button(controls, "Run again", 24, 376, 260, "primary");
+    const cta = frame(root, "Section / 03 / Membership CTA", 0, 1294, 1440, 220, C.surface, C.hair); text(cta, "Heading", "Ready for the complete library?", 56, 67, { font: F.displayBold, size: 34 }); text(cta, "Copy", "Keep the demos free. Join when you want the full notes and simulation collection.", 56, 120, { font: F.display, size: 16, color: C.muted }); button(cta, "Create an account  →", 1148, 84, 236, "primary"); publicFooter(root, 1514); return root;
+  }
+
+  function sampleNotesFrame(page, route, index) {
+    const root = frame(page, "Frame / " + String(index).padStart(2, "0") + " / Sample Notes / /sample-notes", 0, 0, 1440, 2018, C.bg);
+    root.clipsContent = true; root.setPluginData("route", route.route); publicHeader(root);
+    const hero = frame(root, "Section / 01 / Sample notes hero", 0, 74, 1440, 420, C.bg, C.line); grid(hero, "Hero grid", 0, 0, 1440, 420, 46, C.orange, 0.055);
+    text(hero, "Availability", "FIVE OPEN PREVIEWS", 56, 72, { font: F.mono, size: 10, color: C.ember }); text(hero, "Heading", "Notes that show the idea before compressing it.", 56, 112, { font: F.displayBold, size: 55, width: 1040, lineHeight: 62 }); text(hero, "Description", "Browse samples across Physics, Chemistry, and Mathematics. Each preview keeps the visual, formula, and key ideas in one readable unit.", 56, 260, { font: F.display, size: 18, color: C.muted, width: 780, lineHeight: 31 });
+    const browserSection = frame(root, "Section / 02 / Note preview browser", 0, 494, 1440, 850, C.bg);
+    const nav = frame(browserSection, "Note navigation", 56, 82, 310, 662, C.surface, C.line); ["Motion under gravity", "Electric field & potential", "Chemical bonding", "Entropy & spontaneity", "Integration as accumulation"].forEach(function (label, i) { const row = frame(nav, "Note / " + label, 8, 8 + i * 128, 294, 120, i === 0 ? C.raised : null, i === 0 ? C.orange : C.hair); text(row, "Index", "0" + (i + 1) + " / " + (i < 2 ? "PHYSICS" : i < 4 ? "CHEMISTRY" : "MATHEMATICS"), 18, 20, { font: F.mono, size: 8, color: C.muted }); text(row, "Title", label, 18, 55, { font: F.displayBold, size: 15, width: 240, lineHeight: 21 }); text(row, "Arrow", "→", 258, 51, { font: F.display, size: 18, color: C.ember }); });
+    const sheet = frame(browserSection, "Paper note / Motion under gravity", 386, 82, 998, 662, C.paper, C.line); const ink = C.surface; text(sheet, "Meta", "PHYSICS · KINEMATICS", 34, 32, { font: F.mono, size: 9, color: C.soft }); text(sheet, "Counter", "SAMPLE 01 / 05", 844, 32, { font: F.mono, size: 9, color: C.soft }); text(sheet, "Title", "Motion under gravity", 34, 68, { font: F.displayBold, size: 31, color: ink }); rule(sheet, "Header divider", 0, 124, 998, "#D6D1C8"); text(sheet, "Summary", "Read velocity, displacement, and time as one connected picture.", 34, 158, { font: F.display, size: 16, color: "#4A454D", width: 560, lineHeight: 27 });
+    const diagram = frame(sheet, "Concept diagram", 34, 218, 560, 244, "#FFFFFF", "#D6D1C8"); rule(diagram, "Ground", 56, 198, 448, "#9C969F"); rect(diagram, "Path", 279, 37, 1, 161, "#9C969F"); ellipse(diagram, "Ball / Launch", 267, 178, 25, 25, C.amber); ellipse(diagram, "Ball / Apex", 267, 33, 25, 25, C.amber); text(diagram, "Turning point", "turning point", 320, 32, { font: F.mono, size: 9, color: "#8A2F0A" });
+    const formula = frame(sheet, "Core relationship", 34, 490, 560, 118, "#FFF0E8"); rect(formula, "Accent", 0, 0, 4, 118, C.orange); text(formula, "Label", "CORE RELATIONSHIP", 20, 20, { font: F.mono, size: 8, color: "#8A2F0A" }); text(formula, "Equation", "v² = u² + 2as", 20, 54, { font: F.displayBold, size: 28, color: ink });
+    text(sheet, "Retain heading", "Three ideas to retain", 636, 160, { font: F.displayBold, size: 20, color: ink }); ["Acceleration stays downward", "Velocity becomes zero only at the apex", "Equal levels have equal speed magnitude"].forEach(function (label, i) { rect(sheet, "Index block / " + i, 636, 214 + i * 92, 28, 28, ink); text(sheet, "Index / " + i, "0" + (i + 1), 636, 222 + i * 92, { font: F.mono, size: 8, color: C.paper, width: 28, align: "CENTER" }); text(sheet, "Idea / " + i, label, 680, 215 + i * 92, { font: F.body, size: 13, color: "#4A454D", width: 265, lineHeight: 21 }); }); rule(sheet, "Aside divider", 636, 500, 322, "#D6D1C8"); text(sheet, "Format label", "PREVIEW FORMAT", 636, 530, { font: F.mono, size: 8, color: "#8A2F0A" }); text(sheet, "Format copy", "Every note can add its own visual, formula, and retention list without changing the layout.", 636, 561, { font: F.body, size: 13, color: "#4A454D", width: 300, lineHeight: 21 });
+    const cta = frame(root, "Section / 03 / Full library CTA", 0, 1344, 1440, 230, C.surface, C.hair); text(cta, "Heading", "Continue with the full note library.", 56, 70, { font: F.displayBold, size: 34 }); text(cta, "Copy", "Open protected, distraction-free note pages after signing in.", 56, 124, { font: F.display, size: 16, color: C.muted }); button(cta, "Explore membership  →", 1148, 89, 236, "primary"); publicFooter(root, 1574); return root;
   }
 
   function authFrame(page, route, index) {
@@ -530,7 +642,9 @@
       section("Frequently asked questions", "faq", 660, ["What does Orange Nelumbo offer today?", "Does it cover JEE Main and Advanced?", "How does the Simulation Lab help?", "Are video lectures available now?", "Who can use educator access?", "Can I save notes?"], "Clear answers about notes, labs, videos, and educator access.", { alt: true })
     ]),
     spec("About", "/about", "public", [section("Difficult concepts should be easier to see.", "hero", 421, [], "Orange Nelumbo is building a focused JEE learning library around visual notes, interactive simulations, and visual-first video lectures."), section("We are reducing the distance between a formula and its meaning.", "cards", 656, ["Make it visible", "Keep it focused", "Let students test it"], ""), section("Start with one concept. See if it clicks.", "hero", 361, [], "The current demo includes sample visual notes and simulations across Physics, Chemistry, and Mathematics.", { alt: true, button: "Explore the library" })]),
-    spec("Access", "/pricing", "public", [section("Explore the current learning demo.", "hero", 310, [], "Public pricing is not final. The demo is focused on showing the visual notes and simulation experience."), section("Demo access", "cards", 631, ["Visual notes across Physics, Chemistry, and Mathematics", "Available interactive simulations", "Bookmarks and device-local reading progress", "Preview of the future video lecture area"], "", { columns: 2 })]),
+    spec("Pricing", "/pricing", "public", [section("Three plans. One visual way to learn.", "hero", 390, [], "Choose notes, add simulations, or include future video lectures. Every plan stays focused on the learning library."), section("Choose your library", "cards", 680, [{ title: "Notes · ₹4,999/year", body: "Complete visual notes, protected reader, bookmarks, and reading progress." }, { title: "Notes + Simulations · ₹6,999/year", body: "Everything in Notes plus the complete interactive simulation library." }, { title: "Complete Library · ₹9,999/year", body: "The full collection, including video lectures as they are released." }], "", { columns: 3, cardHeight: 420 })]),
+    spec("Free Simulations", "/free-simulations", "public", [section("Five ideas you can move, test, and see.", "hero", 420, [], "Change one variable, predict what happens, and use the visual response to connect the formula with its behaviour."), section("Playable simulation lab", "reader", 820, ["Vertical throw", "Projectile range", "Spring oscillator", "Electric field", "Function grapher"], "Five live demos with controls and animated response."), section("Ready for the complete library?", "hero", 220, [], "Keep the demos free. Join when you want the full notes and simulation collection.", { alt: true, button: "Create an account" })]),
+    spec("Sample Notes", "/sample-notes", "public", [section("Notes that show the idea before compressing it.", "hero", 420, [], "Browse five open samples across Physics, Chemistry, and Mathematics."), section("Five open note previews", "reader", 820, ["Motion under gravity", "Electric field & potential", "Chemical bonding", "Entropy & spontaneity", "Integration as accumulation"], "Each preview keeps the visual, formula, and key ideas in one readable unit."), section("Continue with the full note library.", "hero", 220, [], "Open protected, distraction-free note pages after signing in.", { alt: true, button: "Explore membership" })]),
     spec("Help", "/help", "public", [section("How can we help?", "hero", 278, [], "Quick answers about the learning library and your account."), section("Help topics", "cards", 650, ["Visual notes", "Simulations", "Video lectures", "Profile and settings"], "", { columns: 2, cardHeight: 210 }), section("Still need help?", "hero", 201, [], "Tell us which note, simulation, or account screen is causing trouble.", { alt: true, button: "Contact us" })]),
     spec("Contact", "/contact", "public", [section("Help starts with the real question.", "hero", 366, [], "Be specific and calm. Tell us what you were trying to do, what happened, and what you expected instead."), section("This form is deliberately a demo.", "form", 923, ["Your name", "Email address", "Topic", "Message"], "There is no backend or support inbox connected yet.", { button: "Show success state" }), section("Independence notice", "rows", 129, ["Orange Nelumbo is an independent educational platform."])]),
     spec("Privacy", "/privacy", "public", [section("Privacy, stated precisely.", "hero", 334, [], "What this front-end preview stores, what it does not collect, and the choices available on this device."), section("Privacy sections", "rows", 2289, ["1. Scope of this preview", "2. Information shown or entered", "3. Browser-local storage", "4. Cookies, analytics, and third parties", "5. Students and minors", "6. Security and retention", "7. Your choices and questions"]), section("Independence notice", "rows", 129, ["Orange Nelumbo is an independent educational platform."])]),
@@ -609,7 +723,7 @@
   });
   const generated = [coverFrame(websitePage)];
   routes.forEach(function (route, i) {
-    generated.push(route.route === "/" ? homeFrame(websitePage, i + 1) : route.mode === "auth" ? authFrame(websitePage, route, i + 1) : route.mode === "onboarding" ? onboardingFrame(websitePage, route, i + 1) : route.mode === "reader" ? readerFrame(websitePage, route, i + 1) : routeFrame(websitePage, route, i + 1));
+    generated.push(route.route === "/" ? homeFrame(websitePage, i + 1) : route.route === "/free-simulations" ? freeSimulationsFrame(websitePage, route, i + 1) : route.route === "/sample-notes" ? sampleNotesFrame(websitePage, route, i + 1) : route.mode === "auth" ? authFrame(websitePage, route, i + 1) : route.mode === "onboarding" ? onboardingFrame(websitePage, route, i + 1) : route.mode === "reader" ? readerFrame(websitePage, route, i + 1) : routeFrame(websitePage, route, i + 1));
   });
 
   const columns = 3;

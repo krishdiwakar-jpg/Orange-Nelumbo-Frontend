@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Logo } from "@/components/brand/logo";
 
 const columns = [
-  { title: "Learn", links: [["Visual notes", "/#notes"], ["Simulation Lab", "/#simulations"], ["Video lectures", "/#videos"]] },
+  { title: "Learn", links: [["Free simulations", "/free-simulations"], ["Sample notes", "/sample-notes"], ["Pricing", "/#pricing"]] },
   { title: "Support", links: [["FAQs", "/#faqs"], ["Educator login", "/login?role=educator&returnTo=%2Fdashboard"], ["Contact", "/contact"]] },
   { title: "Legal", links: [["Privacy", "/privacy"], ["Terms", "/terms"]] },
 ] as const;

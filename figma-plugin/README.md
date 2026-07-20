@@ -9,10 +9,10 @@ This local Figma development plugin generates the complete Orange Nelumbo websit
 3. Select `figma-plugin/manifest.json` from this project.
 4. Run **Plugins → Development → Orange Nelumbo — Full Website Import**.
 
-The plugin creates one Figma page named **Orange Nelumbo · Full Website**, containing 26 separate top-level frames arranged in a three-column canvas:
+The plugin creates one Figma page named **Orange Nelumbo · Full Website**, containing 28 separate top-level frames arranged in a three-column canvas. The two additional frames are the new public demo destinations:
 
 - One import-index frame with the full route map and legacy redirects.
-- Public pages: Home, About, Access, Help, Contact, Privacy, Terms, and 404.
+- Public pages: Home, About, Pricing, Free Simulations, Sample Notes, Help, Contact, Privacy, Terms, and 404.
 - Account pages: Student Login, Educator Login, Signup, Forgot Password, and Onboarding.
 - Learning pages: Learning Home, Visual Notes, Subject, Chapter, Simulations, Simulation Detail, Video Lectures, Bookmarks, Notifications, Profile, Settings, and the Protected Note Reader.
 

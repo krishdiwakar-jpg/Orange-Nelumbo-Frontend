@@ -5,50 +5,66 @@ import {
   BookOpen,
   Check,
   ChevronDown,
-  Eye,
   FlaskConical,
   GraduationCap,
-  PlayCircle,
+  Orbit,
+  Play,
   Quote,
   Sigma,
-  SlidersHorizontal,
+  Sparkles,
+  Waves,
 } from "lucide-react";
 
 import { MarketingFooter } from "@/components/layout/marketing-footer";
 import { MarketingHeader } from "@/components/layout/marketing-header";
+import { HeroSimulationCanvas } from "@/components/marketing/hero-simulation-canvas";
 import { testimonials } from "@/data/platform";
 
-const subjects = [
-  { name: "Physics", icon: Atom, copy: "Diagrams, physical intuition, derivations, and interactive models." },
-  { name: "Chemistry", icon: FlaskConical, copy: "Visual structures, reaction logic, trends, and concise revision maps." },
-  { name: "Mathematics", icon: Sigma, copy: "Step-by-step reasoning, geometric meaning, and worked patterns." },
+const demoSimulations = [
+  { slug: "vertical-throw", number: "01", title: "Vertical throw", subject: "Physics", copy: "Launch, pause at the apex, and return.", icon: Orbit, color: "#FF8A3D" },
+  { slug: "projectile-range", number: "02", title: "Projectile range", subject: "Physics", copy: "Change the angle and trace the range.", icon: Play, color: "#F5D9A8" },
+  { slug: "simple-harmonic-motion", number: "03", title: "Spring oscillator", subject: "Physics", copy: "Watch kinetic and potential energy trade.", icon: Waves, color: "#3DE0D0" },
+  { slug: "electric-field-mapper", number: "04", title: "Electric field", subject: "Physics", copy: "Separate charges and read the field.", icon: Atom, color: "#3DE08A" },
+  { slug: "function-grapher", number: "05", title: "Function grapher", subject: "Mathematics", copy: "Move a coefficient and reshape the curve.", icon: Sigma, color: "#B48CFF" },
+];
+
+const notePreviews = [
+  { slug: "motion-under-gravity", subject: "Physics", chapter: "Kinematics", title: "Motion under gravity", formula: "v² = u² + 2as", icon: Atom, color: "#FF8A3D" },
+  { slug: "electric-field-potential", subject: "Physics", chapter: "Electrostatics", title: "Electric field & potential", formula: "E = −dV / dr", icon: Atom, color: "#3DE0D0" },
+  { slug: "chemical-bonding", subject: "Chemistry", chapter: "Inorganic", title: "Chemical bonding", formula: "SN = σ + LP", icon: FlaskConical, color: "#3DE08A" },
+  { slug: "entropy-spontaneity", subject: "Chemistry", chapter: "Thermodynamics", title: "Entropy & spontaneity", formula: "ΔG = ΔH − TΔS", icon: FlaskConical, color: "#F6C344" },
+  { slug: "integration-accumulation", subject: "Mathematics", chapter: "Calculus", title: "Integration as accumulation", formula: "∫ f(x)dx", icon: Sigma, color: "#B48CFF" },
+];
+
+const utilitySteps = [
+  { title: "See the mechanism", copy: "Begin with a visual note that reveals what the equation is describing." },
+  { title: "Change one variable", copy: "Use a simulation to isolate a cause and observe its effect." },
+  { title: "Retrieve the idea", copy: "Close the note and explain the relationship in your own words." },
+  { title: "Revisit the weak link", copy: "Return only to the connection that did not hold—not the whole chapter." },
+];
+
+const heatRows = [
+  { name: "Motion", cells: [1, .75, .55, .28] },
+  { name: "Forces", cells: [.72, 1, .78, .36] },
+  { name: "Energy", cells: [.48, .82, 1, .52] },
+  { name: "Rotation", cells: [.28, .56, .86, 1] },
+  { name: "Electrostatics", cells: [.62, .92, .64, .42] },
+  { name: "Optics", cells: [.36, .58, .74, .88] },
+];
+
+const homePlans = [
+  { name: "Notes", price: "₹4,999", description: "A focused visual notebook across Physics, Chemistry, and Mathematics.", features: ["Complete visual note library", "Five public sample notes", "Protected full-page reader", "Bookmarks and reading progress"], cta: "Choose Notes" },
+  { name: "Notes + Simulations", price: "₹6,999", description: "Connect every important relationship with a model you can control.", features: ["Everything in Notes", "Complete simulation library", "Variable controls and live graphs", "New labs added through the year"], cta: "Choose the visual plan", featured: true },
+  { name: "Complete Library", price: "₹9,999", description: "The full visual learning collection, including lectures as they are released.", features: ["Everything in Notes + Simulations", "Video lectures as released", "Educator-curated visual sequences", "All future library additions this year"], cta: "Choose Complete" },
 ];
 
 const homeFaqs = [
-  {
-    question: "What does Orange Nelumbo offer today?",
-    answer: "The current learning library focuses on visual notes and interactive simulations for JEE Physics, Chemistry, and Mathematics. Video lectures are planned for a future release.",
-  },
-  {
-    question: "Are the notes useful for JEE Main and JEE Advanced?",
-    answer: "Yes. Topics begin with the common foundation and then move into deeper derivations, patterns, and edge cases where Advanced preparation needs them.",
-  },
-  {
-    question: "How does the Simulation Lab help?",
-    answer: "Each lab lets a student predict an outcome, change one or more variables, and observe the result. The goal is to connect an equation with the behaviour it describes.",
-  },
-  {
-    question: "Are video lectures available now?",
-    answer: "Not yet. Visual-first video lectures are in production and will connect directly to the same notes and simulations when released.",
-  },
-  {
-    question: "Who can use educator access?",
-    answer: "Educator access is intended for invited teachers and academic contributors. They can use the dedicated sign-in entry provided by Orange Nelumbo.",
-  },
-  {
-    question: "Can I save notes and continue later?",
-    answer: "Yes. The demo supports bookmarks and device-local reading progress so students can return to the note they were studying.",
-  },
+  { question: "What can I use on Orange Nelumbo today?", answer: "Visual notes and interactive simulations are available today. Video lectures are planned and will be added to the Complete Library as they are released." },
+  { question: "Can I try anything without signing in?", answer: "Yes. Five simulations and five note previews are public, so you can understand the learning experience before creating an account." },
+  { question: "Are these resources for JEE Main and Advanced?", answer: "Yes. The library builds the shared foundation first, then shows the deeper derivations, edge cases, and connections relevant to JEE Advanced." },
+  { question: "Is there an adaptive engine or test platform?", answer: "No. Orange Nelumbo is intentionally focused on visual notes, simulations, and future video lectures. It does not claim to be an adaptive practice engine." },
+  { question: "How does educator access work?", answer: "Invited educators receive a separate login for exclusive academic resources and contributor material. Student and educator accounts stay distinct." },
+  { question: "Do notes open inside the dashboard?", answer: "No. Notes open on a dedicated reader page, keeping the learning layout focused and making it possible to add stronger content-protection controls." },
 ];
 
 export default function HomePage() {
@@ -56,163 +72,84 @@ export default function HomePage() {
     <div className="min-h-screen bg-[#0E0D10] text-white">
       <MarketingHeader />
       <main id="main-content">
-        <section className="hero-grid border-b border-[#FF5A1F]/20">
-          <div className="mx-auto grid min-h-[690px] max-w-[1440px] items-center gap-12 px-5 py-20 sm:px-8 lg:grid-cols-[1.08fr_.92fr] lg:px-14">
+        <section className="hero-grid overflow-hidden border-b border-[#FF5A1F]/20">
+          <div className="mx-auto grid min-h-[720px] max-w-[1440px] items-center gap-12 px-5 py-16 sm:px-8 lg:grid-cols-[.92fr_1.08fr] lg:px-14 lg:py-20">
             <div>
-              <h1 className="max-w-4xl font-display text-[clamp(2.8rem,6vw,5.4rem)] font-bold leading-[.98] tracking-[-.045em]">
-                JEE concepts made <span className="text-gradient">visible.</span>
-              </h1>
-              <p className="mt-7 max-w-2xl text-lg leading-8 text-[#C7C5CC] sm:text-xl">
-                Learn Physics, Chemistry, and Mathematics through visual notes and interactive simulations built for understanding—not information overload.
-              </p>
-              <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-                <Link className="button-primary justify-center" href="/signup">Explore the library <ArrowRight size={18} /></Link>
-                <Link className="button-ghost justify-center" href="/login?demo=1">Open demo</Link>
-              </div>
-              <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm text-[#C7C5CC]/80">
-                <span className="flex items-center gap-2"><Check size={15} className="text-[#3DE08A]" /> Visual notes</span>
-                <span className="flex items-center gap-2"><Check size={15} className="text-[#3DE08A]" /> Interactive simulations</span>
-                <span className="flex items-center gap-2"><Check size={15} className="text-[#3DE08A]" /> Video lectures coming soon</span>
-              </div>
+              <h1 className="max-w-4xl font-display text-[clamp(2.8rem,5.7vw,5.2rem)] font-bold leading-[.98] tracking-[-.045em]">JEE concepts made <span className="text-gradient">visible.</span></h1>
+              <p className="mt-7 max-w-xl text-lg leading-8 text-[#C7C5CC] sm:text-xl">Learn Physics, Chemistry, and Mathematics through visual notes and interactive simulations built for understanding—not information overload.</p>
+              <div className="mt-9 flex flex-col gap-3 sm:flex-row"><Link className="button-primary justify-center" href="/free-simulations">Explore free simulations <ArrowRight size={18}/></Link><Link className="button-ghost justify-center" href="/sample-notes">Preview visual notes</Link></div>
+              <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm text-[#C7C5CC]/80"><span className="flex items-center gap-2"><Check className="text-[#3DE08A]" size={15}/> Visual notes</span><span className="flex items-center gap-2"><Check className="text-[#3DE08A]" size={15}/> Interactive simulations</span><span className="flex items-center gap-2"><Check className="text-[#3DE08A]" size={15}/> Videos in future</span></div>
             </div>
-
-            <div className="relative mx-auto w-full max-w-[580px]">
-              <div className="brand-grid border border-[#FF5A1F]/26 bg-[#161418] p-5 shadow-[0_0_90px_rgba(255,90,31,.10)] sm:p-7">
-                <div className="flex items-center justify-between border-b border-white/9 pb-5">
-                  <div><p className="text-sm font-semibold text-[#FF8A3D]">Physics · Kinematics</p><h2 className="mt-2 text-2xl font-bold">Motion under gravity</h2></div>
-                  <BookOpen className="text-[#FF8A3D]" size={24} />
-                </div>
-                <div className="mt-7 rounded-full border border-[#FF5A1F]/20 p-8 sm:p-12">
-                  <div className="relative mx-auto h-56 max-w-[300px]">
-                    <div className="absolute inset-y-3 left-1/2 border-l border-dashed border-[#C7C5CC]/45" />
-                    <span className="absolute bottom-0 left-1/2 size-8 -translate-x-1/2 rounded-full bg-[#F5D9A8]" />
-                    <span className="absolute left-1/2 top-0 size-8 -translate-x-1/2 rounded-full bg-[#F5D9A8] shadow-[0_0_30px_rgba(255,138,61,.35)]" />
-                    <span className="absolute right-1 top-2 text-sm font-semibold text-[#3DE0D0]">v = 0 at the top</span>
-                    <span className="absolute left-2 top-20 text-sm text-[#FF8A3D]">g stays downward</span>
-                  </div>
-                </div>
-                <div className="mt-6 grid grid-cols-2 gap-3">
-                  <div className="border border-white/9 bg-[#0E0D10] p-4"><p className="text-sm text-[#C7C5CC]">A visual note explains the idea.</p></div>
-                  <div className="border border-white/9 bg-[#0E0D10] p-4"><p className="text-sm text-[#C7C5CC]">A simulation lets you test it.</p></div>
-                </div>
-              </div>
-            </div>
+            <HeroSimulationCanvas />
           </div>
         </section>
 
-        <section className="section-shell" id="notes">
+        <section className="section-shell" id="simulations">
           <div>
-            <div className="section-heading">
-              <h2 className="max-w-3xl font-display text-4xl font-bold sm:text-5xl">Notes designed to help you see the logic.</h2>
-              <p className="max-w-xl text-lg leading-8 text-[#C7C5CC]">Each topic brings together diagrams, definitions, derivations, formulas, and common mistakes in one focused reading experience.</p>
-            </div>
-            <div className="mt-12 grid gap-5 md:grid-cols-3">
-              {subjects.map(({ name, icon: Icon, copy }) => (
-                <article className="border border-[#FF5A1F]/22 bg-[#161418] p-7" key={name}>
-                  <span className="grid size-12 place-items-center border border-[#FF5A1F]/30 text-[#FF8A3D]"><Icon size={22} /></span>
-                  <h3 className="mt-8 text-2xl font-bold">{name}</h3>
-                  <p className="mt-3 leading-7 text-[#C7C5CC]">{copy}</p>
-                </article>
-              ))}
+            <div className="section-heading"><h2 className="max-w-3xl font-display text-4xl font-bold sm:text-5xl">A lab that turns formulas into behaviour.</h2><div><p className="text-lg leading-8 text-[#C7C5CC]">Play with five free simulations. Change one input, predict the outcome, and see the relationship respond.</p><Link className="button-outline mt-7" href="/free-simulations">Explore free simulations <ArrowRight size={17}/></Link></div></div>
+            <div className="mt-12 grid gap-px border border-[#FF5A1F]/20 bg-[#FF5A1F]/20 md:grid-cols-2 xl:grid-cols-5">
+              {demoSimulations.map(({ slug, number, title, subject, copy, icon: Icon, color }, index) => <Link className={`group min-h-64 bg-[#161418] p-6 transition hover:bg-[#1E1B20] ${index === demoSimulations.length - 1 ? "md:col-span-2 xl:col-span-1" : ""}`} href={`/free-simulations?demo=${slug}`} key={slug}><div className="flex items-center justify-between"><span className="font-mono text-xs text-[#C7C5CC]/55">{number}</span><Icon size={20} style={{ color }}/></div><div className="mt-16"><p className="font-mono text-[10px] uppercase tracking-[.14em] text-[#C7C5CC]/55">{subject}</p><h3 className="mt-3 font-display text-xl font-bold">{title}</h3><p className="mt-3 text-sm leading-6 text-[#C7C5CC]">{copy}</p><span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#FF8A3D]">Play demo <ArrowRight className="transition group-hover:translate-x-1" size={15}/></span></div></Link>)}
             </div>
           </div>
         </section>
 
-        <section className="border-y border-white/8 bg-[#161418]" id="simulations">
-          <div className="mx-auto grid max-w-[1440px] items-center gap-12 px-5 py-20 sm:px-8 lg:grid-cols-[.9fr_1.1fr] lg:px-14 lg:py-24">
+        <section className="border-y border-white/8 bg-[#161418]" id="notes">
+          <div className="mx-auto max-w-[1440px] px-5 py-20 sm:px-8 lg:px-14 lg:py-28">
+            <div className="section-heading"><h2 className="max-w-3xl font-display text-4xl font-bold sm:text-5xl">Preview the logic before opening the full note.</h2><div><p className="text-lg leading-8 text-[#C7C5CC]">Five sample notes show how diagrams, relationships, and retention points fit together across all three subjects.</p><Link className="button-primary mt-7" href="/sample-notes">Browse sample notes <ArrowRight size={17}/></Link></div></div>
+            <div className="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-5">
+              {notePreviews.map(({ slug, subject, chapter, title, formula, icon: Icon, color }, index) => <Link className={`note-paper group overflow-hidden border border-white/10 transition hover:-translate-y-1 hover:shadow-[0_24px_70px_rgba(0,0,0,.3)] ${index === notePreviews.length - 1 ? "md:col-span-2 xl:col-span-1" : ""}`} href={`/sample-notes?note=${slug}`} key={slug}><div className="h-2" style={{ background: color }}/><div className="p-5"><div className="flex items-center justify-between"><Icon size={20} style={{ color }}/><BookOpen className="text-[#5E5962]" size={17}/></div><p className="mt-10 font-mono text-[9px] font-semibold uppercase tracking-[.14em] text-[#514C55]">{subject} · {chapter}</p><h3 className="mt-3 min-h-14 font-display text-lg font-bold">{title}</h3><div className="mt-5 border-l-2 border-[#FF5A1F] bg-[#FF5A1F]/10 p-3 font-display text-lg font-semibold text-[#241F25]">{formula}</div><span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#742608]">Open preview <ArrowRight size={15}/></span></div></Link>)}
+            </div>
+          </div>
+        </section>
+
+        <section className="section-shell" id="marginal-utility">
+          <div className="grid items-center gap-12 lg:grid-cols-[1.03fr_.97fr] lg:gap-16">
+            <div className="brand-grid border border-[#FF5A1F]/22 bg-[#161418] p-6 sm:p-9">
+              <div className="flex items-center justify-between"><h3 className="font-display text-2xl font-bold">Useful understanding</h3><span className="font-mono text-[10px] text-[#3DE08A]">NEXT ACTION</span></div>
+              <div className="relative mt-8 min-h-[360px] border-l border-b border-white/20">
+                <svg aria-label="A diminishing curve showing the value of focused study actions" className="absolute inset-0 size-full" preserveAspectRatio="none" viewBox="0 0 600 360"><defs><linearGradient id="utilityFill" x1="0" x2="0" y1="0" y2="1"><stop stopColor="#FF5A1F" stopOpacity=".35"/><stop offset="1" stopColor="#FF5A1F" stopOpacity=".02"/></linearGradient></defs><path d="M0 340 C75 175 150 98 245 60 C350 20 470 14 600 11 L600 360 L0 360Z" fill="url(#utilityFill)"/><path d="M0 340 C75 175 150 98 245 60 C350 20 470 14 600 11" fill="none" stroke="#FF8A3D" strokeWidth="5"/><line x1="145" x2="145" y1="0" y2="360" stroke="#3DE0D0" strokeDasharray="6 8" opacity=".75"/><circle className="sim-pulse" cx="145" cy="104" fill="#3DE0D0" r="8"/></svg>
+                <div className="absolute left-[27%] top-[17%] max-w-44 border border-[#3DE0D0]/35 bg-[#0E0D10]/90 p-3 text-xs leading-5 text-[#C7C5CC]">The next focused connection adds more than another hour of passive rereading.</div>
+                <span className="absolute -bottom-9 right-0 font-mono text-[10px] text-[#C7C5CC]/60">STUDY EFFORT →</span>
+              </div>
+            </div>
             <div>
-              <FlaskConical className="text-[#3DE0D0]" size={34} />
-              <h2 className="mt-7 font-display text-4xl font-bold sm:text-5xl">The Simulation Lab</h2>
-              <p className="mt-5 max-w-xl text-lg leading-8 text-[#C7C5CC]">Turn formulas into behaviour. Predict the result, change the inputs, and build intuition you can carry into a JEE question.</p>
-              <div className="mt-7 grid gap-3 sm:grid-cols-2">
-                <div className="flex gap-3 border border-white/9 bg-[#0E0D10] p-4"><SlidersHorizontal className="mt-1 shrink-0 text-[#FF8A3D]" size={18} /><p className="text-sm leading-6 text-[#C7C5CC]">Control variables and compare outcomes.</p></div>
-                <div className="flex gap-3 border border-white/9 bg-[#0E0D10] p-4"><Eye className="mt-1 shrink-0 text-[#3DE0D0]" size={18} /><p className="text-sm leading-6 text-[#C7C5CC]">See graphs and motion update together.</p></div>
-              </div>
-              <Link className="button-outline mt-8" href="/login?returnTo=%2Fsimulations">Open the Simulation Lab <ArrowRight size={17} /></Link>
+              <h2 className="max-w-2xl font-display text-4xl font-bold sm:text-5xl">Make every extra minute earn its place.</h2>
+              <p className="mt-6 max-w-xl text-lg leading-8 text-[#C7C5CC]">Marginal utility is simply the usefulness of your next study action. It is not an adaptive score. It is a way to move from seeing, to testing, to remembering without repeating the entire chapter.</p>
+              <div className="mt-9 border-t border-[#FF5A1F]/25">{utilitySteps.map((step, index) => <details className="group border-b border-[#FF5A1F]/20" key={step.title} open={index === 0}><summary className="flex min-h-18 cursor-pointer list-none items-center gap-5 py-5 marker:hidden"><span className="font-mono text-xs text-[#FF8A3D]">0{index + 1}</span><span className="font-display text-xl font-bold">{step.title}</span><ChevronDown className="ml-auto text-[#FF8A3D] transition group-open:rotate-180" size={18}/></summary><p className="pb-6 pl-10 text-sm leading-7 text-[#C7C5CC]">{step.copy}</p></details>)}</div>
             </div>
-            <div className="border border-[#FF5A1F]/22 bg-[#0E0D10] p-6 sm:p-8">
-              <div className="flex items-center justify-between"><h3 className="text-2xl font-bold">Vertical throw</h3><span className="text-sm font-semibold text-[#3DE08A]">Live</span></div>
-              <div className="mt-8 h-2 bg-[#2A262E]"><div className="h-full w-[62%] bg-[#FF5A1F]" /></div>
-              <div className="mt-4 flex justify-between text-sm text-[#C7C5CC]"><span>Launch speed</span><span className="font-semibold text-white">9.8 m/s</span></div>
-              <div className="mt-10 grid grid-cols-3 gap-px bg-white/10">
-                {[["Time", "2.00 s"], ["Velocity", "−9.80 m/s"], ["Height", "0.00 m"]].map(([label, value]) => <div className="bg-[#161418] p-4" key={label}><p className="text-xs text-[#C7C5CC]/70">{label}</p><p className="mt-2 text-sm font-bold text-[#3DE0D0] sm:text-base">{value}</p></div>)}
-              </div>
+          </div>
+        </section>
+
+        <section className="border-y border-white/8 bg-[#161418]" id="concept-map">
+          <div className="mx-auto grid max-w-[1440px] gap-12 px-5 py-20 sm:px-8 lg:grid-cols-[.78fr_1.22fr] lg:px-14 lg:py-28">
+            <div><h2 className="max-w-xl font-display text-4xl font-bold sm:text-5xl">See the chapter before you enter it.</h2><p className="mt-6 max-w-lg text-lg leading-8 text-[#C7C5CC]">A concept map exposes the dependencies between topics. The heat view makes strong connections visible, so a chapter feels like a system rather than a list.</p><div className="mt-8 flex flex-wrap gap-5 text-xs text-[#C7C5CC]"><span className="flex items-center gap-2"><i className="size-3 bg-[#FF5A1F]"/> Strong dependency</span><span className="flex items-center gap-2"><i className="size-3 bg-[#FF5A1F]/45"/> Supporting link</span><span className="flex items-center gap-2"><i className="size-3 bg-[#FF5A1F]/15"/> Light connection</span></div></div>
+            <div className="overflow-x-auto border border-[#FF5A1F]/22 bg-[#0E0D10] p-5 sm:p-7">
+              <div className="min-w-[620px]"><div className="grid grid-cols-[150px_repeat(4,1fr)] gap-2 pb-3 font-mono text-[10px] uppercase tracking-[.12em] text-[#C7C5CC]/60"><span>Concept</span><span>Foundation</span><span>Connect</span><span>Apply</span><span>Revisit</span></div>{heatRows.map((row, rowIndex) => <div className="grid grid-cols-[150px_repeat(4,1fr)] gap-2 border-t border-white/7 py-2" key={row.name}><span className="flex items-center gap-3 text-sm font-bold"><span className="font-mono text-[10px] text-[#FF8A3D]">0{rowIndex + 1}</span>{row.name}</span>{row.cells.map((strength, index) => <div aria-label={`${row.name} ${["foundation", "connection", "application", "revision"][index]} strength ${Math.round(strength * 100)} percent`} className="concept-heat-cell min-h-14 border border-[#FF5A1F]/18" key={index} style={{ "--heat": strength } as React.CSSProperties}><span className="font-mono text-[10px] text-white/65">{Math.round(strength * 100)}</span></div>)}</div>)}</div>
             </div>
+          </div>
+        </section>
+
+        <section className="section-shell" id="pricing">
+          <div><div className="section-heading"><h2 className="max-w-3xl font-display text-4xl font-bold sm:text-5xl">Choose how much of the visual library you need.</h2><p className="text-lg leading-8 text-[#C7C5CC]">Three clear annual plans. No adaptive engine, no unrelated test-prep features, and no hidden product layer.</p></div>
+            <div className="mt-12 grid gap-5 lg:grid-cols-3">{homePlans.map((plan) => <article className={`relative flex min-h-[560px] flex-col border p-7 sm:p-8 ${plan.featured ? "border-[#FF5A1F] bg-[#1E1B20] shadow-[0_0_70px_rgba(255,90,31,.12)]" : "border-white/10 bg-[#161418]"}`} key={plan.name}>{plan.featured ? <span className="absolute right-0 top-0 bg-[#FF5A1F] px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-[.14em] text-[#0E0D10]">Most visual</span> : null}<h3 className="font-display text-2xl font-bold">{plan.name}</h3><p className="mt-6"><span className="font-display text-4xl font-bold">{plan.price}</span><span className="ml-2 text-sm text-[#C7C5CC]">/ year</span></p><p className="mt-5 min-h-20 leading-7 text-[#C7C5CC]">{plan.description}</p><ul className="mt-7 space-y-4">{plan.features.map((feature) => <li className="flex gap-3 text-sm leading-6 text-[#C7C5CC]" key={feature}><Check className="mt-1 shrink-0 text-[#3DE08A]" size={16}/>{feature}</li>)}</ul><Link className={`${plan.featured ? "button-primary" : "button-outline"} mt-auto justify-center`} href="/signup">{plan.cta}</Link></article>)}</div>
+          </div>
+        </section>
+
+        <section className="overflow-hidden border-y border-[#FF5A1F]/20 bg-[#FF5A1F]" id="educators">
+          <div className="mx-auto grid max-w-[1440px] items-center gap-10 px-5 py-16 text-[#0E0D10] sm:px-8 lg:grid-cols-[1fr_auto] lg:px-14 lg:py-20">
+            <div className="flex max-w-4xl items-start gap-6"><span className="grid size-14 shrink-0 place-items-center border border-[#0E0D10]/30"><GraduationCap size={27}/></span><div><h2 className="font-display text-3xl font-bold text-[#0E0D10] sm:text-5xl">Educators get a separate door.</h2><p className="mt-5 max-w-2xl text-lg leading-8 text-[#0E0D10]/75">Use educator login for exclusive academic content, contributor resources, and material prepared specifically for invited teachers.</p></div></div>
+            <Link className="button-dark" href="/login?role=educator&returnTo=%2Fdashboard">Educator login <ArrowRight size={17}/></Link>
           </div>
         </section>
 
         <section className="section-shell" id="testimonials">
-          <div>
-            <div className="section-heading">
-              <h2 className="max-w-3xl font-display text-4xl font-bold sm:text-5xl">Built for the moment a concept finally clicks.</h2>
-              <p className="max-w-xl text-lg leading-8 text-[#C7C5CC]">Students use the notes and labs to replace disconnected formulas with a picture they can reason through.</p>
-            </div>
-            <div className="mt-12 grid gap-5 lg:grid-cols-3">
-              {testimonials.slice(0, 3).map((testimonial) => (
-                <figure className="flex h-full flex-col border border-[#FF5A1F]/22 bg-[#161418] p-7 sm:p-8" key={testimonial.id}>
-                  <Quote className="text-[#FF8A3D]" size={27} strokeWidth={1.5} />
-                  <blockquote className="mt-8 flex-1 text-lg leading-8 text-[#DAD8DE]">“{testimonial.quote}”</blockquote>
-                  <figcaption className="mt-8 border-t border-white/8 pt-5">
-                    <p className="font-semibold text-white">{testimonial.name}</p>
-                    <p className="mt-1 text-sm text-[#C7C5CC]/70">{testimonial.detail}</p>
-                  </figcaption>
-                </figure>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="border-y border-white/8 bg-[#161418]" id="educators">
-          <div className="mx-auto grid max-w-[1440px] gap-10 px-5 py-16 sm:px-8 lg:grid-cols-[1fr_.78fr] lg:items-center lg:px-14 lg:py-20">
-            <div>
-              <GraduationCap className="text-[#FF8A3D]" size={36} strokeWidth={1.5} />
-              <h2 className="mt-7 max-w-3xl font-display text-4xl font-bold sm:text-5xl">A dedicated entry for educators.</h2>
-              <p className="mt-5 max-w-2xl text-lg leading-8 text-[#C7C5CC]">Invited teachers and academic contributors can sign in through the educator entry to access their Orange Nelumbo workspace.</p>
-              <Link className="button-primary mt-8" href="/login?role=educator&returnTo=%2Fdashboard">Educator login <ArrowRight size={17} /></Link>
-            </div>
-            <div className="brand-grid border border-[#FF5A1F]/24 bg-[#0E0D10] p-6 sm:p-8">
-              <div className="flex items-center gap-4 border-b border-white/8 pb-6">
-                <span className="grid size-12 place-items-center bg-[#FF5A1F] text-[#0E0D10]"><GraduationCap size={23} /></span>
-                <div><h3 className="text-xl font-bold">Educator access</h3><p className="mt-1 text-sm text-[#C7C5CC]/70">For invited accounts</p></div>
-              </div>
-              <ul className="mt-6 space-y-4 text-sm leading-6 text-[#C7C5CC]">
-                <li className="flex gap-3"><Check className="mt-1 shrink-0 text-[#3DE08A]" size={15} /> Separate educator sign-in entry</li>
-                <li className="flex gap-3"><Check className="mt-1 shrink-0 text-[#3DE08A]" size={15} /> Access tied to an invited account</li>
-                <li className="flex gap-3"><Check className="mt-1 shrink-0 text-[#3DE08A]" size={15} /> Student learning remains in its own workspace</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        <section className="section-shell" id="videos">
-          <div className="hero-grid grid gap-10 border border-[#FF5A1F]/24 bg-[#161418] p-7 sm:p-10 lg:grid-cols-[1fr_auto] lg:items-end lg:p-14">
-            <div>
-              <PlayCircle className="text-[#FF8A3D]" size={34} />
-              <h2 className="mt-7 max-w-3xl font-display text-4xl font-bold sm:text-5xl">Visual-first video lectures are coming.</h2>
-              <p className="mt-5 max-w-2xl text-lg leading-8 text-[#C7C5CC]">Videos will connect directly to the same notes and simulations, so every topic stays part of one clear learning path.</p>
-            </div>
-            <Link className="button-primary justify-center" href="/signup">Start with the notes <ArrowRight size={17} /></Link>
-          </div>
+          <div><div className="section-heading"><h2 className="max-w-3xl font-display text-4xl font-bold sm:text-5xl">What changes when the concept becomes visible.</h2><p className="text-lg leading-8 text-[#C7C5CC]">Students describe the shift from memorising isolated results to seeing how the ideas connect.</p></div><div className="mt-12 grid gap-5 lg:grid-cols-3">{testimonials.slice(0, 3).map((item, index) => <figure className={`border p-7 sm:p-8 ${index === 1 ? "border-[#FF5A1F]/55 bg-[#1E1B20]" : "border-white/10 bg-[#161418]"}`} key={item.id}><Quote className="text-[#FF8A3D]" size={25}/><blockquote className="mt-7 font-display text-xl leading-8">“{item.quote}”</blockquote><figcaption className="mt-8 border-t border-white/9 pt-5"><p className="font-bold">{item.name}</p><p className="mt-1 text-sm text-[#C7C5CC]">{item.detail}</p></figcaption></figure>)}</div></div>
         </section>
 
         <section className="border-t border-white/8 bg-[#161418]" id="faqs">
-          <div className="mx-auto grid max-w-[1440px] gap-12 px-5 py-20 sm:px-8 lg:grid-cols-[.72fr_1.28fr] lg:gap-20 lg:px-14 lg:py-24">
-            <div>
-              <h2 className="font-display text-4xl font-bold sm:text-5xl">Frequently asked questions</h2>
-              <p className="mt-5 max-w-md text-lg leading-8 text-[#C7C5CC]">Clear answers about the current library, future videos, simulations, and educator access.</p>
-              <Link className="button-ghost mt-8" href="/help">Visit the help centre <ArrowRight size={17} /></Link>
-            </div>
-            <div className="border-t border-[#FF5A1F]/25">
-              {homeFaqs.map((item, index) => (
-                <details className="group border-b border-[#FF5A1F]/20" key={item.question} open={index === 0}>
-                  <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-5 py-5 text-lg font-semibold marker:hidden sm:text-xl">
-                    <span>{item.question}</span>
-                    <ChevronDown className="shrink-0 text-[#FF8A3D] transition-transform group-open:rotate-180" size={20} />
-                  </summary>
-                  <p className="max-w-3xl pb-6 pr-8 leading-7 text-[#C7C5CC]">{item.answer}</p>
-                </details>
-              ))}
-            </div>
+          <div className="mx-auto grid max-w-[1440px] gap-12 px-5 py-20 sm:px-8 lg:grid-cols-[.72fr_1.28fr] lg:px-14 lg:py-28">
+            <div className="lg:sticky lg:top-28 lg:self-start"><Sparkles className="text-[#FF8A3D]" size={28}/><h2 className="mt-6 font-display text-4xl font-bold sm:text-5xl">Questions answered. Try the idea next.</h2><p className="mt-5 max-w-md text-lg leading-8 text-[#C7C5CC]">Start with five simulations and five note previews. No sign-in is needed for either.</p><div className="mt-8 flex flex-col gap-3 sm:flex-row lg:items-start"><Link className="button-primary justify-center" href="/free-simulations">Start with a simulation <ArrowRight size={17}/></Link><Link className="button-ghost justify-center" href="/sample-notes">Open a note</Link></div></div>
+            <div className="border-t border-[#FF5A1F]/25">{homeFaqs.map((item, index) => <details className="group border-b border-[#FF5A1F]/20" key={item.question} open={index === 0}><summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-5 py-5 font-display text-lg font-bold marker:hidden sm:text-xl"><span>{item.question}</span><ChevronDown className="shrink-0 text-[#FF8A3D] transition group-open:rotate-180" size={20}/></summary><p className="max-w-3xl pb-6 pr-8 leading-7 text-[#C7C5CC]">{item.answer}</p></details>)}</div>
           </div>
         </section>
       </main>

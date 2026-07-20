@@ -8,10 +8,11 @@ import { Logo } from "@/components/brand/logo";
 import { useApp } from "@/components/providers/app-provider";
 
 const links = [
-  { href: "/#notes", label: "Visual notes" },
   { href: "/#simulations", label: "Simulations" },
+  { href: "/#notes", label: "Notes" },
+  { href: "/#concept-map", label: "Concept map" },
+  { href: "/#pricing", label: "Pricing" },
   { href: "/#educators", label: "Educators" },
-  { href: "/#videos", label: "Videos" },
   { href: "/#faqs", label: "FAQs" },
 ];
 
@@ -89,9 +90,9 @@ export function MarketingHeader() {
     <header className="sticky top-0 z-50 h-[74px] border-b border-[#FF5A1F]/20 bg-[#0E0D10]/92 backdrop-blur-xl">
       <div className="mx-auto flex h-full max-w-[1440px] items-center justify-between px-4 sm:px-6 lg:px-14">
         <Logo href="/" />
-        <nav aria-label="Primary navigation" className="hidden items-center gap-6 lg:flex">
+        <nav aria-label="Primary navigation" className="hidden items-center gap-5 xl:flex">
           {links.map((link) => (
-            <Link className="flex min-h-11 items-center text-sm font-semibold text-[#C7C5CC] transition-colors hover:text-white" href={link.href} key={link.href}>
+            <Link className="flex min-h-11 items-center text-[13px] font-semibold text-[#C7C5CC] transition-colors hover:text-white" href={link.href} key={link.href}>
               {link.label}
             </Link>
           ))}
@@ -107,7 +108,7 @@ export function MarketingHeader() {
             </div>
           )}
 
-          <details className="group relative lg:hidden">
+          <details className="group relative xl:hidden">
             <summary aria-label="Open navigation" className="grid size-11 cursor-pointer list-none place-items-center border border-[#FF5A1F]/30 text-white marker:hidden">
               <Menu aria-hidden="true" size={21} strokeWidth={1.7} />
             </summary>
