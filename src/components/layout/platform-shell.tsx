@@ -13,7 +13,6 @@ import {
   House,
   LogOut,
   Menu,
-  PlaySquare,
   Search,
   Settings,
   UserRound,
@@ -27,7 +26,6 @@ const mainNavigation = [
   { href: "/dashboard", label: "Home", icon: House },
   { href: "/learn", label: "Visual notes", icon: BookOpen },
   { href: "/simulations", label: "Simulations", icon: FlaskConical },
-  { href: "/videos", label: "Video lectures", icon: PlaySquare },
 ];
 
 const utilityNavigation = [
@@ -57,7 +55,6 @@ function pageTitle(pathname: string) {
   const titles: Record<string, string> = {
     dashboard: "Learning home",
     learn: "Visual notes",
-    videos: "Video lectures",
     simulations: "Simulations",
     bookmarks: "Saved notes",
     notifications: "Notifications",

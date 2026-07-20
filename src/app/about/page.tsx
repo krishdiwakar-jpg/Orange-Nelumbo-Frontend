@@ -15,7 +15,7 @@ export default function AboutPage() {
         <section className="hero-grid border-b border-[#FF5A1F]/22">
           <div className="mx-auto max-w-[1440px] px-5 py-20 sm:px-8 lg:px-14 lg:py-28">
             <h1 className="max-w-4xl font-display text-4xl font-bold leading-tight tracking-[-.03em] sm:text-5xl lg:text-6xl">Difficult concepts should be easier to see.</h1>
-            <p className="mt-7 max-w-3xl text-lg leading-8 text-[#C7C5CC]">Orange Nelumbo is building a focused JEE learning library around visual notes, interactive simulations, and—next—visual-first video lectures.</p>
+            <p className="mt-7 max-w-3xl text-lg leading-8 text-[#C7C5CC]">Orange Nelumbo is building a focused JEE learning library around visual notes and interactive simulations.</p>
           </div>
         </section>
 

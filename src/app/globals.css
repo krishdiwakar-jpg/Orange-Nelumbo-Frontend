@@ -1,8 +1,9 @@
 @import "tailwindcss";
-@import "@fontsource/fraunces/latin-400.css";
-@import "@fontsource/fraunces/latin-500.css";
-@import "@fontsource/fraunces/latin-600.css";
-@import "@fontsource/fraunces/latin-700.css";
+@import "@fontsource/hanken-grotesk/latin-400.css";
+@import "@fontsource/hanken-grotesk/latin-500.css";
+@import "@fontsource/hanken-grotesk/latin-600.css";
+@import "@fontsource/hanken-grotesk/latin-700.css";
+@import "@fontsource/hanken-grotesk/latin-800.css";
 @import "@fontsource/dm-sans/latin-400.css";
 @import "@fontsource/dm-sans/latin-500.css";
 @import "@fontsource/dm-sans/latin-600.css";
@@ -12,9 +13,9 @@
 @import "@fontsource/jetbrains-mono/latin-600.css";
 
 @theme inline {
-  --font-display: "Fraunces", Georgia, serif;
-  --font-sans: "Fraunces", Georgia, serif;
-  --font-learning: "DM Sans", system-ui, sans-serif;
+  --font-display: "Hanken Grotesk", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-sans: "Hanken Grotesk", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-learning: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
   --color-obsidian: #0e0d10;
@@ -119,9 +120,9 @@
   --accent: var(--ignition);
   --accent-hover: var(--ember);
   --focus: var(--ignition);
-  --font-display: "Fraunces", Georgia, serif;
-  --font-sans: "Fraunces", Georgia, serif;
-  --font-learning: "DM Sans", system-ui, sans-serif;
+  --font-display: "Hanken Grotesk", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-sans: "Hanken Grotesk", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-learning: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
   --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
   --shadow-ignition: 0 0 28px color-mix(in srgb, var(--ignition) 34%, transparent);
@@ -154,8 +155,8 @@ body {
 
 /* Learning and account surfaces stay highly legible at study density. */
 .learning-surface {
-  --font-display: "DM Sans", system-ui, sans-serif;
-  --font-sans: "DM Sans", system-ui, sans-serif;
+  --font-display: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-sans: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   font-family: var(--font-learning);
 }
 
@@ -241,12 +242,11 @@ summary:focus-visible,
 
 .mono-kicker {
   color: var(--ignition);
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.26em;
+  letter-spacing: 0.04em;
   line-height: 1.4;
-  text-transform: uppercase;
 }
 
 .brand-grid {
@@ -363,12 +363,11 @@ summary:focus-visible,
 
 .kicker {
   color: var(--ignition);
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.26em;
+  letter-spacing: 0.04em;
   line-height: 1.4;
-  text-transform: uppercase;
 }
 
 .button-primary,

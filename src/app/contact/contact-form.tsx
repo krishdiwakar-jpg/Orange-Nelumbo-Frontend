@@ -34,7 +34,6 @@ export function ContactForm() {
           <option disabled value="">Choose a topic</option>
           <option value="notes">Visual notes</option>
           <option value="simulations">Simulations</option>
-          <option value="videos">Future video lectures</option>
           <option value="access">Sign-in, profile, or settings</option>
           <option value="other">Something else</option>
         </select>

@@ -88,28 +88,28 @@ export function SampleNotesBrowser({ initialSlug = "motion-under-gravity" }: { i
   return (
     <div className="grid gap-5 xl:grid-cols-[310px_minmax(0,1fr)]">
       <nav aria-label="Choose a sample note" className="border border-[#FF5A1F]/24 bg-[#161418] p-2">
-        {notes.map((note, index) => {
+        {notes.map((note) => {
           const Icon = subjectIcon[note.subject];
           const selected = note.slug === activeSlug;
-          return <button aria-pressed={selected} className={`group flex min-h-20 w-full items-center gap-4 border-l-2 px-4 text-left transition ${selected ? "border-[#FF5A1F] bg-[#FF5A1F]/9 text-white" : "border-transparent text-[#C7C5CC] hover:bg-white/[.035] hover:text-white"}`} key={note.slug} onClick={() => setActiveSlug(note.slug)} type="button"><span className="grid size-10 shrink-0 place-items-center border border-white/10" style={{ color: note.accent }}><Icon size={18}/></span><span className="min-w-0"><span className="block font-mono text-[10px] text-[#C7C5CC]/60">0{index + 1} / {note.subject}</span><span className="mt-1 block truncate text-sm font-bold">{note.title}</span></span><ChevronRight className="ml-auto shrink-0 opacity-45" size={16}/></button>;
+          return <button aria-pressed={selected} className={`group flex min-h-20 w-full items-center gap-4 border-l-2 px-4 text-left transition ${selected ? "border-[#FF5A1F] bg-[#FF5A1F]/9 text-white" : "border-transparent text-[#C7C5CC] hover:bg-white/[.035] hover:text-white"}`} key={note.slug} onClick={() => setActiveSlug(note.slug)} type="button"><span className="grid size-10 shrink-0 place-items-center border border-white/10" style={{ color: note.accent }}><Icon size={18}/></span><span className="min-w-0"><span className="block text-[11px] font-medium text-[#C7C5CC]/65">{note.subject}</span><span className="mt-1 block truncate text-sm font-bold">{note.title}</span></span><ChevronRight className="ml-auto shrink-0 opacity-45" size={16}/></button>;
         })}
       </nav>
 
       <article className="note-paper overflow-hidden border border-[#FF5A1F]/24 shadow-[0_28px_80px_rgba(0,0,0,.24)]">
         <header className="flex flex-wrap items-start justify-between gap-5 border-b border-[#161418]/12 px-6 py-6 sm:px-9">
-          <div className="flex items-start gap-4"><span className="grid size-11 place-items-center border border-[#161418]/15" style={{ color: active.accent }}><ActiveIcon size={21}/></span><div><p className="font-mono text-[10px] uppercase tracking-[.16em] text-[#5C5860]">{active.subject} · {active.chapter}</p><h2 className="mt-2 font-display text-2xl font-bold text-[#161418] sm:text-3xl">{active.title}</h2></div></div>
-          <span className="flex items-center gap-2 font-mono text-[10px] font-semibold uppercase tracking-[.16em] text-[#514C55]"><BookOpen size={15}/> sample 01 / 05</span>
+          <div className="flex items-start gap-4"><span className="grid size-11 place-items-center border border-[#161418]/15" style={{ color: active.accent }}><ActiveIcon size={21}/></span><div><p className="text-xs font-semibold text-[#5C5860]">{active.subject} · {active.chapter}</p><h2 className="mt-2 font-display text-2xl font-bold text-[#161418] sm:text-3xl">{active.title}</h2></div></div>
+          <span className="flex items-center gap-2 text-xs font-semibold text-[#514C55]"><BookOpen size={15}/> Preview 1 of 5</span>
         </header>
         <div className="grid lg:grid-cols-[1.05fr_.95fr]">
           <div className="border-b border-[#161418]/12 p-6 sm:p-9 lg:border-b-0 lg:border-r">
             <p className="max-w-xl text-base leading-7 text-[#4A454D]">{active.summary}</p>
             <div className="mt-7 min-h-[220px] border border-[#161418]/12 bg-white"><NoteDiagram note={active}/></div>
-            <div className="mt-6 border-l-4 border-[#FF5A1F] bg-[#FF5A1F]/8 p-5"><p className="font-mono text-[10px] uppercase tracking-[.16em] text-[#8A2F0A]">Core relationship</p><p className="mt-3 font-display text-2xl font-semibold text-[#161418] sm:text-3xl">{active.formula}</p></div>
+            <div className="mt-6 border-l-4 border-[#FF5A1F] bg-[#FF5A1F]/8 p-5"><p className="text-xs font-semibold text-[#8A2F0A]">Core relationship</p><p className="mt-3 font-display text-2xl font-semibold text-[#161418] sm:text-3xl">{active.formula}</p></div>
           </div>
           <aside className="p-6 sm:p-9">
             <h3 className="font-display text-xl font-bold text-[#161418]">Three ideas to retain</h3>
             <ol className="mt-6 space-y-5">{active.ideas.map((idea, index) => <li className="flex gap-4" key={idea}><span className="grid size-7 shrink-0 place-items-center bg-[#161418] font-mono text-[10px] text-white">0{index + 1}</span><p className="pt-0.5 text-sm leading-6 text-[#4A454D]">{idea}</p></li>)}</ol>
-            <div className="mt-9 border-t border-[#161418]/12 pt-6"><p className="font-mono text-[10px] uppercase tracking-[.16em] text-[#8A2F0A]">Preview format</p><p className="mt-3 text-sm leading-6 text-[#4A454D]">Each note can add its own visual, relationship, and retention list without changing this layout.</p></div>
+            <div className="mt-9 border-t border-[#161418]/12 pt-6"><p className="text-xs font-semibold text-[#8A2F0A]">Preview format</p><p className="mt-3 text-sm leading-6 text-[#4A454D]">Each note can add its own visual, relationship, and retention list without changing this layout.</p></div>
           </aside>
         </div>
       </article>

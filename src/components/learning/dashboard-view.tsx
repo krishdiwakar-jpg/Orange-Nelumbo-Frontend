@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, BookOpen, Bookmark, FlaskConical, PlayCircle } from "lucide-react";
+import { ArrowRight, BookOpen, Bookmark, FlaskConical } from "lucide-react";
 
 import { learningPath, resolveTopicState } from "@/components/learning/progress-utils";
 import { Card } from "@/components/ui/card";
@@ -27,7 +27,7 @@ export function DashboardView() {
             Pick up a visual note, test the idea in a simulation, or browse a new chapter.
           </p>
 
-          <div className="mt-8 grid gap-4 sm:grid-cols-3">
+          <div className="mt-8 grid gap-4 sm:grid-cols-2">
             <Link className="group border border-[#FF5A1F]/22 bg-[#161418] p-5 transition hover:border-[#FF5A1F]/55" href="/learn">
               <BookOpen className="text-[#FF8A3D]" size={22} />
               <h3 className="mt-5 text-xl font-bold">Visual notes</h3>
@@ -37,11 +37,6 @@ export function DashboardView() {
               <FlaskConical className="text-[#3DE0D0]" size={22} />
               <h3 className="mt-5 text-xl font-bold">Simulations</h3>
               <p className="mt-2 text-sm leading-6 text-[#C7C5CC]/80">Change variables and watch the underlying relationship respond.</p>
-            </Link>
-            <Link className="group border border-white/10 bg-[#161418] p-5 transition hover:border-[#FF5A1F]/40" href="/videos">
-              <PlayCircle className="text-[#C7C5CC]" size={22} />
-              <h3 className="mt-5 text-xl font-bold">Video lectures</h3>
-              <p className="mt-2 text-sm leading-6 text-[#C7C5CC]/80">Visual-first lecture series are in production and will arrive here.</p>
             </Link>
           </div>
         </div>
