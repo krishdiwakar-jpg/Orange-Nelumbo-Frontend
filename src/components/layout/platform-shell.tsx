@@ -184,7 +184,7 @@ export function PlatformShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-[#0E0D10] text-white">
+    <div className="learning-surface min-h-screen bg-[#0E0D10] text-white">
       {sidebarOpen && (
         <button
           aria-label="Close navigation"

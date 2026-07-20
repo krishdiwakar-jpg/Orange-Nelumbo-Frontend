@@ -3,8 +3,8 @@ import Link from "next/link";
 import { Logo } from "@/components/brand/logo";
 
 const columns = [
-  { title: "Learn", links: [["Visual notes", "/#notes"], ["Simulations", "/#simulations"], ["Video lectures", "/#videos"]] },
-  { title: "Support", links: [["Help centre", "/help"], ["Contact", "/contact"], ["About", "/about"]] },
+  { title: "Learn", links: [["Visual notes", "/#notes"], ["Simulation Lab", "/#simulations"], ["Video lectures", "/#videos"]] },
+  { title: "Support", links: [["FAQs", "/#faqs"], ["Educator login", "/login?role=educator&returnTo=%2Fdashboard"], ["Contact", "/contact"]] },
   { title: "Legal", links: [["Privacy", "/privacy"], ["Terms", "/terms"]] },
 ] as const;
 

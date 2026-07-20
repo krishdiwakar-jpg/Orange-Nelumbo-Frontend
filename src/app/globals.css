@@ -1,20 +1,20 @@
 @import "tailwindcss";
-@import "@fontsource/space-grotesk/latin-400.css";
-@import "@fontsource/space-grotesk/latin-500.css";
-@import "@fontsource/space-grotesk/latin-600.css";
-@import "@fontsource/space-grotesk/latin-700.css";
-@import "@fontsource/manrope/latin-400.css";
-@import "@fontsource/manrope/latin-500.css";
-@import "@fontsource/manrope/latin-600.css";
-@import "@fontsource/manrope/latin-700.css";
-@import "@fontsource/manrope/latin-800.css";
+@import "@fontsource/fraunces/latin-400.css";
+@import "@fontsource/fraunces/latin-500.css";
+@import "@fontsource/fraunces/latin-600.css";
+@import "@fontsource/fraunces/latin-700.css";
+@import "@fontsource/dm-sans/latin-400.css";
+@import "@fontsource/dm-sans/latin-500.css";
+@import "@fontsource/dm-sans/latin-600.css";
+@import "@fontsource/dm-sans/latin-700.css";
 @import "@fontsource/jetbrains-mono/latin-400.css";
 @import "@fontsource/jetbrains-mono/latin-500.css";
 @import "@fontsource/jetbrains-mono/latin-600.css";
 
 @theme inline {
-  --font-display: "Space Grotesk", system-ui, sans-serif;
-  --font-sans: "Manrope", system-ui, sans-serif;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-sans: "Fraunces", Georgia, serif;
+  --font-learning: "DM Sans", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
   --color-obsidian: #0e0d10;
@@ -119,8 +119,9 @@
   --accent: var(--ignition);
   --accent-hover: var(--ember);
   --focus: var(--ignition);
-  --font-display: "Space Grotesk", system-ui, sans-serif;
-  --font-sans: "Manrope", system-ui, sans-serif;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-sans: "Fraunces", Georgia, serif;
+  --font-learning: "DM Sans", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
   --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
   --shadow-ignition: 0 0 28px color-mix(in srgb, var(--ignition) 34%, transparent);
@@ -149,6 +150,13 @@ body {
   line-height: 1.625;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Learning and account surfaces stay highly legible at study density. */
+.learning-surface {
+  --font-display: "DM Sans", system-ui, sans-serif;
+  --font-sans: "DM Sans", system-ui, sans-serif;
+  font-family: var(--font-learning);
 }
 
 h1,

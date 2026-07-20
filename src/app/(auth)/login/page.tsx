@@ -21,6 +21,7 @@ function LoginContent() {
   const searchParams = useSearchParams();
   const returnTo = safeReturnTo(searchParams.get("returnTo"));
   const demoRequested = searchParams.get("demo") === "1";
+  const educatorRequested = searchParams.get("role") === "educator";
   const { hydrated, isAuthenticated, onboardingComplete, login, loginAsDemo } = useApp();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -88,12 +89,14 @@ function LoginContent() {
 
   return (
     <div>
-      <p className="mono-kicker text-ignition">Student workspace</p>
+      <p className="mono-kicker text-ignition">{educatorRequested ? "Educator access" : "Student workspace"}</p>
       <h1 className="mt-4 font-display text-4xl font-bold tracking-[-.02em] text-paper sm:text-5xl">
-        Welcome back.
+        {educatorRequested ? "Educator sign in." : "Welcome back."}
       </h1>
       <p className="mt-4 max-w-md leading-7 text-titanium">
-        Continue your visual notes and simulations from exactly where you stopped.
+        {educatorRequested
+          ? "Use the credentials associated with your invited Orange Nelumbo educator account."
+          : "Continue your visual notes and simulations from exactly where you stopped."}
       </p>
 
       <Card className="mt-8 border-steel bg-carbon p-5 sm:p-7">
@@ -146,45 +149,38 @@ function LoginContent() {
             isLoading={isSubmitting}
             disabled={!hydrated || isOpeningDemo}
           >
-            Sign in
+            {educatorRequested ? "Sign in as educator" : "Sign in"}
             <ArrowRight aria-hidden="true" className="size-4" />
           </Button>
         </form>
 
-        <div className="my-6 flex items-center gap-3" aria-hidden="true">
-          <span className="h-px flex-1 bg-steel" />
-          <span className="font-mono text-[0.68rem] uppercase tracking-[0.15em] text-titanium">or explore first</span>
-          <span className="h-px flex-1 bg-steel" />
-        </div>
-
-        <Button
-          type="button"
-          variant="secondary"
-          size="lg"
-          fullWidth
-          isLoading={isOpeningDemo}
-          disabled={!hydrated || isSubmitting}
-          onClick={handleDemoLogin}
-        >
-          <FlaskConical aria-hidden="true" className="size-4 text-cyan" />
-          Open the student demo
-        </Button>
-        <p className="mt-3 text-center text-xs leading-5 text-titanium">
-          Demo access loads a sample JEE 2027 profile. Nothing is submitted.
-        </p>
-        <div className="mt-4 border border-steel bg-graphite/60 px-4 py-3 text-xs leading-5 text-titanium">
-          <p className="font-bold text-paper">Dummy login</p>
-          <p className="mt-1 font-mono">aarav@orangenelumbo.com</p>
-          <p className="font-mono">orange2027</p>
-        </div>
+        {educatorRequested ? (
+          <p className="mt-5 border border-steel bg-graphite/60 px-4 py-3 text-sm leading-6 text-titanium">
+            Educator access is invite-only. Contact Orange Nelumbo if your account has not been activated.
+          </p>
+        ) : (
+          <>
+            <div className="my-6 flex items-center gap-3" aria-hidden="true">
+              <span className="h-px flex-1 bg-steel" />
+              <span className="font-mono text-[0.68rem] uppercase tracking-[0.15em] text-titanium">or explore first</span>
+              <span className="h-px flex-1 bg-steel" />
+            </div>
+            <Button type="button" variant="secondary" size="lg" fullWidth isLoading={isOpeningDemo} disabled={!hydrated || isSubmitting} onClick={handleDemoLogin}>
+              <FlaskConical aria-hidden="true" className="size-4 text-cyan" /> Open the student demo
+            </Button>
+            <p className="mt-3 text-center text-xs leading-5 text-titanium">Demo access loads a sample JEE 2027 profile. Nothing is submitted.</p>
+            <div className="mt-4 border border-steel bg-graphite/60 px-4 py-3 text-xs leading-5 text-titanium">
+              <p className="font-bold text-paper">Dummy login</p><p className="mt-1 font-mono">aarav@orangenelumbo.com</p><p className="font-mono">orange2027</p>
+            </div>
+          </>
+        )}
       </Card>
 
-      <p className="mt-7 text-center text-sm text-titanium">
-        New to Orange Nelumbo?{" "}
-        <Link className="font-bold text-paper underline decoration-ignition decoration-2 underline-offset-4" href="/signup">
-          Create a dummy account
-        </Link>
-      </p>
+      {educatorRequested ? (
+        <p className="mt-7 text-center text-sm text-titanium"><Link className="font-bold text-paper underline decoration-ignition decoration-2 underline-offset-4" href="/login">Student sign in</Link></p>
+      ) : (
+        <p className="mt-7 text-center text-sm text-titanium">New to Orange Nelumbo?{" "}<Link className="font-bold text-paper underline decoration-ignition decoration-2 underline-offset-4" href="/signup">Create a dummy account</Link></p>
+      )}
     </div>
   );
 }

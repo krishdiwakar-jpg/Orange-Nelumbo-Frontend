@@ -24,7 +24,7 @@ export function NotesShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-[#0E0D10] text-white">
+    <div className="learning-surface min-h-screen bg-[#0E0D10] text-white">
       <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0E0D10]/95 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-[1460px] items-center justify-between gap-4 px-4 sm:px-7 lg:px-10">
           <Link className="flex min-h-11 items-center gap-2 text-sm font-semibold text-[#C7C5CC] hover:text-white" href="/learn">

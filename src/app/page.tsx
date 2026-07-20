@@ -1,13 +1,54 @@
 import Link from "next/link";
-import { ArrowRight, Atom, BookOpen, Check, FlaskConical, PlayCircle, Sigma } from "lucide-react";
+import {
+  ArrowRight,
+  Atom,
+  BookOpen,
+  Check,
+  ChevronDown,
+  Eye,
+  FlaskConical,
+  GraduationCap,
+  PlayCircle,
+  Quote,
+  Sigma,
+  SlidersHorizontal,
+} from "lucide-react";
 
 import { MarketingFooter } from "@/components/layout/marketing-footer";
 import { MarketingHeader } from "@/components/layout/marketing-header";
+import { testimonials } from "@/data/platform";
 
 const subjects = [
   { name: "Physics", icon: Atom, copy: "Diagrams, physical intuition, derivations, and interactive models." },
   { name: "Chemistry", icon: FlaskConical, copy: "Visual structures, reaction logic, trends, and concise revision maps." },
   { name: "Mathematics", icon: Sigma, copy: "Step-by-step reasoning, geometric meaning, and worked patterns." },
+];
+
+const homeFaqs = [
+  {
+    question: "What does Orange Nelumbo offer today?",
+    answer: "The current learning library focuses on visual notes and interactive simulations for JEE Physics, Chemistry, and Mathematics. Video lectures are planned for a future release.",
+  },
+  {
+    question: "Are the notes useful for JEE Main and JEE Advanced?",
+    answer: "Yes. Topics begin with the common foundation and then move into deeper derivations, patterns, and edge cases where Advanced preparation needs them.",
+  },
+  {
+    question: "How does the Simulation Lab help?",
+    answer: "Each lab lets a student predict an outcome, change one or more variables, and observe the result. The goal is to connect an equation with the behaviour it describes.",
+  },
+  {
+    question: "Are video lectures available now?",
+    answer: "Not yet. Visual-first video lectures are in production and will connect directly to the same notes and simulations when released.",
+  },
+  {
+    question: "Who can use educator access?",
+    answer: "Educator access is intended for invited teachers and academic contributors. They can use the dedicated sign-in entry provided by Orange Nelumbo.",
+  },
+  {
+    question: "Can I save notes and continue later?",
+    answer: "Yes. The demo supports bookmarks and device-local reading progress so students can return to the note they were studying.",
+  },
 ];
 
 export default function HomePage() {
@@ -81,9 +122,13 @@ export default function HomePage() {
           <div className="mx-auto grid max-w-[1440px] items-center gap-12 px-5 py-20 sm:px-8 lg:grid-cols-[.9fr_1.1fr] lg:px-14 lg:py-24">
             <div>
               <FlaskConical className="text-[#3DE0D0]" size={34} />
-              <h2 className="mt-7 font-display text-4xl font-bold sm:text-5xl">Move a variable. Watch the concept respond.</h2>
-              <p className="mt-5 max-w-xl text-lg leading-8 text-[#C7C5CC]">Simulations turn formulas into behaviour. Predict first, adjust the inputs, and build intuition you can carry into a question.</p>
-              <Link className="button-outline mt-8" href="/login?returnTo=%2Fsimulations">Explore simulations <ArrowRight size={17} /></Link>
+              <h2 className="mt-7 font-display text-4xl font-bold sm:text-5xl">The Simulation Lab</h2>
+              <p className="mt-5 max-w-xl text-lg leading-8 text-[#C7C5CC]">Turn formulas into behaviour. Predict the result, change the inputs, and build intuition you can carry into a JEE question.</p>
+              <div className="mt-7 grid gap-3 sm:grid-cols-2">
+                <div className="flex gap-3 border border-white/9 bg-[#0E0D10] p-4"><SlidersHorizontal className="mt-1 shrink-0 text-[#FF8A3D]" size={18} /><p className="text-sm leading-6 text-[#C7C5CC]">Control variables and compare outcomes.</p></div>
+                <div className="flex gap-3 border border-white/9 bg-[#0E0D10] p-4"><Eye className="mt-1 shrink-0 text-[#3DE0D0]" size={18} /><p className="text-sm leading-6 text-[#C7C5CC]">See graphs and motion update together.</p></div>
+              </div>
+              <Link className="button-outline mt-8" href="/login?returnTo=%2Fsimulations">Open the Simulation Lab <ArrowRight size={17} /></Link>
             </div>
             <div className="border border-[#FF5A1F]/22 bg-[#0E0D10] p-6 sm:p-8">
               <div className="flex items-center justify-between"><h3 className="text-2xl font-bold">Vertical throw</h3><span className="text-sm font-semibold text-[#3DE08A]">Live</span></div>
@@ -96,6 +141,49 @@ export default function HomePage() {
           </div>
         </section>
 
+        <section className="section-shell" id="testimonials">
+          <div>
+            <div className="section-heading">
+              <h2 className="max-w-3xl font-display text-4xl font-bold sm:text-5xl">Built for the moment a concept finally clicks.</h2>
+              <p className="max-w-xl text-lg leading-8 text-[#C7C5CC]">Students use the notes and labs to replace disconnected formulas with a picture they can reason through.</p>
+            </div>
+            <div className="mt-12 grid gap-5 lg:grid-cols-3">
+              {testimonials.slice(0, 3).map((testimonial) => (
+                <figure className="flex h-full flex-col border border-[#FF5A1F]/22 bg-[#161418] p-7 sm:p-8" key={testimonial.id}>
+                  <Quote className="text-[#FF8A3D]" size={27} strokeWidth={1.5} />
+                  <blockquote className="mt-8 flex-1 text-lg leading-8 text-[#DAD8DE]">“{testimonial.quote}”</blockquote>
+                  <figcaption className="mt-8 border-t border-white/8 pt-5">
+                    <p className="font-semibold text-white">{testimonial.name}</p>
+                    <p className="mt-1 text-sm text-[#C7C5CC]/70">{testimonial.detail}</p>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="border-y border-white/8 bg-[#161418]" id="educators">
+          <div className="mx-auto grid max-w-[1440px] gap-10 px-5 py-16 sm:px-8 lg:grid-cols-[1fr_.78fr] lg:items-center lg:px-14 lg:py-20">
+            <div>
+              <GraduationCap className="text-[#FF8A3D]" size={36} strokeWidth={1.5} />
+              <h2 className="mt-7 max-w-3xl font-display text-4xl font-bold sm:text-5xl">A dedicated entry for educators.</h2>
+              <p className="mt-5 max-w-2xl text-lg leading-8 text-[#C7C5CC]">Invited teachers and academic contributors can sign in through the educator entry to access their Orange Nelumbo workspace.</p>
+              <Link className="button-primary mt-8" href="/login?role=educator&returnTo=%2Fdashboard">Educator login <ArrowRight size={17} /></Link>
+            </div>
+            <div className="brand-grid border border-[#FF5A1F]/24 bg-[#0E0D10] p-6 sm:p-8">
+              <div className="flex items-center gap-4 border-b border-white/8 pb-6">
+                <span className="grid size-12 place-items-center bg-[#FF5A1F] text-[#0E0D10]"><GraduationCap size={23} /></span>
+                <div><h3 className="text-xl font-bold">Educator access</h3><p className="mt-1 text-sm text-[#C7C5CC]/70">For invited accounts</p></div>
+              </div>
+              <ul className="mt-6 space-y-4 text-sm leading-6 text-[#C7C5CC]">
+                <li className="flex gap-3"><Check className="mt-1 shrink-0 text-[#3DE08A]" size={15} /> Separate educator sign-in entry</li>
+                <li className="flex gap-3"><Check className="mt-1 shrink-0 text-[#3DE08A]" size={15} /> Access tied to an invited account</li>
+                <li className="flex gap-3"><Check className="mt-1 shrink-0 text-[#3DE08A]" size={15} /> Student learning remains in its own workspace</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
         <section className="section-shell" id="videos">
           <div className="hero-grid grid gap-10 border border-[#FF5A1F]/24 bg-[#161418] p-7 sm:p-10 lg:grid-cols-[1fr_auto] lg:items-end lg:p-14">
             <div>
@@ -104,6 +192,27 @@ export default function HomePage() {
               <p className="mt-5 max-w-2xl text-lg leading-8 text-[#C7C5CC]">Videos will connect directly to the same notes and simulations, so every topic stays part of one clear learning path.</p>
             </div>
             <Link className="button-primary justify-center" href="/signup">Start with the notes <ArrowRight size={17} /></Link>
+          </div>
+        </section>
+
+        <section className="border-t border-white/8 bg-[#161418]" id="faqs">
+          <div className="mx-auto grid max-w-[1440px] gap-12 px-5 py-20 sm:px-8 lg:grid-cols-[.72fr_1.28fr] lg:gap-20 lg:px-14 lg:py-24">
+            <div>
+              <h2 className="font-display text-4xl font-bold sm:text-5xl">Frequently asked questions</h2>
+              <p className="mt-5 max-w-md text-lg leading-8 text-[#C7C5CC]">Clear answers about the current library, future videos, simulations, and educator access.</p>
+              <Link className="button-ghost mt-8" href="/help">Visit the help centre <ArrowRight size={17} /></Link>
+            </div>
+            <div className="border-t border-[#FF5A1F]/25">
+              {homeFaqs.map((item, index) => (
+                <details className="group border-b border-[#FF5A1F]/20" key={item.question} open={index === 0}>
+                  <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-5 py-5 text-lg font-semibold marker:hidden sm:text-xl">
+                    <span>{item.question}</span>
+                    <ChevronDown className="shrink-0 text-[#FF8A3D] transition-transform group-open:rotate-180" size={20} />
+                  </summary>
+                  <p className="max-w-3xl pb-6 pr-8 leading-7 text-[#C7C5CC]">{item.answer}</p>
+                </details>
+              ))}
+            </div>
           </div>
         </section>
       </main>
