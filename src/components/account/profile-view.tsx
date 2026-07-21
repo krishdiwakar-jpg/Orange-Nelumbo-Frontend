@@ -75,7 +75,7 @@ function OptionButton({
 
 export function ProfileView() {
   const { completeOnboarding, onboardingProfile, user } = useApp();
-  const student = user ?? { ...studentProfile, onboardingComplete: true };
+  const student = user ?? { ...studentProfile, onboardingComplete: true, isDemo: true, role: "student" as const };
   const sourceProfile = useMemo<OnboardingProfile>(
     () =>
       onboardingProfile ?? {

@@ -1,9 +1,11 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Check, CreditCard, ShieldCheck, Tag } from "lucide-react";
+import { ArrowRight, Check, CreditCard, GraduationCap, ShieldCheck, Tag } from "lucide-react";
 
+import { useApp } from "@/components/providers/app-provider";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,6 +19,8 @@ type FieldName = "studentName" | "email" | "cardNumber" | "expiry" | "cvv" | "ci
 type FormErrors = Partial<Record<FieldName | "terms", string>>;
 
 const DEMO_COUPON = "MASTERY10";
+const SUCCESS_CARD = "4242 4242 4242 4242";
+const FAILURE_CARD = "4000 0000 0000 0002";
 
 const formatPrice = new Intl.NumberFormat("en-IN", {
   style: "currency",
@@ -36,6 +40,7 @@ function formatExpiry(value: string) {
 
 export function CheckoutForm({ plan }: CheckoutFormProps) {
   const router = useRouter();
+  const { activatePlan, hydrated, isAuthenticated, isEducator } = useApp();
   const [fields, setFields] = useState<Record<FieldName, string>>({
     studentName: "",
     email: "",
@@ -53,6 +58,47 @@ export function CheckoutForm({ plan }: CheckoutFormProps) {
 
   const discount = useMemo(() => (couponApplied ? Math.round(plan.price * 0.1) : 0), [couponApplied, plan.price]);
   const total = plan.price - discount;
+
+  if (!hydrated) {
+    return <div aria-label="Loading checkout" className="min-h-72 animate-pulse border border-white/10 bg-[#161418]" />;
+  }
+
+  if (!isAuthenticated) {
+    const returnTo = `/checkout?plan=${plan.id}`;
+    return (
+      <section className="border border-[#D8794A]/35 bg-[#161418] p-6 sm:p-8" aria-labelledby="checkout-account-heading">
+        <div className="grid size-14 place-items-center border border-[#D8794A]/35 bg-[#D8794A]/7 text-[#D8794A]">
+          <ShieldCheck aria-hidden="true" size={27} strokeWidth={1.6} />
+        </div>
+        <h2 className="mt-7 max-w-xl font-display text-3xl font-bold leading-tight" id="checkout-account-heading">Sign in before the demo payment.</h2>
+        <p className="mt-5 max-w-2xl leading-7 text-[#C7C5CC]">The selected course is attached to a student account after an approved test payment. You will return to this exact checkout.</p>
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <Link className="button-primary justify-center" href={`/login?returnTo=${encodeURIComponent(returnTo)}`}>Sign in to continue <ArrowRight aria-hidden="true" size={17} /></Link>
+          <Link className="button-outline justify-center" href={`/signup?returnTo=${encodeURIComponent(returnTo)}`}>Create a student account</Link>
+        </div>
+      </section>
+    );
+  }
+
+  if (isEducator) {
+    return (
+      <section className="border border-[#3DE08A]/35 bg-[#161418] p-6 sm:p-8" aria-labelledby="educator-access-heading">
+        <div className="grid size-14 place-items-center border border-[#3DE08A]/35 bg-[#3DE08A]/7 text-[#3DE08A]">
+          <GraduationCap aria-hidden="true" size={27} strokeWidth={1.6} />
+        </div>
+        <p className="mt-7 text-sm font-semibold text-[#3DE08A]">Educator access included</p>
+        <h2 className="mt-3 max-w-xl font-display text-3xl font-bold leading-tight" id="educator-access-heading">
+          No purchase is required for the educator demo.
+        </h2>
+        <p className="mt-5 max-w-2xl leading-7 text-[#C7C5CC]">
+          Your verification is still under review, but this demo educator account can open every live simulation while the production verification service is being built.
+        </p>
+        <Link className="button-primary mt-8" href="/simulations">
+          Open the simulation lab <ArrowRight aria-hidden="true" size={17} />
+        </Link>
+      </section>
+    );
+  }
 
   function updateField(name: FieldName, value: string) {
     setFields((current) => ({ ...current, [name]: value }));
@@ -87,11 +133,32 @@ export function CheckoutForm({ plan }: CheckoutFormProps) {
     return Object.keys(nextErrors).length === 0;
   }
 
-  function submit(event: React.FormEvent<HTMLFormElement>) {
+  function fillTestCard(outcome: "success" | "failure") {
+    setFields((current) => ({
+      ...current,
+      cardNumber: outcome === "success" ? SUCCESS_CARD : FAILURE_CARD,
+      expiry: "12/30",
+      cvv: "123",
+    }));
+    setErrors((current) => ({ ...current, cardNumber: undefined, expiry: undefined, cvv: undefined }));
+  }
+
+  async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!validate()) return;
 
     setProcessing(true);
+    await new Promise((resolve) => window.setTimeout(resolve, 700));
+
+    const cardDigits = fields.cardNumber.replace(/\D/g, "");
+    if (cardDigits === FAILURE_CARD.replace(/\D/g, "")) {
+      const query = new URLSearchParams({ plan: plan.id, reason: "card-declined" });
+      if (couponApplied) query.set("coupon", DEMO_COUPON);
+      router.push(`/checkout/failed?${query.toString()}`);
+      return;
+    }
+
+    activatePlan(plan.id);
     const receipt = `DEMO-${Date.now().toString(36).toUpperCase()}`;
     const query = new URLSearchParams({ plan: plan.id, receipt });
     if (couponApplied) query.set("coupon", DEMO_COUPON);
@@ -142,6 +209,25 @@ export function CheckoutForm({ plan }: CheckoutFormProps) {
 
         <div className="mt-6 border-l-2 border-[#F6C344] bg-[#F6C344]/7 p-4 text-sm leading-6 text-[#DAD8DE]">
           No values in this section are transmitted, charged, tokenised, or stored. Do not enter a real card number, CVV, or billing identity.
+        </div>
+
+        <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          <button
+            className="min-h-12 border border-[#3DE08A]/30 bg-[#3DE08A]/5 px-4 text-left text-sm font-semibold text-[#DAD8DE] transition-colors hover:border-[#3DE08A]/65 hover:text-white"
+            onClick={() => fillTestCard("success")}
+            type="button"
+          >
+            Use approval test card
+            <span className="mt-1 block font-mono text-xs font-normal text-[#3DE08A]">4242 4242 4242 4242</span>
+          </button>
+          <button
+            className="min-h-12 border border-[#E0483C]/30 bg-[#E0483C]/5 px-4 text-left text-sm font-semibold text-[#DAD8DE] transition-colors hover:border-[#E0483C]/65 hover:text-white"
+            onClick={() => fillTestCard("failure")}
+            type="button"
+          >
+            Use decline test card
+            <span className="mt-1 block font-mono text-xs font-normal text-[#E88279]">4000 0000 0000 0002</span>
+          </button>
         </div>
 
         <div className="mt-7 grid gap-6 sm:grid-cols-2">
@@ -244,7 +330,7 @@ export function CheckoutForm({ plan }: CheckoutFormProps) {
             }}
             type="checkbox"
           />
-          <span>I understand this is a front-end simulation, no payment will be processed, and no rank or admission outcome is guaranteed.</span>
+          <span>I understand this is a front-end simulation, no real payment will be processed, and successful test payments only unlock demo access in this browser.</span>
         </label>
         {errors.terms ? <p className="mt-2 text-sm text-[#E0483C]">{errors.terms}</p> : null}
 

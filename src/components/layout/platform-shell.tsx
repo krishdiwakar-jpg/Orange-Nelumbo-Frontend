@@ -4,17 +4,20 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
+  ArrowRight,
   Bell,
   Bookmark,
   BookOpen,
   ChevronDown,
   CircleHelp,
   FlaskConical,
+  GraduationCap,
   House,
   LogOut,
   Menu,
   Search,
   Settings,
+  ShieldCheck,
   UserRound,
   X,
 } from "lucide-react";
@@ -73,6 +76,7 @@ export function PlatformShell({ children }: { children: React.ReactNode }) {
   const [accountOpen, setAccountOpen] = useState(false);
   const [desktopNavigation, setDesktopNavigation] = useState(false);
   const [query, setQuery] = useState("");
+  const [educatorNoticeOpen, setEducatorNoticeOpen] = useState(true);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const sidebarRef = useRef<HTMLElement>(null);
   const sidebarReturnFocusRef = useRef<HTMLElement | null>(null);
@@ -272,6 +276,7 @@ export function PlatformShell({ children }: { children: React.ReactNode }) {
                   <div className="border-b border-white/8 px-3 py-3">
                     <p className="font-semibold">{user?.name ?? "Aarav Sharma"}</p>
                     <p className="mt-1 truncate text-xs text-[#C7C5CC]/70">{user?.email ?? "aarav@example.com"}</p>
+                    {user?.role === "educator" ? <p className="mt-2 text-xs font-semibold text-[#F6C344]">Educator verification pending</p> : null}
                   </div>
                   <Link className="mt-2 flex min-h-11 items-center gap-3 px-3 text-sm text-[#C7C5CC] hover:bg-white/5 hover:text-white" href="/profile"><UserRound size={17} /> Profile</Link>
                   <Link className="flex min-h-11 items-center gap-3 px-3 text-sm text-[#C7C5CC] hover:bg-white/5 hover:text-white" href="/settings"><Settings size={17} /> Settings</Link>
@@ -332,6 +337,23 @@ export function PlatformShell({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       )}
+
+      {educatorNoticeOpen && user?.role === "educator" && user.educatorVerificationStatus === "pending" ? (
+        <div aria-labelledby="educator-verification-title" aria-modal="true" className="fixed inset-0 z-[90] grid place-items-center bg-black/80 p-4" role="dialog">
+          <button aria-label="Close educator verification notice" className="absolute inset-0 size-full cursor-default" onClick={() => setEducatorNoticeOpen(false)} type="button" />
+          <section className="relative w-full max-w-xl border border-[#F6C344]/40 bg-[#161418] p-6 sm:p-8">
+            <div className="flex items-start justify-between gap-6">
+              <span className="grid size-12 shrink-0 place-items-center border border-[#F6C344]/35 bg-[#F6C344]/7 text-[#F6C344]"><GraduationCap size={23} /></span>
+              <button aria-label="Close" className="grid size-11 place-items-center border border-white/10 text-[#C7C5CC] hover:text-white" onClick={() => setEducatorNoticeOpen(false)} type="button"><X size={18} /></button>
+            </div>
+            <p className="mt-7 text-sm font-semibold text-[#F6C344]">Verification pending</p>
+            <h2 className="mt-3 font-display text-3xl font-bold" id="educator-verification-title">Your educator verification is under progress.</h2>
+            <p className="mt-5 leading-7 text-[#C7C5CC]">A production backend will verify invited educators before permanent access is granted. For this demo, you can continue through the website with the complete simulation library unlocked and no purchase required.</p>
+            <div className="mt-7 flex items-start gap-3 border border-[#3DE08A]/30 bg-[#3DE08A]/6 p-4 text-sm leading-6 text-[#C7C5CC]"><ShieldCheck className="mt-0.5 shrink-0 text-[#3DE08A]" size={18} /><span>Temporary educator demo access is active on this browser.</span></div>
+            <button className="button-primary mt-7 w-full justify-center" onClick={() => setEducatorNoticeOpen(false)} type="button">Continue with demo access <ArrowRight size={16} /></button>
+          </section>
+        </div>
+      ) : null}
     </div>
   );
 }

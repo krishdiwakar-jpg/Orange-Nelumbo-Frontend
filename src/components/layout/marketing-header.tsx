@@ -8,7 +8,8 @@ import { Logo } from "@/components/brand/logo";
 import { useApp } from "@/components/providers/app-provider";
 
 const links = [
-  { href: "/#simulations", label: "Simulations" },
+  { href: "/courses", label: "Courses" },
+  { href: "/simulation-lab", label: "Simulations" },
   { href: "/#notes", label: "Notes" },
   { href: "/#concept-map", label: "Concept map" },
   { href: "/#pricing", label: "Pricing" },

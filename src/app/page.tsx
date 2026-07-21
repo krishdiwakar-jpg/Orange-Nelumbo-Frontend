@@ -53,9 +53,9 @@ const heatRows = [
 ];
 
 const homePlans = [
-  { name: "Notes", price: "₹4,999", description: "A focused visual notebook across Physics, Chemistry, and Mathematics.", features: ["Complete visual note library", "Five public sample notes", "Protected full-page reader", "Bookmarks and reading progress"], cta: "Choose Notes" },
-  { name: "Notes + Simulations", price: "₹6,999", description: "Connect every important relationship with a model you can control.", features: ["Everything in Notes", "Complete simulation library", "Variable controls and live graphs", "New labs added through the year"], cta: "Choose the visual plan", featured: true },
-  { name: "Complete Library", price: "₹9,999", description: "The complete notes and simulations collection, organised into guided visual sequences.", features: ["Everything in Notes + Simulations", "Curated concept maps", "Educator-curated visual sequences", "All library additions this year"], cta: "Choose Complete" },
+  { id: "notes", slug: "visual-notes", name: "Notes", price: "₹4,999", description: "A focused visual notebook across Physics, Chemistry, and Mathematics.", features: ["Complete visual note library", "Five public sample notes", "Protected full-page reader", "Bookmarks and reading progress"], cta: "Choose Notes" },
+  { id: "simulations", slug: "notes-and-simulations", name: "Notes + Simulations", price: "₹6,999", description: "Connect every important relationship with a model you can control.", features: ["Everything in Notes", "Complete simulation library", "Variable controls and live graphs", "New labs added through the year"], cta: "Choose the visual plan", featured: true },
+  { id: "complete", slug: "complete-visual-library", name: "Complete Library", price: "₹9,999", description: "The complete notes and simulations collection, organised into guided visual sequences.", features: ["Everything in Notes + Simulations", "Curated concept maps", "Educator-curated visual sequences", "All library additions this year"], cta: "Choose Complete" },
 ];
 
 const homeFaqs = [
@@ -75,7 +75,7 @@ export default function HomePage() {
         <section className="hero-grid overflow-hidden border-b border-[#FF5A1F]/20">
           <div className="mx-auto grid min-h-[720px] max-w-[1440px] items-center gap-12 px-5 py-16 sm:px-8 lg:grid-cols-[.92fr_1.08fr] lg:px-14 lg:py-20">
             <div>
-              <h1 className="max-w-4xl font-display text-[clamp(3.15rem,5.45vw,5rem)] font-extrabold uppercase leading-[.84] tracking-[-.065em]">
+              <h1 className="max-w-4xl font-hero text-[50px] font-extrabold uppercase leading-[.84] tracking-[-.055em] sm:text-[64px] lg:text-[84px]">
                 <span className="block">JEE prep</span>
                 <span className="block">that makes</span>
                 <span className="text-gradient block">hard ideas</span>
@@ -142,7 +142,7 @@ export default function HomePage() {
 
         <section className="section-shell" id="pricing">
           <div><div className="section-heading"><h2 className="max-w-3xl font-display text-4xl font-bold sm:text-5xl">Choose how much of the visual library you need.</h2><p className="text-lg leading-8 text-[#C7C5CC]">Three clear annual plans. No adaptive engine, no unrelated test-prep features, and no hidden product layer.</p></div>
-            <div className="mt-12 grid gap-5 lg:grid-cols-3">{homePlans.map((plan) => <article className={`relative flex min-h-[560px] flex-col border p-7 sm:p-8 ${plan.featured ? "border-[#FF5A1F] bg-[#1E1B20]" : "border-white/10 bg-[#161418]"}`} key={plan.name}>{plan.featured ? <span className="absolute right-0 top-0 bg-[#FF5A1F] px-4 py-2 text-xs font-bold text-[#0E0D10]">Most visual</span> : null}<h3 className="font-display text-2xl font-bold">{plan.name}</h3><p className="mt-6"><span className="font-display text-4xl font-bold">{plan.price}</span><span className="ml-2 text-sm text-[#C7C5CC]">/ year</span></p><p className="mt-5 min-h-20 leading-7 text-[#C7C5CC]">{plan.description}</p><ul className="mt-7 space-y-4">{plan.features.map((feature) => <li className="flex gap-3 text-sm leading-6 text-[#C7C5CC]" key={feature}><Check className="mt-1 shrink-0 text-[#3DE08A]" size={16}/>{feature}</li>)}</ul><Link className={`${plan.featured ? "button-primary" : "button-outline"} mt-auto justify-center`} href="/signup">{plan.cta}</Link></article>)}</div>
+            <div className="mt-12 grid gap-5 lg:grid-cols-3">{homePlans.map((plan) => <article className={`relative flex min-h-[560px] flex-col border p-7 sm:p-8 ${plan.featured ? "border-[#FF5A1F] bg-[#1E1B20]" : "border-white/10 bg-[#161418]"}`} key={plan.name}>{plan.featured ? <span className="absolute right-0 top-0 bg-[#FF5A1F] px-4 py-2 text-xs font-bold text-[#0E0D10]">Most visual</span> : null}<h3 className="font-display text-2xl font-bold">{plan.name}</h3><p className="mt-6"><span className="font-display text-4xl font-bold">{plan.price}</span><span className="ml-2 text-sm text-[#C7C5CC]">/ year</span></p><p className="mt-5 min-h-20 leading-7 text-[#C7C5CC]">{plan.description}</p><ul className="mt-7 space-y-4">{plan.features.map((feature) => <li className="flex gap-3 text-sm leading-6 text-[#C7C5CC]" key={feature}><Check className="mt-1 shrink-0 text-[#3DE08A]" size={16}/>{feature}</li>)}</ul><div className="mt-auto grid gap-3"><Link className={plan.featured ? "button-primary justify-center" : "button-outline justify-center"} href={`/checkout?plan=${plan.id}`}>{plan.cta}</Link><Link className="button-ghost justify-center" href={`/courses/${plan.slug}`}>View course details</Link></div></article>)}</div>
           </div>
         </section>
 

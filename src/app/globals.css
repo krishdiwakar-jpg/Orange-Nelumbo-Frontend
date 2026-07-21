@@ -1,4 +1,10 @@
 @import "tailwindcss";
+@import "@fontsource/outfit/latin-700.css";
+@import "@fontsource/outfit/latin-800.css";
+@import "@fontsource/fustat/latin-400.css";
+@import "@fontsource/fustat/latin-500.css";
+@import "@fontsource/fustat/latin-600.css";
+@import "@fontsource/fustat/latin-700.css";
 @import "@fontsource/hanken-grotesk/latin-400.css";
 @import "@fontsource/hanken-grotesk/latin-500.css";
 @import "@fontsource/hanken-grotesk/latin-600.css";
@@ -14,8 +20,9 @@
 
 @theme inline {
   --font-display: "Hanken Grotesk", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-sans: "Hanken Grotesk", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-learning: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-hero: "Outfit", "Hanken Grotesk", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-sans: "Fustat", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-learning: "Fustat", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
   --color-obsidian: #0e0d10;
@@ -121,8 +128,9 @@
   --accent-hover: var(--ember);
   --focus: var(--ignition);
   --font-display: "Hanken Grotesk", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-sans: "Hanken Grotesk", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-learning: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-hero: "Outfit", "Hanken Grotesk", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-sans: "Fustat", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-learning: "Fustat", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
   --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
   --shadow-ignition: none;
@@ -155,32 +163,38 @@ body {
 
 /* Learning and account surfaces stay highly legible at study density. */
 .learning-surface {
-  --font-display: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-sans: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-display: "Fustat", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-sans: "Fustat", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   font-family: var(--font-learning);
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  margin: 0;
-  color: var(--foreground);
-  font-family: var(--font-display);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0;
+    color: var(--foreground);
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 }
 
-p {
-  margin: 0;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
+.font-hero {
+  font-family: var(--font-hero);
 }
 
 button,

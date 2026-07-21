@@ -27,6 +27,8 @@ export type AppTheme = "light" | "dark" | "system";
 export type TargetExam = "JEE Main" | "JEE Advanced";
 export type ClassLevel = "Class 11" | "Class 12" | "Dropper";
 export type StudyWindow = "Morning" | "Afternoon" | "Evening" | "Flexible";
+export type UserRole = "student" | "educator";
+export type EducatorVerificationStatus = "pending" | "verified";
 
 export interface AppUser {
   id: string;
@@ -38,7 +40,9 @@ export interface AppUser {
   targetExam: TargetExam;
   targetYear: number;
   examDate: string;
-  activePlanId: "notes" | "complete" | "practice";
+  activePlanId: "notes" | "simulations" | "complete";
+  role: UserRole;
+  educatorVerificationStatus?: EducatorVerificationStatus;
   readingStreak: number;
   joinedAt: string;
   onboardingComplete: boolean;
@@ -48,6 +52,7 @@ export interface AppUser {
 export interface LoginInput {
   email: string;
   password: string;
+  role?: UserRole;
 }
 
 export interface SignUpInput extends LoginInput {
@@ -100,10 +105,14 @@ export interface AppContextValue extends PersistedAppState {
   signIn: (input: LoginInput) => Promise<AuthResult>;
   signUp: (input: SignUpInput) => Promise<AuthResult>;
   loginAsDemo: () => Promise<AuthResult>;
+  loginAsEducatorDemo: () => Promise<AuthResult>;
+  isEducator: boolean;
+  hasFullAccess: boolean;
   requestPasswordReset: (email: string) => Promise<AuthResult>;
   logout: () => void;
   signOut: () => void;
   completeOnboarding: (profile: OnboardingProfile) => void;
+  activatePlan: (planId: AppUser["activePlanId"]) => void;
   setTopicProgress: (
     topicId: string,
     value: number | Partial<Pick<TopicProgressEntry, "progress" | "status">>,
@@ -126,8 +135,28 @@ const DEMO_USER: AppUser = {
   targetYear: 2027,
   examDate: "2027-05-23",
   activePlanId: "notes",
+  role: "student",
   readingStreak: 47,
   joinedAt: "2026-05-20",
+  onboardingComplete: true,
+  isDemo: true,
+};
+
+const DEMO_EDUCATOR: AppUser = {
+  id: "educator-meera-demo",
+  name: "Dr. Meera Iyer",
+  firstName: "Meera",
+  initials: "MI",
+  email: "educator@orangenelumbo.com",
+  city: "Bengaluru",
+  targetExam: "JEE Advanced",
+  targetYear: 2027,
+  examDate: "2027-05-23",
+  activePlanId: "complete",
+  role: "educator",
+  educatorVerificationStatus: "pending",
+  readingStreak: 0,
+  joinedAt: "2026-07-21",
   onboardingComplete: true,
   isDemo: true,
 };
@@ -178,6 +207,26 @@ function createDemoState(theme: AppTheme = "dark"): PersistedAppState {
       focusSubjects: ["physics", "mathematics"],
       studyWindow: "Evening",
       city: "Kota",
+    },
+    topicProgress: { ...DEMO_TOPIC_PROGRESS },
+    bookmarkedTopicIds: ["phy-kin-motion-gravity", "mat-algebra-complex"],
+    completedPlannerItemIds: ["planner-2026-07-17-bonding"],
+    questionAttempts: {},
+    theme,
+  };
+}
+
+function createEducatorDemoState(theme: AppTheme = "dark"): PersistedAppState {
+  return {
+    user: { ...DEMO_EDUCATOR },
+    onboardingProfile: {
+      targetExam: "JEE Advanced",
+      targetYear: 2027,
+      classLevel: "Class 12",
+      dailyGoalMinutes: 90,
+      focusSubjects: ["physics", "chemistry", "mathematics"],
+      studyWindow: "Flexible",
+      city: "Bengaluru",
     },
     topicProgress: { ...DEMO_TOPIC_PROGRESS },
     bookmarkedTopicIds: ["phy-kin-motion-gravity", "mat-algebra-complex"],
@@ -262,9 +311,14 @@ function normaliseUser(value: unknown): AppUser | null {
     targetYear,
     examDate: typeof candidate.examDate === "string" ? candidate.examDate : `${targetYear}-05-23`,
     activePlanId:
-      candidate.activePlanId === "complete" || candidate.activePlanId === "practice"
+      candidate.activePlanId === "complete" || candidate.activePlanId === "simulations"
         ? candidate.activePlanId
         : "notes",
+    role: candidate.role === "educator" ? "educator" : "student",
+    educatorVerificationStatus:
+      candidate.role === "educator"
+        ? candidate.educatorVerificationStatus === "verified" ? "verified" : "pending"
+        : undefined,
     readingStreak: Number.isFinite(candidate.readingStreak) ? Math.max(0, Number(candidate.readingStreak)) : 0,
     joinedAt: typeof candidate.joinedAt === "string" ? candidate.joinedAt : new Date().toISOString(),
     onboardingComplete: candidate.onboardingComplete === true,
@@ -456,8 +510,25 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const login = useCallback(async (input: LoginInput): Promise<AuthResult> => {
     const email = normaliseEmail(input.email);
+    const requestedRole = input.role ?? "student";
     if (!isEmail(email) || !input.password) {
       return { success: false, message: "Enter a valid email and password." };
+    }
+
+    if (requestedRole === "educator") {
+      if (email === DEMO_EDUCATOR.email && input.password === "teach2027") {
+        setState((current) =>
+          restoreState(
+            readDeviceItem(userStateKey(DEMO_EDUCATOR.id)),
+            createEducatorDemoState(current.theme),
+          ),
+        );
+        return { success: true, message: "Welcome, Dr. Meera.", user: DEMO_EDUCATOR };
+      }
+      return {
+        success: false,
+        message: "Those details do not match the invited educator demo account.",
+      };
     }
 
     if (email === DEMO_USER.email && input.password === "orange2027") {
@@ -468,7 +539,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
 
     const account = readAccounts().find((item) => item.user.email === email);
-    if (!account || account.password !== input.password) {
+    if (!account || account.password !== input.password || account.user.role !== "student") {
       return {
         success: false,
         message: "Those details do not match a saved dummy account. Try demo access instead.",
@@ -497,7 +568,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
 
     const accounts = readAccounts();
-    if (accounts.some((account) => account.user.email === email) || email === DEMO_USER.email) {
+    if (
+      accounts.some((account) => account.user.email === email) ||
+      email === DEMO_USER.email ||
+      email === DEMO_EDUCATOR.email
+    ) {
       return { success: false, message: "A dummy account with this email already exists." };
     }
 
@@ -512,6 +587,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       targetYear: 2027,
       examDate: "2027-05-23",
       activePlanId: "notes",
+      role: "student",
       readingStreak: 0,
       joinedAt: new Date().toISOString(),
       onboardingComplete: false,
@@ -533,6 +609,20 @@ export function AppProvider({ children }: { children: ReactNode }) {
       restoreState(readDeviceItem(userStateKey(DEMO_USER.id)), createDemoState(current.theme)),
     );
     return { success: true, message: "Demo workspace loaded.", user: DEMO_USER };
+  }, []);
+
+  const loginAsEducatorDemo = useCallback(async (): Promise<AuthResult> => {
+    setState((current) =>
+      restoreState(
+        readDeviceItem(userStateKey(DEMO_EDUCATOR.id)),
+        createEducatorDemoState(current.theme),
+      ),
+    );
+    return {
+      success: true,
+      message: "Educator demo workspace loaded. Verification is pending.",
+      user: DEMO_EDUCATOR,
+    };
   }, []);
 
   const requestPasswordReset = useCallback(async (emailValue: string): Promise<AuthResult> => {
@@ -563,6 +653,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
       };
       updateStoredAccountUser(user);
       return { ...current, user, onboardingProfile: profile };
+    });
+  }, []);
+
+  const activatePlan = useCallback((planId: AppUser["activePlanId"]) => {
+    setState((current) => {
+      if (!current.user || current.user.role === "educator") return current;
+      const user = { ...current.user, activePlanId: planId };
+      updateStoredAccountUser(user);
+      return { ...current, user };
     });
   }, []);
 
@@ -648,7 +747,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
     setState((current) => {
       if (!current.user || current.user.id !== userId) return current;
-      if (current.user.isDemo) return createDemoState(current.theme);
+      if (current.user.isDemo) {
+        return current.user.role === "educator"
+          ? createEducatorDemoState(current.theme)
+          : createDemoState(current.theme);
+      }
       return {
         ...createEmptyUserState(current.user, current.theme),
         onboardingProfile: current.onboardingProfile,
@@ -670,10 +773,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
       signIn: login,
       signUp,
       loginAsDemo,
+      loginAsEducatorDemo,
+      isEducator: state.user?.role === "educator",
+      hasFullAccess: state.user?.role === "educator" || state.user?.activePlanId === "complete",
       requestPasswordReset,
       logout,
       signOut: logout,
       completeOnboarding,
+      activatePlan,
       setTopicProgress,
       toggleBookmark,
       togglePlannerItem,
@@ -683,9 +790,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }),
     [
       completeOnboarding,
+      activatePlan,
       hydrated,
       login,
       loginAsDemo,
+      loginAsEducatorDemo,
       logout,
       recordQuestionAttempt,
       requestPasswordReset,
