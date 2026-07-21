@@ -44,16 +44,16 @@ export default async function CheckoutSuccessPage({ searchParams }: SuccessPageP
               <div className="grid size-20 place-items-center border border-[#3DE08A]/45 bg-[#3DE08A]/7">
                 <CheckCircle2 aria-hidden="true" className="text-[#3DE08A]" size={39} strokeWidth={1.5} />
               </div>
-              <Badge className="mt-8" tone="success">Simulation complete</Badge>
-              <h1 className="mt-6 font-display text-[clamp(3rem,6vw,3.5rem)] font-bold leading-none tracking-[-.02em]">The flow worked. <span className="text-gradient">No payment happened.</span></h1>
-              <p className="mt-7 max-w-2xl text-lg leading-8 text-[#C7C5CC]">Validation completed locally and the browser navigated to this receipt. No card, identity, or order data was transmitted or stored.</p>
+              <Badge className="mt-8" tone="success">Demo payment approved</Badge>
+              <h1 className="mt-6 font-display text-[clamp(3rem,6vw,3.5rem)] font-bold leading-none tracking-[-.02em]">Demo access is active. <span className="text-gradient">No real payment happened.</span></h1>
+              <p className="mt-7 max-w-2xl text-lg leading-8 text-[#C7C5CC]">The demo gateway approved the test card and updated access in this browser. No real card, identity, or order data was transmitted or stored.</p>
               <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-                <Link className="button-primary" href="/login?demo=1&returnTo=%2Fdashboard">Open student demo <ArrowRight aria-hidden="true" size={17} /></Link>
+                <Link className="button-primary" href={selectedPlan.id === "notes" ? "/learn" : "/simulations"}>Open included content <ArrowRight aria-hidden="true" size={17} /></Link>
                 <Link className="button-ghost" href="/pricing">Return to pricing</Link>
               </div>
             </div>
 
-            <section aria-labelledby="receipt-heading" className="border border-[#FF5A1F]/35 bg-[#161418] p-6 shadow-[0_0_70px_rgba(255,90,31,.08)] sm:p-8">
+            <section aria-labelledby="receipt-heading" className="border border-[#FF5A1F]/35 bg-[#161418] p-6 sm:p-8">
               <div className="flex items-start justify-between gap-6 border-b border-white/8 pb-6">
                 <div>
                   <p className="kicker">Front-end receipt</p>
@@ -68,10 +68,10 @@ export default async function CheckoutSuccessPage({ searchParams }: SuccessPageP
                 <div className="flex justify-between gap-6 border-t border-white/8 pt-5 text-lg font-bold"><dt>Simulated total</dt><dd className="font-mono text-[#FF8A3D]">{formatPrice.format(total)}</dd></div>
               </dl>
               <div className="mt-7 grid gap-3 sm:grid-cols-2">
-                <div className="border border-[#3DE08A]/30 bg-[#3DE08A]/5 p-4"><ShieldCheck aria-hidden="true" className="text-[#3DE08A]" size={20} /><p className="mt-3 text-sm font-semibold">No charge</p></div>
-                <div className="border border-[#3DE0D0]/30 bg-[#3DE0D0]/5 p-4"><DatabaseZap aria-hidden="true" className="text-[#3DE0D0]" size={20} /><p className="mt-3 text-sm font-semibold">No saved order</p></div>
+                <div className="border border-[#3DE08A]/30 bg-[#3DE08A]/5 p-4"><ShieldCheck aria-hidden="true" className="text-[#3DE08A]" size={20} /><p className="mt-3 text-sm font-semibold">No real charge</p></div>
+                <div className="border border-[#3DE0D0]/30 bg-[#3DE0D0]/5 p-4"><DatabaseZap aria-hidden="true" className="text-[#3DE0D0]" size={20} /><p className="mt-3 text-sm font-semibold">Local demo access updated</p></div>
               </div>
-              <p className="mt-6 text-xs leading-5 text-[#C7C5CC]/70">This reference exists only in the current URL. It is not proof of purchase, payment, enrolment, or subscription.</p>
+              <p className="mt-6 text-xs leading-5 text-[#C7C5CC]/70">This reference is a demo receipt only. It is not proof of a real purchase, payment, enrolment, or subscription.</p>
             </section>
           </div>
         </section>

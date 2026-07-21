@@ -1,6 +1,7 @@
 const protectedRouteRoots = new Set([
   "analytics",
   "bookmarks",
+  "checkout",
   "dashboard",
   "learn",
   "mocks",

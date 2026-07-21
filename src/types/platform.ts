@@ -279,7 +279,7 @@ export interface AnalyticsData {
 }
 
 export interface Plan {
-  id: "notes" | "complete" | "practice";
+  id: "notes" | "simulations" | "complete";
   name: string;
   eyebrow: string;
   price: number;
