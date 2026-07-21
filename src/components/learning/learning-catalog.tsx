@@ -76,7 +76,7 @@ function TopicRow({ chapter, subject, topic }: { chapter: Chapter; subject: Subj
         <span className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[#C7C5CC]/70">
           <span>{topic.estimatedMinutes} min</span>
           <span>{topic.difficulty}</span>
-          {topic.simulationIds?.length ? <span className="flex items-center gap-1 text-[#3DE0D0]"><FlaskConical size={12} /> Live model</span> : null}
+          {topic.simulationIds?.length ? <span className="flex items-center gap-1 text-[#3DE0D0]"><FlaskConical size={12} /> Optional simulation</span> : null}
         </span>
       </Link>
       <div className="flex items-center gap-2 sm:justify-end">
@@ -110,9 +110,9 @@ function SimulationStepRow({ simulationId }: { simulationId: string }) {
       <span className="grid size-7 place-items-center border border-[#3DE0D0]/35 text-[#3DE0D0]"><FlaskConical size={14} /></span>
       <span className="min-w-0 pl-3 sm:border-l sm:border-[#3DE0D0]/22">
         <span className="block text-sm font-semibold text-[#DDF8F5] transition group-hover:text-white">{simulation.shortTitle}</span>
-        <span className="mt-1 block text-xs text-[#C7C5CC]/65">Simulation step · opens full screen</span>
+        <span className="mt-1 block text-xs text-[#C7C5CC]/65">Optional simulation · opens full screen</span>
       </span>
-      <span className="flex items-center gap-2 text-xs font-semibold text-[#3DE0D0]">Run lab <ArrowRight size={14} /></span>
+      <span className="flex items-center gap-2 text-xs font-semibold text-[#3DE0D0]">Open lab <ArrowRight size={14} /></span>
     </Link>
   );
 }
@@ -339,7 +339,7 @@ export function SubjectOverview({ subject }: { subject: Subject }) {
                             const simulation = simulationForId(simulationId);
                             return simulation ? (
                               <Link className="ml-5 flex min-h-10 items-center gap-2 border-l border-[#3DE0D0]/30 px-3 text-xs text-[#3DE0D0]/80 hover:bg-[#3DE0D0]/5 hover:text-[#3DE0D0]" href={simulationPath(simulation.id)} key={simulation.id}>
-                                <FlaskConical size={13} /> {simulation.shortTitle}
+                                <FlaskConical size={13} /> Optional · {simulation.shortTitle}
                               </Link>
                             ) : null;
                           })}
@@ -389,7 +389,7 @@ export function ChapterOverview({ chapter, subject }: { chapter: Chapter; subjec
 
       <div className="mx-auto grid max-w-[1460px] gap-8 px-5 py-9 sm:px-7 lg:px-10 xl:grid-cols-[minmax(0,1fr)_320px] xl:px-12">
         <section>
-          <div className="mb-5"><p className="mono-kicker">Concept sequence</p><h3 className="mt-2 font-display text-2xl font-bold sm:text-3xl">Notes and simulations, in learning order</h3></div>
+          <div className="mb-5"><p className="mono-kicker">Concept sequence</p><h3 className="mt-2 font-display text-2xl font-bold sm:text-3xl">Topics in learning order</h3></div>
           <Card className="p-0">
             {chapter.topics.map((topic) => (
               <div key={topic.id}>

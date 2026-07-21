@@ -80,7 +80,7 @@ export function SecuredNoteReader({ note }: { note: SecuredNoteConfig }) {
                   className="block w-full border-0 bg-[#161418]"
                   loading={index <= activeChunk + 1 ? "eager" : "lazy"}
                   ref={(element) => { frames.current[index] = element; }}
-                  sandbox="allow-scripts"
+                  sandbox="allow-scripts allow-top-navigation-by-user-activation"
                   src={`/api/secured-notes/${note.slug}/chunks/${index}`}
                   style={{ height }}
                   title={`${note.headings[index]} — protected note chunk ${index + 1}`}

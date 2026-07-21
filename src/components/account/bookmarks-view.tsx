@@ -164,7 +164,7 @@ export function BookmarksView() {
                   </div>
                   <div className="mt-5 flex items-center gap-4 text-xs text-[#C7C5CC]/70">
                     <span className="flex items-center gap-1.5"><Clock3 aria-hidden="true" size={13} /> {topic.estimatedMinutes} min</span>
-                    {topic.simulationIds?.length ? <span className="flex items-center gap-1.5 text-[#3DE0D0]"><FlaskConical aria-hidden="true" size={13} /> Live model</span> : null}
+                    {topic.simulationIds?.length ? <span className="flex items-center gap-1.5 text-[#3DE0D0]"><FlaskConical aria-hidden="true" size={13} /> Optional simulation</span> : null}
                   </div>
                   {state.progress > 0 ? <Progress className="mt-5" showValue value={state.progress} /> : null}
                   <Link className="mt-6 flex min-h-11 items-center justify-between border-t border-white/8 pt-4 text-sm font-bold text-[#FF8A3D] hover:text-[#FF5A1F]" href={topicRoute(record)}>

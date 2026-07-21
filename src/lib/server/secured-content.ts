@@ -13,6 +13,10 @@ const simulationSources: Record<string, string> = {
   "extrema-integral-functions": "extrema-of-integral-defined-functions.sim.html",
 };
 
+const noteSimulationRoutes: Record<string, string> = {
+  "extrema-integral-functions": "/simulations/extrema-integral-functions",
+};
+
 function stripTags(value: string) {
   return value
     .replace(/<[^>]+>/g, " ")
@@ -36,7 +40,7 @@ async function readSource(fileName: string) {
 
 function extractNoteSections(source: string) {
   const style = source.match(/<style>([\s\S]*?)<\/style>/i)?.[1] ?? "";
-  const main = source.match(/<main[^>]*class=["']page["'][^>]*>([\s\S]*?)<div class=["']sim-launch["']/i)?.[1];
+  const main = source.match(/<main[^>]*class=["']page["'][^>]*>([\s\S]*?)<div[^>]*class=["'][^"']*sim-overlay[^"']*["'][^>]*>/i)?.[1];
   if (!main) throw new Error("The secured note does not contain the expected page body.");
 
   const starts = [...main.matchAll(/<h2\b/gi)].map((match) => match.index ?? 0);
@@ -108,6 +112,18 @@ export async function renderSecuredNoteChunk(slug: string, index: number) {
   const note = extractNoteSections(await readSource(fileName));
   const section = note.sections[index];
   if (!section) return null;
+  const simulationRoute = noteSimulationRoutes[slug];
+  const sectionHtml = simulationRoute
+    ? section.html
+        .replace(
+          /<button[^>]*class=["']sim-btn["'][^>]*>([\s\S]*?)<\/button>/i,
+          `<a class="sim-btn" href="${simulationRoute}" target="_top">$1</a>`,
+        )
+        .replace(
+          /<p class=["']sim-note["']>[\s\S]*?<\/p>/i,
+          '<p class="sim-note">Optional simulation · opens in the full-screen lab · use Back to return to this note</p>',
+        )
+    : section.html;
 
   const style = note.style
     .replace(/--head:[^;]+;/, "--head:'Fustat','DM Sans','Segoe UI',sans-serif;")
@@ -120,11 +136,11 @@ export async function renderSecuredNoteChunk(slug: string, index: number) {
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${section.heading}</title>
 <style>${style}
-html,body{background:#161418}.page{max-width:760px;padding:24px 12px 56px}body{background-image:none}h2{margin-top:28px}.sim-launch,.sim-overlay{display:none!important}
+html,body{background:#161418}.page{max-width:760px;padding:24px 12px 56px}body{background-image:none}h2{margin-top:28px}.sim-btn{display:inline-flex;align-items:center;text-decoration:none}.sim-overlay{display:none!important}
 @media(max-width:560px){body{font-size:16px}.page{padding:18px 4px 42px}h1.title{font-size:30px}.lede{font-size:17px}.eq,.chain{margin-left:0}}
 </style>
 </head>
-<body><main class="page">${section.html}</main>${noteRuntime(index)}</body>
+<body><main class="page">${sectionHtml}</main>${noteRuntime(index)}</body>
 </html>`;
 }
 

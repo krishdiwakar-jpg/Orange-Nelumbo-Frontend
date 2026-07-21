@@ -134,7 +134,7 @@ const DEMO_USER: AppUser = {
   targetExam: "JEE Advanced",
   targetYear: 2027,
   examDate: "2027-05-23",
-  activePlanId: "notes",
+  activePlanId: "complete",
   role: "student",
   readingStreak: 47,
   joinedAt: "2026-05-20",
@@ -775,7 +775,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
       loginAsDemo,
       loginAsEducatorDemo,
       isEducator: state.user?.role === "educator",
-      hasFullAccess: state.user?.role === "educator" || state.user?.activePlanId === "complete",
+      hasFullAccess:
+        state.user?.isDemo === true ||
+        state.user?.role === "educator" ||
+        state.user?.activePlanId === "complete",
       requestPasswordReset,
       logout,
       signOut: logout,

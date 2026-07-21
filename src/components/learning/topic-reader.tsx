@@ -303,33 +303,21 @@ export function TopicReader({
     if (bookmarkedTopicIds.includes(topic.id)) toggleBookmark(topic.id);
     if (bookmarkedTopicIds.includes(topic.slug)) toggleBookmark(topic.slug);
   }
-  const learningSequence = subject.chapters.flatMap((itemChapter) =>
-    itemChapter.topics.flatMap((itemTopic) => {
-      const topicStep = {
-        kind: "topic" as const,
-        chapter: itemChapter,
-        href: learningPath(subject, itemChapter, itemTopic),
-        label: itemTopic.title,
-        topic: itemTopic,
-      };
-      const simulationSteps = (itemTopic.simulationIds ?? []).flatMap((simulationId) => {
-        const simulation = simulationForId(simulationId);
-        return simulation
-          ? [{
-              kind: "simulation" as const,
-              chapter: itemChapter,
-              href: simulationPath(simulation.id),
-              label: simulation.shortTitle,
-              topic: itemTopic,
-            }]
-          : [];
-      });
-      return [topicStep, ...simulationSteps];
-    }),
+  const subjectSequence = subject.chapters.flatMap((itemChapter) =>
+    itemChapter.topics.map((itemTopic) => ({
+      chapter: itemChapter,
+      href: learningPath(subject, itemChapter, itemTopic),
+      label: itemTopic.title,
+      topic: itemTopic,
+    })),
   );
-  const currentIndex = learningSequence.findIndex((item) => item.kind === "topic" && item.topic.id === topic.id);
-  const previous = currentIndex > 0 ? learningSequence[currentIndex - 1] : undefined;
-  const next = currentIndex >= 0 && currentIndex < learningSequence.length - 1 ? learningSequence[currentIndex + 1] : undefined;
+  const currentIndex = subjectSequence.findIndex((item) => item.topic.id === topic.id);
+  const previous = currentIndex > 0 ? subjectSequence[currentIndex - 1] : undefined;
+  const next = currentIndex >= 0 && currentIndex < subjectSequence.length - 1 ? subjectSequence[currentIndex + 1] : undefined;
+  const optionalSimulations = (topic.simulationIds ?? []).flatMap((simulationId) => {
+    const simulation = simulationForId(simulationId);
+    return simulation ? [simulation] : [];
+  });
   const toc = securedNote
     ? securedNote.headings.map((heading, index) => ({ id: `secured-note-section-${index + 1}`, label: heading, number: index + 1 }))
     : lesson
@@ -371,7 +359,7 @@ export function TopicReader({
               <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 font-mono text-[11px] uppercase tracking-[.12em] text-[#C7C5CC]/70">
                 <span className="flex items-center gap-2"><Clock3 size={14} /> {lesson?.estimatedMinutes ?? topic.estimatedMinutes} min</span>
                 <span>{lesson?.readingLevel ?? topic.difficulty}</span>
-                {topic.simulationIds?.length ? <span className="flex items-center gap-2 text-[#3DE0D0]"><FlaskConical size={14} /> Interactive lab</span> : null}
+                {topic.simulationIds?.length ? <span className="flex items-center gap-2 text-[#3DE0D0]"><FlaskConical size={14} /> Optional simulation</span> : null}
               </div>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row xl:justify-end">
@@ -412,7 +400,7 @@ export function TopicReader({
                       if (!simulation) return null;
                       return (
                         <Link className="ml-5 flex items-center gap-2 border-l border-[#3DE0D0]/30 px-3 py-2 text-[11px] text-[#3DE0D0]/80 hover:bg-[#3DE0D0]/5 hover:text-[#3DE0D0]" href={simulationPath(simulation.id)} key={simulation.id}>
-                          <FlaskConical size={12} /> {simulation.shortTitle}
+                          <FlaskConical size={12} /> Optional · {simulation.shortTitle}
                         </Link>
                       );
                     })}
@@ -430,6 +418,24 @@ export function TopicReader({
               ? lesson.sections.map((section) => <LessonSectionBlock key={section.id} section={section} />)
               : <GenericTopicBody chapter={chapter} subject={subject} topic={topic} />}
 
+          {!securedNote && optionalSimulations.length ? (
+            <section className="border-t border-[#FF5A1F]/18 py-10 sm:py-14">
+              <div className="border border-[#FF5A1F]/24 bg-[#161418] p-6 sm:flex sm:items-center sm:justify-between sm:gap-8 sm:p-8">
+                <div>
+                  <h2 className="font-display text-2xl font-bold sm:text-3xl">Try this concept interactively.</h2>
+                  <p className="mt-3 max-w-2xl text-sm leading-7 text-[#C7C5CC]">Optional practice—open a simulation if you want to test the idea visually, or continue directly to the next topic.</p>
+                </div>
+                <div className="mt-6 flex shrink-0 flex-col gap-3 sm:mt-0">
+                  {optionalSimulations.map((simulation) => (
+                    <Link className="button-primary justify-center" href={simulationPath(simulation.id)} key={simulation.id}>
+                      <FlaskConical size={17} /> Open {simulation.shortTitle} <ArrowRight size={16} />
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </section>
+          ) : null}
+
           <section className="py-10 sm:py-14">
             <Card variant="priority">
               <div className="flex flex-wrap items-start justify-between gap-5">
@@ -446,14 +452,14 @@ export function TopicReader({
           <nav aria-label="Adjacent topics" className="grid border-l border-t border-white/10 sm:grid-cols-2">
             {previous ? (
               <Link className="group border-b border-r border-white/10 bg-[#161418] p-5 transition hover:bg-[#1E1B20] sm:p-6" href={previous.href}>
-                <span className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[.14em] text-[#C7C5CC]/70"><ArrowLeft size={14} /> Previous {previous.kind === "simulation" ? "simulation" : "concept"}</span>
+                <span className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[.14em] text-[#C7C5CC]/70"><ArrowLeft size={14} /> Previous concept</span>
                 <span className="mt-4 block font-display text-xl font-bold group-hover:text-[#FF8A3D]">{previous.label}</span>
                 <span className="mt-2 block text-xs text-[#C7C5CC]/70">{previous.chapter.title}</span>
               </Link>
             ) : <div className="hidden border-b border-r border-white/10 sm:block" />}
             {next ? (
               <Link className="group border-b border-r border-white/10 bg-[#161418] p-5 text-right transition hover:bg-[#1E1B20] sm:p-6" href={next.href}>
-                <span className="flex items-center justify-end gap-2 font-mono text-[11px] uppercase tracking-[.14em] text-[#C7C5CC]/70">Next {next.kind === "simulation" ? "simulation" : "concept"} <ArrowRight size={14} /></span>
+                <span className="flex items-center justify-end gap-2 font-mono text-[11px] uppercase tracking-[.14em] text-[#C7C5CC]/70">Next concept <ArrowRight size={14} /></span>
                 <span className="mt-4 block font-display text-xl font-bold group-hover:text-[#FF8A3D]">{next.label}</span>
                 <span className="mt-2 block text-xs text-[#C7C5CC]/70">{next.chapter.title}</span>
               </Link>
