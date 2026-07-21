@@ -33,14 +33,14 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
             </Link>
             <div className="mt-8 grid gap-10 lg:grid-cols-[1.1fr_.9fr] lg:items-end">
               <div>
-                <p className="kicker">Demo checkout - no transaction</p>
+                <p className="kicker">Orange Nelumbo Pay · Demo gateway</p>
                 <h1 className="mt-6 max-w-4xl font-display text-[clamp(3rem,6vw,3.5rem)] font-bold leading-none tracking-[-.02em]">
                   Review the plan. <span className="text-gradient">Simulate the flow.</span>
                 </h1>
               </div>
               <div className="border-l border-[#FF5A1F]/35 pl-6 sm:pl-8">
                 <div className="flex items-center gap-3 text-[#3DE08A]"><LockKeyhole aria-hidden="true" size={20} strokeWidth={1.6} /><span className="font-mono text-xs uppercase tracking-[.12em]">No transmission or storage</span></div>
-                <p className="mt-4 leading-7 text-[#C7C5CC]">This route demonstrates validation and conversion UX only. Use invented student and payment details.</p>
+                <p className="mt-4 leading-7 text-[#C7C5CC]">Use the provided approval or decline test card to preview both payment outcomes. No real transaction is attempted.</p>
               </div>
             </div>
           </div>

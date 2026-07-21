@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useRef, useState, type FormEvent } from "react";
-import { ArrowRight, FlaskConical } from "lucide-react";
+import { ArrowRight, FlaskConical, GraduationCap } from "lucide-react";
 
 import { useApp } from "@/components/providers/app-provider";
 import { Button } from "@/components/ui/button";
@@ -22,19 +22,30 @@ function LoginContent() {
   const returnTo = safeReturnTo(searchParams.get("returnTo"));
   const demoRequested = searchParams.get("demo") === "1";
   const educatorRequested = searchParams.get("role") === "educator";
-  const { hydrated, isAuthenticated, onboardingComplete, login, loginAsDemo } = useApp();
+  const {
+    hydrated,
+    isAuthenticated,
+    onboardingComplete,
+    user,
+    login,
+    loginAsDemo,
+    loginAsEducatorDemo,
+  } = useApp();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<FormErrors>({});
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isOpeningDemo, setIsOpeningDemo] = useState(false);
+  const [isOpeningEducatorDemo, setIsOpeningEducatorDemo] = useState(false);
   const demoStartedRef = useRef(false);
 
   useEffect(() => {
     if (!hydrated || !isAuthenticated) return;
+    const roleMatches = educatorRequested ? user?.role === "educator" : user?.role !== "educator";
+    if (!roleMatches) return;
     router.replace(onboardingComplete ? returnTo : `/onboarding?returnTo=${encodeURIComponent(returnTo)}`);
-  }, [hydrated, isAuthenticated, onboardingComplete, returnTo, router]);
+  }, [educatorRequested, hydrated, isAuthenticated, onboardingComplete, returnTo, router, user?.role]);
 
   useEffect(() => {
     if (!hydrated || isAuthenticated || !demoRequested || demoStartedRef.current) return;
@@ -60,7 +71,7 @@ function LoginContent() {
 
     setIsSubmitting(true);
     try {
-      const result = await login({ email, password });
+      const result = await login({ email, password, role: educatorRequested ? "educator" : "student" });
       if (!result.success) {
         setMessage(result.message);
         return;
@@ -87,6 +98,20 @@ function LoginContent() {
     }
   }
 
+  async function handleEducatorDemoLogin() {
+    setMessage("");
+    setIsOpeningEducatorDemo(true);
+    try {
+      const result = await loginAsEducatorDemo();
+      if (result.success) router.replace(returnTo);
+      else setMessage(result.message);
+    } catch {
+      setMessage("The educator demo could not be opened. Please try again.");
+    } finally {
+      setIsOpeningEducatorDemo(false);
+    }
+  }
+
   return (
     <div>
       <p className="mono-kicker text-ignition">{educatorRequested ? "Educator access" : "Student workspace"}</p>
@@ -98,6 +123,12 @@ function LoginContent() {
           ? "Use the credentials associated with your invited Orange Nelumbo educator account."
           : "Continue your visual notes and simulations from exactly where you stopped."}
       </p>
+
+      {educatorRequested && isAuthenticated && user?.role === "student" ? (
+        <p className="mt-5 border border-[#F6C344]/35 bg-[#F6C344]/7 px-4 py-3 text-sm leading-6 text-titanium">
+          A student demo is currently active. Signing in here will switch this browser to the educator workspace.
+        </p>
+      ) : null}
 
       <Card className="mt-8 border-steel bg-carbon p-5 sm:p-7">
         <form className="space-y-5" onSubmit={handleSubmit} noValidate>
@@ -147,7 +178,7 @@ function LoginContent() {
             size="lg"
             fullWidth
             isLoading={isSubmitting}
-            disabled={!hydrated || isOpeningDemo}
+            disabled={!hydrated || isOpeningDemo || isOpeningEducatorDemo}
           >
             {educatorRequested ? "Sign in as educator" : "Sign in"}
             <ArrowRight aria-hidden="true" className="size-4" />
@@ -155,9 +186,20 @@ function LoginContent() {
         </form>
 
         {educatorRequested ? (
-          <p className="mt-5 border border-steel bg-graphite/60 px-4 py-3 text-sm leading-6 text-titanium">
-            Educator access is invite-only. Contact Orange Nelumbo if your account has not been activated.
-          </p>
+          <>
+            <div className="my-6 flex items-center gap-3" aria-hidden="true">
+              <span className="h-px flex-1 bg-steel" />
+              <span className="text-xs font-semibold text-titanium">educator demo</span>
+              <span className="h-px flex-1 bg-steel" />
+            </div>
+            <Button type="button" variant="secondary" size="lg" fullWidth isLoading={isOpeningEducatorDemo} disabled={!hydrated || isSubmitting} onClick={handleEducatorDemoLogin}>
+              <GraduationCap aria-hidden="true" className="size-4 text-cyan" /> Open the educator demo
+            </Button>
+            <p className="mt-3 text-center text-xs leading-5 text-titanium">This uses a separate invited educator identity with full demo simulation access.</p>
+            <div className="mt-4 border border-steel bg-graphite/60 px-4 py-3 text-xs leading-5 text-titanium">
+              <p className="font-bold text-paper">Educator dummy login</p><p className="mt-1 font-mono">educator@orangenelumbo.com</p><p className="font-mono">teach2027</p>
+            </div>
+          </>
         ) : (
           <>
             <div className="my-6 flex items-center gap-3" aria-hidden="true">

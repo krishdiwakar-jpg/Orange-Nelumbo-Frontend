@@ -16,7 +16,6 @@ const nextConfig: NextConfig = {
       { source: "/rank-map", destination: "/dashboard", permanent: false },
       { source: "/results/:path*", destination: "/dashboard", permanent: false },
       { source: "/diagnostic", destination: "/", permanent: false },
-      { source: "/checkout/:path*", destination: "/pricing", permanent: false },
     ];
   },
   turbopack: {

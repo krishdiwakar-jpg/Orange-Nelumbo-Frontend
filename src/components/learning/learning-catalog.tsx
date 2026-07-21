@@ -153,7 +153,7 @@ export function LearningOverview() {
             level={2}
             title="Visual notes for JEE."
           />
-          <label className="mt-8 flex min-h-14 max-w-3xl items-center gap-3 border border-[#FF5A1F]/28 bg-[#0E0D10] px-4 focus-within:border-[#FF5A1F] focus-within:shadow-[0_0_24px_rgba(255,90,31,.10)]">
+          <label className="mt-8 flex min-h-14 max-w-3xl items-center gap-3 border border-[#FF5A1F]/28 bg-[#0E0D10] px-4 focus-within:border-[#FF5A1F]">
             <Search aria-hidden="true" className="shrink-0 text-[#FF8A3D]" size={19} />
             <span className="sr-only">Search concepts</span>
             <input

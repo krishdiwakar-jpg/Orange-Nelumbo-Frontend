@@ -1,4 +1,10 @@
 @import "tailwindcss";
+@import "@fontsource/outfit/latin-700.css";
+@import "@fontsource/outfit/latin-800.css";
+@import "@fontsource/fustat/latin-400.css";
+@import "@fontsource/fustat/latin-500.css";
+@import "@fontsource/fustat/latin-600.css";
+@import "@fontsource/fustat/latin-700.css";
 @import "@fontsource/hanken-grotesk/latin-400.css";
 @import "@fontsource/hanken-grotesk/latin-500.css";
 @import "@fontsource/hanken-grotesk/latin-600.css";
@@ -14,8 +20,9 @@
 
 @theme inline {
   --font-display: "Hanken Grotesk", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-sans: "Hanken Grotesk", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-learning: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-hero: "Outfit", "Hanken Grotesk", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-sans: "Fustat", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-learning: "Fustat", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
   --color-obsidian: #0e0d10;
@@ -115,17 +122,18 @@
   --surface-elevated: var(--steel);
   --foreground: var(--paper);
   --muted: var(--titanium);
-  --border: color-mix(in srgb, var(--ignition) 22%, transparent);
-  --border-strong: color-mix(in srgb, var(--ignition) 40%, transparent);
+  --border: color-mix(in srgb, var(--ignition) 18%, transparent);
+  --border-strong: color-mix(in srgb, var(--ignition) 34%, transparent);
   --accent: var(--ignition);
   --accent-hover: var(--ember);
   --focus: var(--ignition);
   --font-display: "Hanken Grotesk", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-sans: "Hanken Grotesk", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-learning: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-hero: "Outfit", "Hanken Grotesk", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-sans: "Fustat", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-learning: "Fustat", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
   --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
-  --shadow-ignition: 0 0 28px color-mix(in srgb, var(--ignition) 34%, transparent);
+  --shadow-ignition: none;
 }
 
 *,
@@ -155,32 +163,38 @@ body {
 
 /* Learning and account surfaces stay highly legible at study density. */
 .learning-surface {
-  --font-display: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-sans: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-display: "Fustat", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-sans: "Fustat", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   font-family: var(--font-learning);
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  margin: 0;
-  color: var(--foreground);
-  font-family: var(--font-display);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0;
+    color: var(--foreground);
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 }
 
-p {
-  margin: 0;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
+.font-hero {
+  font-family: var(--font-hero);
 }
 
 button,
@@ -251,8 +265,8 @@ summary:focus-visible,
 
 .brand-grid {
   background-image:
-    linear-gradient(color-mix(in srgb, var(--ignition) 7%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--ignition) 7%, transparent) 1px, transparent 1px);
+    linear-gradient(color-mix(in srgb, var(--ignition) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ignition) 5%, transparent) 1px, transparent 1px);
   background-position: center;
   background-size: 46px 46px;
 }
@@ -277,7 +291,7 @@ summary:focus-visible,
 }
 
 .brand-glow {
-  box-shadow: var(--shadow-ignition);
+  box-shadow: none;
 }
 
 .brand-logo-link,
@@ -331,17 +345,14 @@ summary:focus-visible,
 /* Shared page composition classes used across the route layer. */
 .hero-grid {
   background-image:
-    linear-gradient(color-mix(in srgb, var(--ignition) 7%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--ignition) 7%, transparent) 1px, transparent 1px),
-    radial-gradient(circle at 75% 12%, color-mix(in srgb, var(--ignition) 12%, transparent), transparent 34%);
-  background-size: 46px 46px, 46px 46px, auto;
+    linear-gradient(color-mix(in srgb, var(--ignition) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ignition) 5%, transparent) 1px, transparent 1px);
+  background-size: 46px 46px;
 }
 
 .text-gradient {
-  background: linear-gradient(100deg, var(--ember), var(--ignition));
-  background-clip: text;
-  color: transparent;
-  -webkit-background-clip: text;
+  background: none;
+  color: var(--ignition);
 }
 
 .section-shell {
@@ -392,13 +403,14 @@ summary:focus-visible,
 }
 
 .button-primary {
-  background: linear-gradient(105deg, var(--ember), var(--ignition));
+  background: var(--ignition);
   color: var(--obsidian);
 }
 
 .button-primary:hover {
-  box-shadow: var(--shadow-ignition);
-  filter: brightness(1.08);
+  background: var(--ember);
+  box-shadow: none;
+  filter: none;
 }
 
 .button-outline {
@@ -407,8 +419,8 @@ summary:focus-visible,
 }
 
 .button-outline:hover {
-  background: color-mix(in srgb, var(--ignition) 9%, transparent);
-  box-shadow: 0 0 18px color-mix(in srgb, var(--ignition) 20%, transparent);
+  background: color-mix(in srgb, var(--ignition) 6%, transparent);
+  box-shadow: none;
 }
 
 .button-ghost {
@@ -439,7 +451,7 @@ summary:focus-visible,
 
 .button-dark:hover {
   background: var(--graphite);
-  box-shadow: 0 12px 30px rgb(14 13 16 / 24%);
+  box-shadow: none;
 }
 
 /* Light note sheets use their own high-contrast ink palette. */
@@ -464,7 +476,7 @@ summary:focus-visible,
   justify-content: center;
   gap: 16px;
   padding: 8px clamp(16px, 4vw, 56px);
-  background: linear-gradient(100deg, var(--ember), var(--ignition));
+  background: var(--ignition);
   color: var(--obsidian);
   font-size: 0.75rem;
   line-height: 1.4;
@@ -485,9 +497,9 @@ summary:focus-visible,
   max-width: 680px;
   margin-inline: auto;
   overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--ignition) 28%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ignition) 22%, transparent);
   background-color: var(--carbon);
-  box-shadow: 0 0 90px rgb(255 90 31 / 10%);
+  box-shadow: none;
 }
 
 .sim-ball-loop {
@@ -529,13 +541,13 @@ summary:focus-visible,
 .concept-heat-cell {
   display: grid;
   place-items: center;
-  background: rgb(255 90 31 / calc(8% + var(--heat) * 78%));
+  background: rgb(255 90 31 / calc(7% + var(--heat) * 46%));
   transition: filter 180ms var(--ease-standard), transform 180ms var(--ease-standard);
 }
 
 .concept-heat-cell:hover {
-  filter: brightness(1.18);
-  transform: translateY(-2px);
+  filter: none;
+  transform: none;
 }
 
 /* Button */
@@ -562,7 +574,7 @@ summary:focus-visible,
 }
 
 .ui-button:hover:not(:disabled) {
-  filter: brightness(1.08);
+  filter: none;
 }
 
 .ui-button:active:not(:disabled) {
@@ -576,12 +588,13 @@ summary:focus-visible,
 }
 
 .ui-button--primary {
-  background: linear-gradient(105deg, var(--ember), var(--ignition));
+  background: var(--ignition);
   color: var(--obsidian);
 }
 
 .ui-button--primary:hover:not(:disabled) {
-  box-shadow: var(--shadow-ignition);
+  background: var(--ember);
+  box-shadow: none;
 }
 
 .ui-button--secondary {
@@ -591,8 +604,8 @@ summary:focus-visible,
 }
 
 .ui-button--secondary:hover:not(:disabled) {
-  background: color-mix(in srgb, var(--ignition) 9%, transparent);
-  box-shadow: 0 0 18px color-mix(in srgb, var(--ignition) 20%, transparent);
+  background: color-mix(in srgb, var(--ignition) 6%, transparent);
+  box-shadow: none;
 }
 
 .ui-button--ghost {
@@ -655,14 +668,13 @@ summary:focus-visible,
   border-color: var(--border-strong);
   background-color: var(--obsidian);
   background-image:
-    radial-gradient(circle at 92% 8%, transparent 0 82px, color-mix(in srgb, var(--ignition) 22%, transparent) 83px 84px, transparent 85px),
-    linear-gradient(color-mix(in srgb, var(--ignition) 5%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--ignition) 5%, transparent) 1px, transparent 1px);
-  background-size: auto, 38px 38px, 38px 38px;
+    linear-gradient(color-mix(in srgb, var(--ignition) 4%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ignition) 4%, transparent) 1px, transparent 1px);
+  background-size: 38px 38px;
 }
 
 .ui-card--subtle {
-  background: color-mix(in srgb, var(--graphite) 74%, transparent);
+  background: var(--graphite);
 }
 
 .ui-card--interactive {
@@ -675,8 +687,8 @@ summary:focus-visible,
 .ui-card--interactive:hover,
 .ui-card--interactive:focus-within {
   border-color: var(--border-strong);
-  box-shadow: 0 12px 30px rgb(0 0 0 / 18%), 0 0 24px color-mix(in srgb, var(--ignition) 12%, transparent);
-  transform: translateY(-2px);
+  box-shadow: none;
+  transform: none;
 }
 
 /* Progress */
@@ -730,7 +742,7 @@ summary:focus-visible,
 }
 
 .ui-progress--brand {
-  --progress-color: linear-gradient(90deg, var(--ember), var(--ignition));
+  --progress-color: var(--ignition);
 }
 
 .ui-progress--cyan {
@@ -867,7 +879,7 @@ section > div > .mono-kicker {
 
 .ui-input:focus-visible {
   border-color: var(--ignition);
-  box-shadow: 0 0 18px color-mix(in srgb, var(--ignition) 13%, transparent);
+  box-shadow: none;
 }
 
 .ui-input[aria-invalid="true"] {
@@ -917,7 +929,7 @@ section > div > .mono-kicker {
   aspect-ratio: 1;
   border-radius: 50%;
   background: var(--ignition);
-  box-shadow: 0 0 22px color-mix(in srgb, var(--ignition) 65%, transparent);
+  box-shadow: none;
   inset-block-start: 8%;
   inset-inline-start: 69%;
 }

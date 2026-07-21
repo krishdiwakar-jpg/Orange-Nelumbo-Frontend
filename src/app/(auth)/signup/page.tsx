@@ -1,14 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState, type FormEvent } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState, type FormEvent } from "react";
 import { ArrowRight, Check } from "lucide-react";
 
 import { useApp } from "@/components/providers/app-provider";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { safeReturnTo } from "@/lib/navigation";
 
 interface FormErrors {
   name?: string;
@@ -20,8 +21,10 @@ interface FormErrors {
 
 const benefits = ["Visual notes", "Interactive simulations", "Saved progress on this device"];
 
-export default function SignUpPage() {
+function SignUpContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const returnTo = safeReturnTo(searchParams.get("returnTo"));
   const { hydrated, isAuthenticated, onboardingComplete, signUp } = useApp();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -34,8 +37,8 @@ export default function SignUpPage() {
 
   useEffect(() => {
     if (!hydrated || !isAuthenticated) return;
-    router.replace(onboardingComplete ? "/" : "/onboarding?returnTo=%2F");
-  }, [hydrated, isAuthenticated, onboardingComplete, router]);
+    router.replace(onboardingComplete ? returnTo : `/onboarding?returnTo=${encodeURIComponent(returnTo)}`);
+  }, [hydrated, isAuthenticated, onboardingComplete, returnTo, router]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -56,7 +59,7 @@ export default function SignUpPage() {
         setMessage(result.message);
         return;
       }
-      router.replace("/onboarding?returnTo=%2F");
+      router.replace(`/onboarding?returnTo=${encodeURIComponent(returnTo)}`);
     } catch {
       setMessage("The dummy account could not be created. Please try again.");
     } finally {
@@ -168,10 +171,18 @@ export default function SignUpPage() {
 
       <p className="mt-7 text-center text-sm text-titanium">
         Already have a dummy account?{" "}
-        <Link className="font-bold text-paper underline decoration-ignition decoration-2 underline-offset-4" href="/login">
+        <Link className="font-bold text-paper underline decoration-ignition decoration-2 underline-offset-4" href={`/login?returnTo=${encodeURIComponent(returnTo)}`}>
           Sign in
         </Link>
       </p>
     </div>
+  );
+}
+
+export default function SignUpPage() {
+  return (
+    <Suspense fallback={<p className="py-10 text-center text-sm text-titanium">Preparing your account…</p>}>
+      <SignUpContent />
+    </Suspense>
   );
 }

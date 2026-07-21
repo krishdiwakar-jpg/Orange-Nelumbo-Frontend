@@ -4,17 +4,20 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
+  ArrowRight,
   Bell,
   Bookmark,
   BookOpen,
   ChevronDown,
   CircleHelp,
   FlaskConical,
+  GraduationCap,
   House,
   LogOut,
   Menu,
   Search,
   Settings,
+  ShieldCheck,
   UserRound,
   X,
 } from "lucide-react";
@@ -73,6 +76,7 @@ export function PlatformShell({ children }: { children: React.ReactNode }) {
   const [accountOpen, setAccountOpen] = useState(false);
   const [desktopNavigation, setDesktopNavigation] = useState(false);
   const [query, setQuery] = useState("");
+  const [educatorNoticeOpen, setEducatorNoticeOpen] = useState(true);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const sidebarRef = useRef<HTMLElement>(null);
   const sidebarReturnFocusRef = useRef<HTMLElement | null>(null);
@@ -242,7 +246,7 @@ export function PlatformShell({ children }: { children: React.ReactNode }) {
       </aside>
 
       <div aria-hidden={searchOpen || undefined} className="lg:pl-[278px]">
-        <header className="sticky top-0 z-30 flex h-[74px] items-center justify-between border-b border-[#FF5A1F]/18 bg-[#0E0D10]/92 px-4 backdrop-blur-xl sm:px-6 lg:px-8">
+        <header className="sticky top-0 z-30 flex h-[74px] items-center justify-between border-b border-[#FF5A1F]/18 bg-[#0E0D10] px-4 sm:px-6 lg:px-8">
           <div className="flex min-w-0 items-center gap-3">
             <button aria-label="Open navigation" className="grid size-11 shrink-0 place-items-center border border-white/10 text-[#C7C5CC] lg:hidden" onClick={(event) => { sidebarReturnFocusRef.current = event.currentTarget; setSidebarOpen(true); }} ref={menuButtonRef} type="button">
               <Menu size={20} />
@@ -268,10 +272,11 @@ export function PlatformShell({ children }: { children: React.ReactNode }) {
                 <ChevronDown className="hidden text-[#C7C5CC]/70 xl:block" size={14} />
               </button>
               {accountOpen && (
-                <div className="absolute right-0 top-[52px] w-60 border border-[#FF5A1F]/22 bg-[#161418] p-2 shadow-2xl">
+                <div className="absolute right-0 top-[52px] w-60 border border-[#FF5A1F]/22 bg-[#161418] p-2">
                   <div className="border-b border-white/8 px-3 py-3">
                     <p className="font-semibold">{user?.name ?? "Aarav Sharma"}</p>
                     <p className="mt-1 truncate text-xs text-[#C7C5CC]/70">{user?.email ?? "aarav@example.com"}</p>
+                    {user?.role === "educator" ? <p className="mt-2 text-xs font-semibold text-[#F6C344]">Educator verification pending</p> : null}
                   </div>
                   <Link className="mt-2 flex min-h-11 items-center gap-3 px-3 text-sm text-[#C7C5CC] hover:bg-white/5 hover:text-white" href="/profile"><UserRound size={17} /> Profile</Link>
                   <Link className="flex min-h-11 items-center gap-3 px-3 text-sm text-[#C7C5CC] hover:bg-white/5 hover:text-white" href="/settings"><Settings size={17} /> Settings</Link>
@@ -288,7 +293,7 @@ export function PlatformShell({ children }: { children: React.ReactNode }) {
         </footer>
       </div>
 
-      <nav aria-hidden={searchOpen || undefined} aria-label="Mobile primary navigation" className="fixed inset-x-0 bottom-0 z-30 grid h-[66px] grid-cols-5 border-t border-[#FF5A1F]/20 bg-[#161418]/96 backdrop-blur lg:hidden">
+      <nav aria-hidden={searchOpen || undefined} aria-label="Mobile primary navigation" className="fixed inset-x-0 bottom-0 z-30 grid h-[66px] grid-cols-5 border-t border-[#FF5A1F]/20 bg-[#161418] lg:hidden">
         {[
           mainNavigation[0],
           mainNavigation[1],
@@ -307,9 +312,9 @@ export function PlatformShell({ children }: { children: React.ReactNode }) {
       </nav>
 
       {searchOpen && (
-        <div aria-labelledby="concept-search-title" aria-modal="true" className="fixed inset-0 z-[80] bg-black/78 p-4 backdrop-blur-sm" role="dialog">
+        <div aria-labelledby="concept-search-title" aria-modal="true" className="fixed inset-0 z-[80] bg-black/78 p-4" role="dialog">
           <button aria-label="Close search" className="absolute inset-0 size-full cursor-default" onClick={() => setSearchOpen(false)} type="button" />
-          <div className="relative mx-auto mt-[8vh] max-w-2xl border border-[#FF5A1F]/30 bg-[#161418] shadow-[0_0_90px_rgba(255,90,31,.12)]" ref={searchDialogRef}>
+          <div className="relative mx-auto mt-[8vh] max-w-2xl border border-[#FF5A1F]/30 bg-[#161418]" ref={searchDialogRef}>
             <h2 className="sr-only" id="concept-search-title">Search notes and simulations</h2>
             <div className="flex h-16 items-center gap-3 border-b border-white/10 px-5">
               <Search className="text-[#FF8A3D]" size={20} />
@@ -332,6 +337,23 @@ export function PlatformShell({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       )}
+
+      {educatorNoticeOpen && user?.role === "educator" && user.educatorVerificationStatus === "pending" ? (
+        <div aria-labelledby="educator-verification-title" aria-modal="true" className="fixed inset-0 z-[90] grid place-items-center bg-black/80 p-4" role="dialog">
+          <button aria-label="Close educator verification notice" className="absolute inset-0 size-full cursor-default" onClick={() => setEducatorNoticeOpen(false)} type="button" />
+          <section className="relative w-full max-w-xl border border-[#F6C344]/40 bg-[#161418] p-6 sm:p-8">
+            <div className="flex items-start justify-between gap-6">
+              <span className="grid size-12 shrink-0 place-items-center border border-[#F6C344]/35 bg-[#F6C344]/7 text-[#F6C344]"><GraduationCap size={23} /></span>
+              <button aria-label="Close" className="grid size-11 place-items-center border border-white/10 text-[#C7C5CC] hover:text-white" onClick={() => setEducatorNoticeOpen(false)} type="button"><X size={18} /></button>
+            </div>
+            <p className="mt-7 text-sm font-semibold text-[#F6C344]">Verification pending</p>
+            <h2 className="mt-3 font-display text-3xl font-bold" id="educator-verification-title">Your educator verification is under progress.</h2>
+            <p className="mt-5 leading-7 text-[#C7C5CC]">A production backend will verify invited educators before permanent access is granted. For this demo, you can continue through the website with the complete simulation library unlocked and no purchase required.</p>
+            <div className="mt-7 flex items-start gap-3 border border-[#3DE08A]/30 bg-[#3DE08A]/6 p-4 text-sm leading-6 text-[#C7C5CC]"><ShieldCheck className="mt-0.5 shrink-0 text-[#3DE08A]" size={18} /><span>Temporary educator demo access is active on this browser.</span></div>
+            <button className="button-primary mt-7 w-full justify-center" onClick={() => setEducatorNoticeOpen(false)} type="button">Continue with demo access <ArrowRight size={16} /></button>
+          </section>
+        </div>
+      ) : null}
     </div>
   );
 }

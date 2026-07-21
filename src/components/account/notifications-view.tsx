@@ -184,7 +184,7 @@ export function NotificationsView() {
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
                         <Badge tone={meta.tone}>{meta.label}</Badge>
-                        {!read ? <span className="size-2 bg-[#FF5A1F] shadow-[0_0_10px_rgba(255,90,31,.75)]" aria-label="Unread" /> : null}
+                        {!read ? <span className="size-2 bg-[#FF5A1F]" aria-label="Unread" /> : null}
                         <time className="font-mono text-[11px] uppercase tracking-[.12em] text-[#C7C5CC]/70" dateTime={notification.createdAt}>
                           {notificationTime(notification.createdAt)}
                         </time>

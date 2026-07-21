@@ -247,7 +247,7 @@ export function MockAttempt({ mock }: { mock: MockTest }) {
       </div>
 
       {confirming && (
-        <div aria-labelledby="submit-dialog-title" aria-modal="true" className="fixed inset-0 z-50 grid place-items-center bg-black/78 p-4 backdrop-blur-sm" role="dialog">
+        <div aria-labelledby="submit-dialog-title" aria-modal="true" className="fixed inset-0 z-50 grid place-items-center bg-black/78 p-4" role="dialog">
           <div className="w-full max-w-lg border border-[#FF5A1F]/30 bg-[#161418] p-6 sm:p-8" ref={dialogRef}>
             <div className="flex items-start justify-between gap-4"><div className="grid size-12 place-items-center border border-[#F6C344]/35 text-[#F6C344]"><AlertTriangle size={22} /></div><button aria-label="Close submit dialog" className="grid size-11 place-items-center text-[#C7C5CC]/70 hover:text-white" onClick={() => setConfirming(false)} type="button"><X size={19} /></button></div>
             <h2 className="mt-6 font-display text-3xl font-semibold" id="submit-dialog-title">Submit this paper?</h2>

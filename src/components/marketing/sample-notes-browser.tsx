@@ -95,7 +95,7 @@ export function SampleNotesBrowser({ initialSlug = "motion-under-gravity" }: { i
         })}
       </nav>
 
-      <article className="note-paper overflow-hidden border border-[#FF5A1F]/24 shadow-[0_28px_80px_rgba(0,0,0,.24)]">
+      <article className="note-paper overflow-hidden border border-[#FF5A1F]/24">
         <header className="flex flex-wrap items-start justify-between gap-5 border-b border-[#161418]/12 px-6 py-6 sm:px-9">
           <div className="flex items-start gap-4"><span className="grid size-11 place-items-center border border-[#161418]/15" style={{ color: active.accent }}><ActiveIcon size={21}/></span><div><p className="text-xs font-semibold text-[#5C5860]">{active.subject} · {active.chapter}</p><h2 className="mt-2 font-display text-2xl font-bold text-[#161418] sm:text-3xl">{active.title}</h2></div></div>
           <span className="flex items-center gap-2 text-xs font-semibold text-[#514C55]"><BookOpen size={15}/> Preview 1 of 5</span>
