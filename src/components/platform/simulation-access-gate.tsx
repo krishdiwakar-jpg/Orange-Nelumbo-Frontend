@@ -5,18 +5,18 @@ import { ArrowRight, FlaskConical, GraduationCap, LockKeyhole } from "lucide-rea
 
 import { useApp } from "@/components/providers/app-provider";
 
-export function SimulationAccessGate({ children }: { children: React.ReactNode }) {
+export function SimulationAccessGate({ children, fullscreen = false }: { children: React.ReactNode; fullscreen?: boolean }) {
   const { hydrated, hasFullAccess, user } = useApp();
   const hasSimulationPlan = user?.activePlanId === "simulations" || hasFullAccess;
 
   if (!hydrated) {
-    return <div className="content-shell py-16 text-sm text-[#C7C5CC]">Checking simulation access…</div>;
+    return <div className={fullscreen ? "grid h-full place-items-center text-sm text-[#C7C5CC]" : "content-shell py-16 text-sm text-[#C7C5CC]"}>Checking simulation access…</div>;
   }
 
   if (hasSimulationPlan) return children;
 
   return (
-    <div className="content-shell pb-28 pt-10 lg:pb-16 lg:pt-14">
+    <div className={fullscreen ? "h-full overflow-y-auto p-5 sm:p-8" : "content-shell pb-28 pt-10 lg:pb-16 lg:pt-14"}>
       <section className="brand-grid border border-[#FF5A1F]/30 bg-[#161418] p-7 sm:p-10">
         <span className="grid size-14 place-items-center border border-[#FF5A1F]/30 bg-[#0E0D10] text-[#FF8A3D]"><LockKeyhole size={25} /></span>
         <h2 className="mt-7 max-w-3xl font-display text-4xl font-bold sm:text-5xl">This simulation is part of the complete lab.</h2>

@@ -92,12 +92,8 @@ export function SimulationLab({ fullscreen = false, simulation }: { fullscreen?:
       <div className={`${fullscreen ? "mb-4 justify-end" : "mb-6 justify-between"} flex flex-wrap items-center gap-4`}>
         {!fullscreen ? (
         <Link className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-[#C7C5CC]/80 hover:text-white" href="/simulations"><ArrowLeft size={17} /> All simulations</Link>
-<<<<<<< HEAD
         ) : null}
         <div className="flex items-center gap-3"><span className="size-2 bg-[#3DE08A] shadow-[0_0_12px_#3DE08A]" /><span className="font-mono text-[11px] uppercase tracking-[.16em] text-[#3DE08A]">Lab live</span></div>
-=======
-        <div className="flex items-center gap-3"><span className="size-2 bg-[#3DE08A]" /><span className="font-mono text-[11px] uppercase tracking-[.16em] text-[#3DE08A]">Lab live</span></div>
->>>>>>> 004088f05e8c358363d623a05bdd6f29d6a7afcb
       </div>
       <div className="grid gap-5 xl:grid-cols-[1fr_340px]">
         <section className="border border-[#FF5A1F]/25 bg-[#161418]">

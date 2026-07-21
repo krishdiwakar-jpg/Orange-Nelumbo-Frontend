@@ -6,6 +6,7 @@ import { Check, Clock3, FlaskConical, LockKeyhole } from "lucide-react";
 import { FullscreenSimulationShell } from "@/components/layout/fullscreen-simulation-shell";
 import { FreeSimulationPlayground } from "@/components/marketing/free-simulation-playground";
 import { SimulationLab } from "@/components/platform/simulation-lab";
+import { SimulationAccessGate } from "@/components/platform/simulation-access-gate";
 import { FrontendActionButton } from "@/components/ui/frontend-action-button";
 import { curriculum, getSimulation } from "@/data/platform";
 import { learningPath } from "@/components/learning/progress-utils";
@@ -44,22 +45,24 @@ export default async function SimulationPage({ params }: Props) {
   if (simulation.availability === "live" && slug === "extrema-integral-functions") {
     return (
       <FullscreenSimulationShell {...shellProps}>
-        <iframe
-          className="block size-full border-0 bg-[#F5F0E8]"
-          sandbox="allow-scripts"
-          src="/api/secured-simulations/extrema-integral-functions"
-          title="Accumulation Bench interactive simulation"
-        />
+        <SimulationAccessGate fullscreen>
+          <iframe
+            className="block size-full border-0 bg-[#F5F0E8]"
+            sandbox="allow-scripts"
+            src="/api/secured-simulations/extrema-integral-functions"
+            title="Accumulation Bench interactive simulation"
+          />
+        </SimulationAccessGate>
       </FullscreenSimulationShell>
     );
   }
 
   if (simulation.availability === "live" && slug === "vertical-throw") {
-    return <FullscreenSimulationShell {...shellProps}><SimulationLab fullscreen simulation={simulation} /></FullscreenSimulationShell>;
+    return <FullscreenSimulationShell {...shellProps}><SimulationAccessGate fullscreen><SimulationLab fullscreen simulation={simulation} /></SimulationAccessGate></FullscreenSimulationShell>;
   }
 
   if (simulation.availability === "live") {
-    return <FullscreenSimulationShell {...shellProps}><FreeSimulationPlayground fullscreen initialSlug={slug} /></FullscreenSimulationShell>;
+    return <FullscreenSimulationShell {...shellProps}><SimulationAccessGate fullscreen><FreeSimulationPlayground fullscreen initialSlug={slug} /></SimulationAccessGate></FullscreenSimulationShell>;
   }
 
   return (
