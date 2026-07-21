@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Accumulation bench — Extrema of integral-defined functions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Varela+Round&display=swap" rel="stylesheet">
+<style>
+:root{
+ --carbon:#161418; --obsidian:#0E0D10; --graphite:#1E1B20; --steel:#2A262E;
+ --ignition:#FF5A1F; --ember:#FF8A3D; --titanium:#C7C5CC; --white:#F5F4F6;
+ --cyan:#3DE0D8; --honey:#F5B532; --marigold:#FFC96B; --sand:#F5E3C0;
+ --brick:#F0685A; --moss:#A9CF7F; --cocoa:#CDA98C; --terracotta:#E8784A;
+ --emerald:#1FA35A; --ghost:#FFE348;
+ --head:'Quicksand',system-ui,sans-serif; --read:'Varela Round',system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0; background:var(--carbon); color:var(--white); font-family:var(--read);
+ display:flex; flex-direction:column; overflow:hidden}
+.eyebrow{font-family:var(--head); font-weight:700; text-transform:uppercase;
+ letter-spacing:.12em; font-size:12px; color:var(--ignition); margin:0}
+.sim-bar{height:44px; flex:0 0 44px; display:flex; align-items:center; padding:0 14px;
+ border-bottom:1px solid var(--steel); background:var(--obsidian)}
+.sim-back{font-family:var(--head); font-weight:700; font-size:14px; color:var(--ignition);
+ background:none; border:1px solid var(--steel); padding:7px 14px; cursor:pointer; text-decoration:none}
+.sim-head{flex:0 0 auto; padding:10px 18px; border-bottom:1px solid var(--steel)}
+.sim-head h1{font-family:var(--head); font-weight:700; font-size:20px; margin:4px 0 4px; color:var(--white)}
+.sim-head .what,.sim-head .explains{margin:2px 0; font-size:13.5px; color:var(--titanium); line-height:1.5}
+.sim-head .what b{color:var(--cyan); font-weight:400}
+.sim-body{flex:1 1 auto; min-height:0; display:grid; grid-template-columns:25% 75%}
+.sim-controls{overflow:auto; padding:16px; border-right:1px solid var(--steel); background:var(--carbon)}
+.sim-stage{position:relative; background:var(--obsidian); min-width:0}
+.sim-stage canvas{display:block; width:100%; height:100%}
+.sc-group{margin:0 0 18px}
+.sc-lab{font-family:var(--head); font-weight:700; text-transform:uppercase;
+ letter-spacing:.09em; font-size:11px; color:var(--cocoa); margin:0 0 7px}
+.sc-val{font-family:var(--read); font-style:italic; color:var(--cyan); font-size:15px}
+.sim-controls input[type=range]{width:100%; accent-color:var(--ignition); margin:4px 0}
+.preset-row{display:flex; flex-wrap:wrap; gap:6px}
+.pbtn{font-family:var(--head); font-weight:600; font-size:12px; color:var(--white);
+ background:var(--graphite); border:1px solid var(--steel); padding:7px 9px; cursor:pointer; text-align:left; flex:1 1 100%}
+.pbtn.active{border-color:var(--ignition); color:var(--ember)}
+.pbtn .rid{font-size:10px; color:var(--terracotta); letter-spacing:.05em}
+.runbar{display:flex; gap:6px; align-items:center; flex-wrap:wrap; margin:0 0 14px}
+.runbtn{font-family:var(--head); font-weight:700; font-size:14px; color:var(--carbon);
+ background:var(--ignition); border:none; padding:9px 18px; cursor:pointer}
+.chip{font-family:var(--head); font-weight:600; font-size:12px; color:var(--white);
+ background:var(--graphite); border:1px solid var(--steel); padding:7px 11px; cursor:pointer}
+.chip.active{border-color:var(--cyan); color:var(--cyan)}
+.spd{display:flex; gap:5px; flex-wrap:wrap}
+.sbtn{font-family:var(--head); font-weight:600; font-size:12px; color:var(--titanium);
+ background:var(--graphite); border:1px solid var(--steel); padding:6px 10px; cursor:pointer}
+.sbtn.active{border-color:var(--ignition); color:var(--ember)}
+.rd{display:grid; grid-template-columns:auto 1fr; gap:3px 10px; font-size:14px; margin:6px 0}
+.rd .rk{font-family:var(--head); font-weight:600; color:var(--cocoa); font-size:12px; text-transform:uppercase; letter-spacing:.06em}
+.rd .rv{font-family:var(--read); font-style:italic; color:var(--cyan)}
+.expl{border-top:1px solid var(--steel); margin-top:12px; padding-top:12px}
+.expl .eb{font-family:var(--head); font-weight:700; text-transform:uppercase;
+ letter-spacing:.09em; font-size:10.5px; margin:12px 0 3px}
+.expl .eb.a{color:var(--sand)} .expl .eb.b{color:var(--cocoa)}
+.expl .eb.c{color:var(--ignition)} .expl .eb.d{color:var(--cyan)}
+.expl .et{font-size:15px; color:var(--titanium); line-height:1.55; margin:0}
+.expl .esym{font-family:var(--read); font-style:italic; font-size:16px; color:var(--white); margin:0}
+.expl .esub{font-family:var(--read); font-style:italic; font-size:16px; color:var(--cyan); margin:3px 0 0}
+</style>
+</head>
+<body>
+ <div class="sim-bar">
+  <a class="sim-back" href="extrema-of-integral-defined-functions.html"
+     onclick="if(history.length>1){history.back();return false;}">← Back to notes</a>
+ </div>
+ <div class="sim-head">
+  <p class="eyebrow">SIMULATION · Extrema of Integral-Defined Functions</p>
+  <h1>Accumulation bench</h1>
+  <p class="what"><b>What it shows:</b> the integrand on top and the running total below — as the upper limit sweeps, area accumulates and the total rises or falls.</p>
+  <p class="explains"><b>What to do:</b> press Run to sweep, drag the lower limit to see the total shift without moving its extrema, and switch presets to meet composite limits.</p>
+ </div>
+ <div class="sim-body">
+  <div class="sim-controls" id="s_controls">
+   <div class="sc-group">
+    <p class="sc-lab">Presets — keyed to KG rows</p>
+    <div class="preset-row" id="s_presets"></div>
+   </div>
+   <div class="runbar">
+    <button class="runbtn" id="s_run">▶ Run</button>
+    <button class="chip active" id="s_chipG" data-gt="g">g(x)</button>
+    <button class="chip" id="s_chipGp" data-gt="gp">g′(x)</button>
+   </div>
+   <div class="sc-group">
+    <p class="sc-lab">Speed</p>
+    <div class="spd" id="s_speed">
+     <button class="sbtn" data-s="0.25">0.25×</button>
+     <button class="sbtn" data-s="0.5">0.5×</button>
+     <button class="sbtn active" data-s="1">1×</button>
+     <button class="sbtn" data-s="2">2×</button>
+     <button class="sbtn" data-s="4">4×</button>
+     <button class="sbtn" id="s_reset">⟲ Reset (R)</button>
+    </div>
+   </div>
+   <div class="sc-group">
+    <p class="sc-lab">Upper limit sweep — <span class="sc-val" id="s_xval">x = −1.00</span></p>
+    <input type="range" id="s_x" min="-1" max="4" step="0.01" value="-1" aria-label="upper limit sweep x">
+   </div>
+   <div class="sc-group" id="s_agroup">
+    <p class="sc-lab">Lower limit — <span class="sc-val" id="s_aval">a = 0.00</span></p>
+    <input type="range" id="s_a" min="-1" max="3" step="0.05" value="0" aria-label="lower limit a">
+   </div>
+   <div class="rd">
+    <span class="rk">upper u</span><span class="rv" id="s_ru">0.00</span>
+    <span class="rk">lower ℓ</span><span class="rv" id="s_rl">0.00</span>
+    <span class="rk">g(x)</span><span class="rv" id="s_rg">0.00</span>
+    <span class="rk">g′(x)</span><span class="rv" id="s_rgp">0.00</span>
+    <span class="rk">nearest</span><span class="rv" id="s_rcrit">—</span>
+   </div>
+   <div class="expl">
+    <p class="eb a">What you see</p><p class="et" id="s_bA">—</p>
+    <p class="eb b">The math, live</p><p class="esym" id="s_bSym">—</p><p class="esub" id="s_bSub">—</p>
+    <p class="eb c">Because → therefore</p><p class="et" id="s_bC">—</p>
+    <p class="eb d">Check yourself</p><p class="et" id="s_bD">—</p>
+   </div>
+  </div>
+  <div class="sim-stage" id="s_stage">
+   <canvas id="s_canvas" aria-label="Two stacked graphs: the integrand f of t with shaded signed area, and the accumulated total g of x with its maxima and minima marked."></canvas>
+  </div>
+ </div>
+
+<script>
+(function(){
+ const $=id=>document.getElementById(id);
+ const canvas=$('s_canvas'); if(!canvas) return;
+ const ctx=canvas.getContext('2d');
+ const stage=$('s_stage');
+ const dpr=Math.min(window.devicePixelRatio||1,2.5);
+ const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+ function fmt(n,d){ if(!isFinite(n)) return '—'; let s=n.toFixed(d);
+  if(parseFloat(s)===0) s=(0).toFixed(d); return s.replace('-','−'); }
+ const f2=n=>fmt(n,2), f3=n=>fmt(n,3);
+ function tick(v){ const r=Math.round(v*1000)/1000;
+  let s=(Math.abs(r-Math.round(r))<1e-9)?String(Math.round(r)):String(r);
+  return s.replace('-','−'); }
+
+ const PI=Math.PI;
+ const PRESETS={
+  P1:{ row:'AOD-032', name:'Parabola integrand', fLabel:'f(t) = (t−1)(t−2)',
+    f:t=>(t-1)*(t-2), A:t=>t*t*t/3 - 1.5*t*t + 2*t,
+    hi:x=>x, hip:x=>1, loFn:null, loFnp:null,
+    xmin:-1, xmax:4, xstart:-1, Wa:8, Wb:8, fY:[-2,7], gY:[-4,6], gpY:[-2,7],
+    aEnabled:true, crit:[{x:1,type:'max'},{x:2,type:'min'}],
+    sym:'g′(x) = f(x) = (x−1)(x−2)',
+    gpSub:x=>`g′(${f2(x)}) = (${f2(x)}−1)(${f2(x)}−2) = ${f3((x-1)*(x-2))}`,
+    rise:'The integrand is positive, so area piles on and g climbs.',
+    fall:'The integrand is negative, so area is removed and g falls.',
+    note:{1:'f crosses + to − at x = 1 — g is at a local maximum.',2:'f crosses − to + at x = 2 — g is at a local minimum.'},
+    D:'Before Run: will g rise or fall first? Then drag x to 1.00 and watch it turn — that is the maximum.' },
+  P2:{ row:'AOD-032', name:'Three sign changes', fLabel:'f(t) = (t−1)(t−2)(t−3)',
+    f:t=>(t-1)*(t-2)*(t-3), A:t=>t*t*t*t/4 - 2*t*t*t + 5.5*t*t - 6*t,
+    hi:x=>x, hip:x=>1, loFn:null, loFnp:null,
+    xmin:-0.5, xmax:4, xstart:-0.5, Wa:8, Wb:8, fY:[-7,7], gY:[-3.5,3], gpY:[-7,7],
+    aEnabled:true, crit:[{x:1,type:'min'},{x:2,type:'max'},{x:3,type:'min'}],
+    sym:'g′(x) = f(x) = (x−1)(x−2)(x−3)',
+    gpSub:x=>`g′(${f2(x)}) = (${f2(x)}−1)(${f2(x)}−2)(${f2(x)}−3) = ${f3((x-1)*(x-2)*(x-3))}`,
+    rise:'The integrand is positive, so g climbs.',
+    fall:'The integrand is negative, so g falls.',
+    note:{1:'f crosses − to + at x = 1 — a local minimum.',2:'f crosses + to − at x = 2 — a local maximum.',3:'f crosses − to + at x = 3 — a local minimum.'},
+    D:'Count the sign changes of f. Each one is an extremum of g — three in all.' },
+  P3:{ row:'AOD-032', name:'Sine integrand', fLabel:'f(t) = sin t',
+    f:t=>Math.sin(t), A:t=>-Math.cos(t),
+    hi:x=>x, hip:x=>1, loFn:null, loFnp:null,
+    xmin:-1, xmax:7, xstart:-1, Wa:9, Wb:9, fY:[-1.3,1.3], gY:[-0.5,2.5], gpY:[-1.3,1.3],
+    aEnabled:true, crit:[{x:0,type:'min'},{x:PI,type:'max'},{x:2*PI,type:'min'}],
+    sym:'g′(x) = f(x) = sin x',
+    gpSub:x=>`g′(${f2(x)}) = sin(${f2(x)}) = ${f3(Math.sin(x))}`,
+    rise:'sin x is positive, so g climbs.',
+    fall:'sin x is negative, so g falls.',
+    note:{0:'sin crosses − to + at x = 0 — a local minimum.',3.14159:'sin crosses + to − at x = π — a local maximum.',6.28319:'sin crosses − to + at x = 2π — a local minimum.'},
+    D:'A wave keeps changing sign — so g here has a maximum at π and minima at 0 and 2π.' },
+  P4:{ row:'AOD-033', name:'Composite limit x²', fLabel:'f(t) = t − 1,  upper = x²',
+    f:t=>t-1, A:t=>t*t/2 - t,
+    hi:x=>x*x, hip:x=>2*x, loFn:null, loFnp:null,
+    xmin:-1.6, xmax:1.6, xstart:-1.6, Wa:8, Wb:6, fY:[-2,3], gY:[-1,2], gpY:[-5.5,5.5],
+    aEnabled:true, crit:[{x:-1,type:'min'},{x:0,type:'max'},{x:1,type:'min'}],
+    sym:'g′(x) = f(x²)·2x = (x²−1)·2x',
+    gpSub:x=>`g′(${f2(x)}) = 2(${f2(x)})((${f2(x)})²−1) = ${f3(2*x*(x*x-1))}`,
+    rise:'g′ = 2x(x²−1) is positive here, so g climbs.',
+    fall:'g′ = 2x(x²−1) is negative here, so g falls.',
+    note:{'-1':'g′ crosses − to + at x = −1 — a local minimum.',0:'At x = 0 the factor 2x flips sign — a local maximum, though the integrand is not zero.',1:'g′ crosses − to + at x = 1 — a local minimum.'},
+    D:'Watch x = 0: the total turns even though the integrand is nowhere zero. The factor 2x did that.' },
+  P5:{ row:'AOD-033', name:'Both limits vary', fLabel:'f(t) = t,  ∫ from x to x²',
+    f:t=>t, A:t=>t*t/2,
+    hi:x=>x*x, hip:x=>2*x, loFn:x=>x, loFnp:x=>1,
+    xmin:-1.3, xmax:1.3, xstart:-1.3, Wa:6, Wb:6, fY:[-2,2], gY:[-0.5,1], gpY:[-3.5,3.5],
+    aEnabled:false, crit:[{x:-0.70711,type:'min'},{x:0,type:'max'},{x:0.70711,type:'min'}],
+    sym:'g′(x) = f(x²)·2x − f(x)·1 = 2x³ − x',
+    gpSub:x=>`g′(${f2(x)}) = 2(${f2(x)})³ − (${f2(x)}) = ${f3(2*x*x*x - x)}`,
+    rise:'g′ = 2x³ − x is positive here, so g climbs.',
+    fall:'g′ = 2x³ − x is negative here, so g falls.',
+    note:{'-0.70711':'g′ crosses − to + near x = −0.71 — a local minimum.',0:'At x = 0 both limit terms vanish — a local maximum.',0.70711:'g′ crosses − to + near x = 0.71 — a local minimum.'},
+    D:'Both limits move now. The lower limit subtracts f(x)·1 — see it in the live equation.' },
+ };
+
+ let P=PRESETS.P1;
+ let x=P.xstart, xTarget=P.xstart, aCur=0, aTarget=0;
+ let playing=false, speed=1, graphType='g';
+ let ghost=null;
+ let simIsActive=false;
+ let cssW=0, cssH=0, last=0;
+
+ function loVal(w){ return P.loFn? P.loFn(w): aCur; }
+ function Gval(w){ return P.A(P.hi(w)) - P.A(loVal(w)); }
+ function Gp(w){ const lp=P.loFnp?P.loFnp(w):0; return P.f(P.hi(w))*P.hip(w) - P.f(loVal(w))*lp; }
+
+ function resize(){ const r=stage.getBoundingClientRect(); cssW=r.width; cssH=r.height;
+  if(cssW<2||cssH<2) return;
+  canvas.width=Math.round(cssW*dpr); canvas.height=Math.round(cssH*dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0); }
+ addEventListener('resize',resize);
+
+ function niceStep(r){ const p=Math.pow(10,Math.floor(Math.log10(r))); const f=r/p;
+  return (f<1.5?1:f<3?2:f<7?5:10)*p; }
+ function drawFunc(m,fn,color,lw){ ctx.strokeStyle=color; ctx.lineWidth=lw; ctx.lineJoin='round';
+  const w0=m.panX-m.Ww/2, w1=m.panX+m.Ww/2, dw=(w1-w0)/320; let started=false; ctx.beginPath();
+  for(let w=w0; w<=w1; w+=dw){ const v=fn(w); if(!isFinite(v)){started=false;continue;}
+   const X=m.sx(w), Y=m.sy(v); if(Y<m.pt-400||Y>m.pb+400){started=false;continue;}
+   if(!started){ctx.moveTo(X,Y);started=true;} else ctx.lineTo(X,Y); }
+  ctx.stroke(); }
+ function tri(X,Y,dir){ const s=5.5; ctx.beginPath();
+  if(dir==='up'){ctx.moveTo(X,Y-s);ctx.lineTo(X-s,Y+s*0.75);ctx.lineTo(X+s,Y+s*0.75);}
+  else{ctx.moveTo(X,Y+s);ctx.lineTo(X-s,Y-s*0.75);ctx.lineTo(X+s,Y-s*0.75);}
+  ctx.closePath(); ctx.fill(); }
+
+ function drawZone(z,opt){
+  ctx.fillStyle='#0E0D10'; ctx.fillRect(z.x,z.y,z.w,z.h);
+  ctx.strokeStyle='#2A262E'; ctx.lineWidth=1; ctx.strokeRect(z.x+.5,z.y+.5,z.w-1,z.h-1);
+  const mL=52,mR=14,mT=24,mB=24;
+  const pl=z.x+mL, pr=z.x+z.w-mR, pt=z.y+mT, pb=z.y+z.h-mB;
+  const pw=pr-pl, ph=pb-pt;
+  const Ww=opt.Ww, ppux=pw/Ww, cx=pl+pw/2;
+  const ppuy=ph/(opt.ymax-opt.ymin);
+  const sx=w=>cx+(w-opt.panX)*ppux;
+  const sy=v=>pb-(v-opt.ymin)*ppuy;
+  const m={sx,sy,pl,pr,pt,pb,pw,ph,ppux,ppuy,cx,panX:opt.panX,Ww};
+  ctx.fillStyle='#CDA98C'; ctx.font='600 12px Quicksand,sans-serif'; ctx.textAlign='left'; ctx.textBaseline='alphabetic';
+  ctx.fillText(opt.title, z.x+8, z.y+16);
+  ctx.save(); ctx.beginPath(); ctx.rect(pl,pt,pw,ph); ctx.clip();
+  const k0=Math.ceil(opt.panX-Ww/2), k1=Math.floor(opt.panX+Ww/2);
+  for(let k=k0;k<=k1;k++){ const X=sx(k); ctx.strokeStyle=(k===0)?'rgba(199,197,204,0.45)':'rgba(255,138,61,0.06)';
+   ctx.lineWidth=(k===0)?1.4:1; ctx.beginPath();ctx.moveTo(X,pt);ctx.lineTo(X,pb);ctx.stroke(); }
+  const step=niceStep((opt.ymax-opt.ymin)/5);
+  const y0=Math.ceil(opt.ymin/step)*step;
+  for(let v=y0; v<=opt.ymax+1e-9; v+=step){ const Y=sy(v);
+   ctx.strokeStyle=(Math.abs(v)<1e-9)?'rgba(199,197,204,0.45)':'rgba(255,138,61,0.06)';
+   ctx.lineWidth=(Math.abs(v)<1e-9)?1.4:1; ctx.beginPath();ctx.moveTo(pl,Y);ctx.lineTo(pr,Y);ctx.stroke(); }
+  opt.content(m);
+  ctx.strokeStyle='#F5B532'; ctx.setLineDash([5,4]); ctx.lineWidth=1.4;
+  ctx.beginPath();ctx.moveTo(cx,pt);ctx.lineTo(cx,pb);ctx.stroke(); ctx.setLineDash([]);
+  ctx.restore();
+  ctx.fillStyle='#9C968E'; ctx.font='500 11px Quicksand,sans-serif'; ctx.textAlign='center'; ctx.textBaseline='top';
+  for(let k=k0;k<=k1;k++){ const X=sx(k); if(X>pl+6&&X<pr-6) ctx.fillText(String(k),X,pb+5); }
+  ctx.textAlign='right'; ctx.textBaseline='middle';
+  for(let v=y0; v<=opt.ymax+1e-9; v+=step){ const Y=sy(v); ctx.fillText(tick(v),pl-6,Y); }
+  ctx.fillStyle='#C7C5CC'; ctx.font='600 11px Quicksand,sans-serif'; ctx.textAlign='right'; ctx.textBaseline='alphabetic';
+  ctx.fillText(opt.xlab, pr, pb+18);
+  return m;
+ }
+
+ function draw(){
+  if(cssW<2||cssH<2) return;
+  const W=cssW,H=cssH; ctx.clearRect(0,0,W,H);
+  const statusH=24, gap=12;
+  const zoneH=(H-statusH-gap)/2;
+  const uV=P.hi(x);
+  drawZone({x:0,y:0,w:W,h:zoneH},{
+   title:'INTEGRAND   f(t)', xlab:'t', panX:uV, Ww:P.Wa, ymin:P.fY[0], ymax:P.fY[1],
+   content:(m)=>{
+    const lo=loVal(x), hi=P.hi(x); const a0=Math.min(lo,hi), a1=Math.max(lo,hi);
+    const dw=(m.Ww)/240;
+    for(let t=a0;t<a1;t+=dw){ const fv=P.f(t); const X0=m.sx(t),X1=m.sx(t+dw);
+     const Y0=m.sy(0),Yf=m.sy(fv);
+     ctx.fillStyle=(fv>=0)?'rgba(61,224,216,0.16)':'rgba(240,104,90,0.16)';
+     ctx.fillRect(X0,Math.min(Y0,Yf),Math.max(1,X1-X0+1),Math.abs(Yf-Y0)); }
+    drawFunc(m,P.f,'#FFC96B',2.6);
+    const XL=m.sx(lo); if(XL>m.pl&&XL<m.pr){ ctx.strokeStyle='#C7C5CC'; ctx.setLineDash([3,3]); ctx.lineWidth=1.2;
+     ctx.beginPath();ctx.moveTo(XL,m.pt);ctx.lineTo(XL,m.pb);ctx.stroke(); ctx.setLineDash([]); }
+   }
+  });
+  drawZone({x:0,y:zoneH+gap,w:W,h:zoneH},{
+   title:(graphType==='g'?'ACCUMULATION   g(x)':'DERIVATIVE   g′(x)'), xlab:'x', panX:x, Ww:P.Wb,
+   ymin:(graphType==='g'?P.gY[0]:P.gpY[0]), ymax:(graphType==='g'?P.gY[1]:P.gpY[1]),
+   content:(m)=>{
+    if(ghost && graphType==='g'){ ctx.setLineDash([2,4]);
+     drawFunc(m, w=>P.A(P.hi(w))-P.A(ghost.a), '#FFE348', 1.8); ctx.setLineDash([]); }
+    const fn = (graphType==='g')? (w=>Gval(w)) : (w=>Gp(w));
+    drawFunc(m, fn, (graphType==='g'?'#3DE0D8':'#A9CF7F'), 2.8);
+    P.crit.forEach(c=>{ const val=(graphType==='g')?Gval(c.x):0; const X=m.sx(c.x),Y=m.sy(val);
+     if(X>m.pl&&X<m.pr){ ctx.fillStyle='#F5B532'; tri(X,Y,c.type==='max'?'down':'up'); } });
+    const val=(graphType==='g')?Gval(x):Gp(x); const X=m.cx,Y=m.sy(val);
+    ctx.fillStyle=(graphType==='g'?'#3DE0D8':'#A9CF7F'); ctx.beginPath();ctx.arc(X,Y,4.6,0,7);ctx.fill();
+    ctx.strokeStyle='#0E0D10'; ctx.lineWidth=1.6; ctx.stroke();
+    const lw=132, lh=(graphType==='g'&&ghost)?44:30, lx=m.pr-lw-4, ly=m.pt+4;
+    ctx.fillStyle='rgba(14,13,16,0.86)'; ctx.fillRect(lx,ly,lw,lh);
+    ctx.strokeStyle='#2A262E'; ctx.lineWidth=1; ctx.strokeRect(lx+.5,ly+.5,lw-1,lh-1);
+    ctx.font='500 11px Quicksand,sans-serif'; ctx.textAlign='left'; ctx.textBaseline='middle';
+    ctx.fillStyle=(graphType==='g'?'#3DE0D8':'#A9CF7F'); ctx.fillRect(lx+8,ly+11,12,3);
+    ctx.fillStyle='#C7C5CC'; ctx.fillText(graphType==='g'?'g(x) — total':'g′(x) — slope', lx+26, ly+13);
+    if(graphType==='g'&&ghost){ ctx.fillStyle='#FFE348'; ctx.fillRect(lx+8,ly+29,12,3);
+     ctx.fillStyle='#C7C5CC'; ctx.fillText('ghost — last run', lx+26, ly+31); }
+   }
+  });
+  ctx.fillStyle='#0E0D10'; ctx.fillRect(0,H-statusH,W,statusH);
+  ctx.fillStyle='rgba(245,244,246,0.55)'; ctx.font='500 11px Quicksand,sans-serif';
+  ctx.textAlign='left'; ctx.textBaseline='middle';
+  ctx.fillText('x-grid: 1 div = 1 unit  ·  x = '+f2(x)+'  ·  u = '+f2(uV)+'  ·  g = '+f3(Gval(x))+'  ·  '+(playing?'RUNNING':'PAUSED')+' '+speed+'×', 10, H-statusH/2);
+ }
+
+ function narrate(w){
+  let best=null,bd=1e9; P.crit.forEach(c=>{ const d=Math.abs(w-c.x); if(d<bd){bd=d;best=c;} });
+  if(best && bd<0.10){ let nt=''; Object.keys(P.note).forEach(k=>{ if(Math.abs(parseFloat(k)-best.x)<0.02) nt=P.note[k]; });
+   return {A:(best.type==='max'?'A local maximum of g.':'A local minimum of g.'), C:nt}; }
+  const s=Gp(w);
+  if(s>0) return {A:'g is climbing.', C:P.rise};
+  if(s<0) return {A:'g is falling.', C:P.fall};
+  return {A:'g is momentarily flat.', C:'g′ = 0 here — a candidate extremum.'};
+ }
+ function readouts(){
+  $('s_xval').textContent='x = '+f2(x);
+  $('s_aval').textContent='a = '+f2(aCur);
+  $('s_ru').textContent=f2(P.hi(x));
+  $('s_rl').textContent=f2(loVal(x));
+  $('s_rg').textContent=f3(Gval(x));
+  $('s_rgp').textContent=f3(Gp(x));
+  let best=null,bd=1e9; P.crit.forEach(c=>{ const d=Math.abs(x-c.x); if(d<bd){bd=d;best=c;} });
+  $('s_rcrit').textContent=best? (f2(best.x)+' · '+best.type) : '—';
+  const n=narrate(x);
+  $('s_bA').textContent=n.A; $('s_bC').textContent=n.C;
+  $('s_bSym').textContent=P.sym; $('s_bSub').innerHTML=P.gpSub(x);
+ }
+
+ const RATE_SECS=6;
+ function frame(ts){
+  if(!last) last=ts; let dt=Math.min((ts-last)/1000,0.05); last=ts; const sdt=dt*speed;
+  if(simIsActive){
+   if(playing){ const rate=(P.xmax-P.xmin)/RATE_SECS; x+=rate*sdt;
+    if(x>=P.xmax){ x=P.xmax; playing=false; runFinished(); updateRunBtn(); }
+    xTarget=x; sx.value=x; }
+   else if(!reduced){ x+=(xTarget-x)*(1-Math.pow(0.0001,dt)); if(Math.abs(xTarget-x)<1e-4)x=xTarget; }
+   else x=xTarget;
+   if(!reduced){ aCur+=(aTarget-aCur)*(1-Math.pow(0.0001,dt)); if(Math.abs(aTarget-aCur)<1e-4)aCur=aTarget; }
+   else aCur=aTarget;
+   draw(); readouts();
+  }
+  requestAnimationFrame(frame);
+ }
+
+ const sx=$('s_x'), sa=$('s_a');
+ function runFinished(){ ghost = P.aEnabled? {a:aCur, type:'g'} : null; }
+ function updateRunBtn(){ $('s_run').textContent=playing?'❚❚ Pause':'▶ Run'; }
+ function activeKey(){ const b=document.querySelector('#s_presets .pbtn.active'); return b?b.dataset.k:'P1'; }
+ function loadPreset(key){
+  P=PRESETS[key]; ghost=null; playing=false; updateRunBtn();
+  x=xTarget=P.xstart; aCur=aTarget=0;
+  sx.min=P.xmin; sx.max=P.xmax; sx.value=P.xstart; sa.value=0;
+  $('s_agroup').style.display=P.aEnabled?'':'none';
+  document.querySelectorAll('#s_presets .pbtn').forEach(b=>b.classList.toggle('active',b.dataset.k===key));
+  $('s_bD').textContent=P.D;
+  readouts();
+ }
+ (function(){ const wrap=$('s_presets');
+  Object.keys(PRESETS).forEach(k=>{ const p=PRESETS[k]; const b=document.createElement('button');
+   b.className='pbtn'; b.dataset.k=k; b.innerHTML='<span class="rid">'+p.row+'</span> '+p.name+' — '+p.fLabel;
+   b.addEventListener('click',()=>loadPreset(k)); wrap.appendChild(b); });
+ })();
+ sx.addEventListener('input',()=>{ playing=false; updateRunBtn(); xTarget=parseFloat(sx.value); });
+ sa.addEventListener('input',()=>{ aTarget=parseFloat(sa.value); });
+ $('s_run').addEventListener('click',()=>{ if(!playing){ if(x>=P.xmax-1e-6){ x=xTarget=P.xmin; sx.value=P.xmin; } playing=true; } else playing=false; updateRunBtn(); });
+ $('s_reset').addEventListener('click',()=>loadPreset(activeKey()));
+ $('s_chipG').addEventListener('click',()=>setGT('g'));
+ $('s_chipGp').addEventListener('click',()=>setGT('gp'));
+ function setGT(gt){ graphType=gt; $('s_chipG').classList.toggle('active',gt==='g'); $('s_chipGp').classList.toggle('active',gt==='gp'); }
+ document.querySelectorAll('#s_speed .sbtn[data-s]').forEach(b=>{
+  b.addEventListener('click',()=>{ speed=parseFloat(b.dataset.s);
+   document.querySelectorAll('#s_speed .sbtn[data-s]').forEach(o=>o.classList.toggle('active',o===b)); });
+ });
+ addEventListener('keydown',e=>{ if(!simIsActive) return;
+  if(e.key===' '){ e.preventDefault(); $('s_run').click(); }
+  else if(e.key==='r'||e.key==='R'){ loadPreset(activeKey()); }
+  else if(e.key==='ArrowRight'){ playing=false; updateRunBtn(); xTarget=Math.min(P.xmax,xTarget+0.05); sx.value=xTarget; }
+  else if(e.key==='ArrowLeft'){ playing=false; updateRunBtn(); xTarget=Math.max(P.xmin,xTarget-0.05); sx.value=xTarget; }
+ });
+
+ window.SIM={ resize, active:(v)=>{ simIsActive=v; if(v) resize(); } };
+ if(!document.querySelector('.sim-overlay')) simIsActive=true;
+
+ loadPreset('P1');
+ resize();
+ requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

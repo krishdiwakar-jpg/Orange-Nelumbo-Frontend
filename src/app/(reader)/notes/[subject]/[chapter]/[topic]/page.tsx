@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 
 import { TopicReader } from "@/components/learning/topic-reader";
 import { curriculum, lessons } from "@/data/platform";
+import { getSecuredNoteManifest } from "@/lib/server/secured-content";
 
 export function generateStaticParams() {
   return curriculum.flatMap((subject) =>
@@ -18,5 +19,15 @@ export default async function NotePage({ params }: { params: Promise<{ subject: 
   const topic = chapter?.topics.find((item) => item.slug === slugs.topic);
   if (!subject || !chapter || !topic) notFound();
   const lesson = topic.lessonSlug ? lessons.find((item) => item.slug === topic.lessonSlug) : undefined;
-  return <TopicReader chapter={chapter} lesson={lesson} subject={subject} topic={topic} />;
+  const manifest = topic.id === "mat-calc-integration"
+    ? await getSecuredNoteManifest("extrema-integral-functions")
+    : null;
+  const securedNote = manifest
+    ? {
+        ...manifest,
+        simulationSlug: "extrema-integral-functions",
+        simulationTitle: "Accumulation Bench",
+      }
+    : undefined;
+  return <TopicReader chapter={chapter} lesson={lesson} securedNote={securedNote} subject={subject} topic={topic} />;
 }

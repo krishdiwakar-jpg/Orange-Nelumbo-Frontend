@@ -74,6 +74,7 @@ export const curriculum: Subject[] = [
             status: "completed",
             progress: 100,
             availability: "preview",
+            simulationIds: ["sim-vertical-throw"],
             tags: ["graphs", "equations of motion", "average velocity"],
           },
           {
@@ -89,7 +90,6 @@ export const curriculum: Subject[] = [
             progress: 62,
             availability: "live",
             lessonSlug: "motion-under-gravity",
-            simulationIds: ["sim-vertical-throw"],
             tags: ["free fall", "vertical throw", "velocity-time graph", "PYQ"],
           },
           {
@@ -486,16 +486,16 @@ export const curriculum: Subject[] = [
           {
             id: "mat-calc-integration",
             slug: "integration",
-            title: "Integration",
-            description: "Recognise reverse derivatives and accumulate signed area.",
+            title: "Extrema of integral-defined functions",
+            description: "Use the Fundamental Theorem of Calculus and sign changes to locate extrema of accumulation functions.",
             order: 3,
-            estimatedMinutes: 60,
+            estimatedMinutes: 52,
             difficulty: "JEE Advanced",
             status: "not-started",
             progress: 0,
-            availability: "preview",
-            simulationIds: ["sim-function-grapher"],
-            tags: ["indefinite integral", "definite integral", "area"],
+            availability: "live",
+            simulationIds: ["sim-extrema-integral-functions"],
+            tags: ["definite integral", "fundamental theorem", "maxima and minima"],
           },
           {
             id: "mat-calc-differential-equations",
@@ -820,7 +820,7 @@ export const simulations: Simulation[] = [
     shortTitle: "Vertical Throw",
     subjectId: "physics",
     chapterId: "phy-kinematics",
-    topicId: "phy-kin-motion-gravity",
+    topicId: "phy-kin-motion-straight",
     description:
       "Run a vertical throw and watch the velocity-time line draw itself straight through zero at the apex.",
     learningObjectives: [
@@ -836,6 +836,26 @@ export const simulations: Simulation[] = [
       { id: "launch-speed", label: "Launch speed", unit: "m/s", min: 4.9, max: 19.6, step: 0.1, initialValue: 9.8 },
     ],
     accent: "#FF6B2C",
+  },
+  {
+    id: "sim-extrema-integral-functions",
+    slug: "extrema-integral-functions",
+    title: "Accumulation Bench · Extrema of Integral-Defined Functions",
+    shortTitle: "Accumulation Bench",
+    subjectId: "mathematics",
+    chapterId: "mat-calculus",
+    topicId: "mat-calc-integration",
+    description:
+      "Sweep an integral's upper limit, inspect the accumulated area, and connect the integrand's sign to local extrema.",
+    learningObjectives: [
+      "Connect an accumulation function's derivative to its integrand.",
+      "Locate extrema through positive-to-negative and negative-to-positive sign changes.",
+      "Distinguish stationary points from genuine maxima and minima.",
+    ],
+    availability: "live",
+    estimatedMinutes: 18,
+    format: "canvas",
+    accent: "#3DE0D0",
   },
   {
     id: "sim-projectile-range",

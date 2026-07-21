@@ -31,6 +31,7 @@ import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { SectionHeader } from "@/components/ui/section-header";
 import { allTopics, curriculum } from "@/data/platform";
+import { simulationForId, simulationPath } from "@/lib/simulation-routing";
 import type { Chapter, LearningStatus, Subject, Topic } from "@/types/platform";
 
 function statusTone(status: LearningStatus): BadgeTone {
@@ -94,6 +95,25 @@ function TopicRow({ chapter, subject, topic }: { chapter: Chapter; subject: Subj
         </Link>
       </div>
     </div>
+  );
+}
+
+function SimulationStepRow({ simulationId }: { simulationId: string }) {
+  const simulation = simulationForId(simulationId);
+  if (!simulation) return null;
+
+  return (
+    <Link
+      className="group grid gap-3 border-b border-[#3DE0D0]/12 bg-[#3DE0D0]/[.025] px-4 py-3.5 transition hover:bg-[#3DE0D0]/[.055] sm:grid-cols-[32px_1fr_auto] sm:items-center sm:px-5"
+      href={simulationPath(simulation.id)}
+    >
+      <span className="grid size-7 place-items-center border border-[#3DE0D0]/35 text-[#3DE0D0]"><FlaskConical size={14} /></span>
+      <span className="min-w-0 pl-3 sm:border-l sm:border-[#3DE0D0]/22">
+        <span className="block text-sm font-semibold text-[#DDF8F5] transition group-hover:text-white">{simulation.shortTitle}</span>
+        <span className="mt-1 block text-xs text-[#C7C5CC]/65">Simulation step · opens full screen</span>
+      </span>
+      <span className="flex items-center gap-2 text-xs font-semibold text-[#3DE0D0]">Run lab <ArrowRight size={14} /></span>
+    </Link>
   );
 }
 
@@ -309,11 +329,21 @@ export function SubjectOverview({ subject }: { subject: Subject }) {
                     {chapter.topics.slice(0, 4).map((topic) => {
                       const state = resolveTopicState(topic, topicProgress);
                       return (
-                        <Link className="flex min-h-11 items-center gap-3 border border-white/8 px-3 text-sm transition hover:border-[#FF5A1F]/35 hover:bg-white/[.025]" href={learningPath(subject, chapter, topic)} key={topic.id}>
-                          <TopicStateIcon status={state.status} />
-                          <span className="min-w-0 flex-1 truncate">{topic.title}</span>
-                          <ChevronRight className="shrink-0 text-[#C7C5CC]/70" size={15} />
-                        </Link>
+                        <div className="grid gap-2" key={topic.id}>
+                          <Link className="flex min-h-11 items-center gap-3 border border-white/8 px-3 text-sm transition hover:border-[#FF5A1F]/35 hover:bg-white/[.025]" href={learningPath(subject, chapter, topic)}>
+                            <TopicStateIcon status={state.status} />
+                            <span className="min-w-0 flex-1 truncate">{topic.title}</span>
+                            <ChevronRight className="shrink-0 text-[#C7C5CC]/70" size={15} />
+                          </Link>
+                          {(topic.simulationIds ?? []).map((simulationId) => {
+                            const simulation = simulationForId(simulationId);
+                            return simulation ? (
+                              <Link className="ml-5 flex min-h-10 items-center gap-2 border-l border-[#3DE0D0]/30 px-3 text-xs text-[#3DE0D0]/80 hover:bg-[#3DE0D0]/5 hover:text-[#3DE0D0]" href={simulationPath(simulation.id)} key={simulation.id}>
+                                <FlaskConical size={13} /> {simulation.shortTitle}
+                              </Link>
+                            ) : null;
+                          })}
+                        </div>
                       );
                     })}
                   </div>
@@ -359,9 +389,14 @@ export function ChapterOverview({ chapter, subject }: { chapter: Chapter; subjec
 
       <div className="mx-auto grid max-w-[1460px] gap-8 px-5 py-9 sm:px-7 lg:px-10 xl:grid-cols-[minmax(0,1fr)_320px] xl:px-12">
         <section>
-          <div className="mb-5"><p className="mono-kicker">Concept sequence</p><h3 className="mt-2 font-display text-2xl font-bold sm:text-3xl">{chapter.topics.length} topics, one dependency chain</h3></div>
+          <div className="mb-5"><p className="mono-kicker">Concept sequence</p><h3 className="mt-2 font-display text-2xl font-bold sm:text-3xl">Notes and simulations, in learning order</h3></div>
           <Card className="p-0">
-            {chapter.topics.map((topic) => <TopicRow chapter={chapter} key={topic.id} subject={subject} topic={topic} />)}
+            {chapter.topics.map((topic) => (
+              <div key={topic.id}>
+                <TopicRow chapter={chapter} subject={subject} topic={topic} />
+                {(topic.simulationIds ?? []).map((simulationId) => <SimulationStepRow key={simulationId} simulationId={simulationId} />)}
+              </div>
+            ))}
           </Card>
         </section>
 

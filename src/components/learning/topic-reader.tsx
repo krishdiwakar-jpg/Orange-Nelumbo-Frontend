@@ -26,10 +26,12 @@ import {
   statusLabel,
 } from "@/components/learning/progress-utils";
 import { VerticalThrowLab } from "@/components/learning/vertical-throw-lab";
+import { SecuredNoteReader, type SecuredNoteConfig } from "@/components/learning/secured-note-reader";
 import { Badge, type BadgeTone } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { simulationForId, simulationPath } from "@/lib/simulation-routing";
 import type {
   Chapter,
   Lesson,
@@ -279,11 +281,13 @@ function GenericTopicBody({ chapter, subject, topic }: { chapter: Chapter; subje
 export function TopicReader({
   chapter,
   lesson,
+  securedNote,
   subject,
   topic,
 }: {
   chapter: Chapter;
   lesson?: Lesson;
+  securedNote?: SecuredNoteConfig;
   subject: Subject;
   topic: Topic;
 }) {
@@ -299,19 +303,42 @@ export function TopicReader({
     if (bookmarkedTopicIds.includes(topic.id)) toggleBookmark(topic.id);
     if (bookmarkedTopicIds.includes(topic.slug)) toggleBookmark(topic.slug);
   }
-  const subjectSequence = subject.chapters.flatMap((itemChapter) =>
-    itemChapter.topics.map((itemTopic) => ({ chapter: itemChapter, topic: itemTopic })),
+  const learningSequence = subject.chapters.flatMap((itemChapter) =>
+    itemChapter.topics.flatMap((itemTopic) => {
+      const topicStep = {
+        kind: "topic" as const,
+        chapter: itemChapter,
+        href: learningPath(subject, itemChapter, itemTopic),
+        label: itemTopic.title,
+        topic: itemTopic,
+      };
+      const simulationSteps = (itemTopic.simulationIds ?? []).flatMap((simulationId) => {
+        const simulation = simulationForId(simulationId);
+        return simulation
+          ? [{
+              kind: "simulation" as const,
+              chapter: itemChapter,
+              href: simulationPath(simulation.id),
+              label: simulation.shortTitle,
+              topic: itemTopic,
+            }]
+          : [];
+      });
+      return [topicStep, ...simulationSteps];
+    }),
   );
-  const currentIndex = subjectSequence.findIndex((item) => item.topic.id === topic.id);
-  const previous = currentIndex > 0 ? subjectSequence[currentIndex - 1] : undefined;
-  const next = currentIndex >= 0 && currentIndex < subjectSequence.length - 1 ? subjectSequence[currentIndex + 1] : undefined;
-  const toc = lesson
-    ? lesson.sections.map((section) => ({ id: section.id, label: section.title, number: section.number }))
-    : [
-        { id: "concept-briefing", label: "Concept briefing", number: 1 },
-        { id: "study-sequence", label: "Study sequence", number: 2 },
-        { id: "full-note", label: "Full note", number: 3 },
-      ];
+  const currentIndex = learningSequence.findIndex((item) => item.kind === "topic" && item.topic.id === topic.id);
+  const previous = currentIndex > 0 ? learningSequence[currentIndex - 1] : undefined;
+  const next = currentIndex >= 0 && currentIndex < learningSequence.length - 1 ? learningSequence[currentIndex + 1] : undefined;
+  const toc = securedNote
+    ? securedNote.headings.map((heading, index) => ({ id: `secured-note-section-${index + 1}`, label: heading, number: index + 1 }))
+    : lesson
+      ? lesson.sections.map((section) => ({ id: section.id, label: section.title, number: section.number }))
+      : [
+          { id: "concept-briefing", label: "Concept briefing", number: 1 },
+          { id: "study-sequence", label: "Study sequence", number: 2 },
+          { id: "full-note", label: "Full note", number: 3 },
+        ];
   const badgeTone: BadgeTone = state.status === "completed" ? "success" : state.status === "in-progress" ? "warning" : "neutral";
 
   function toggleComplete() {
@@ -337,7 +364,7 @@ export function TopicReader({
               <div className="flex flex-wrap gap-2">
                 <Badge tone="brand">{lesson?.unitCode ?? `${subject.code} · ${chapter.title}`}</Badge>
                 <Badge tone={badgeTone}>{state.progress > 0 && state.status !== "completed" ? `${state.progress}% read` : statusLabel(state.status)}</Badge>
-                {lesson ? <Badge tone="cyan">{lesson.conceptRange}</Badge> : <Badge tone="neutral">Preview note</Badge>}
+                {lesson ? <Badge tone="cyan">{lesson.conceptRange}</Badge> : securedNote ? <Badge tone="success">Full visual note</Badge> : <Badge tone="neutral">Preview note</Badge>}
               </div>
               <h1 className="mt-6 max-w-5xl font-display text-3xl font-bold tracking-[-.02em] sm:text-4xl lg:text-[2.75rem]">{lesson?.title ?? topic.title}</h1>
               <p className="mt-5 max-w-3xl text-base leading-8 text-[#C7C5CC] sm:text-lg">{lesson?.summary ?? topic.description}</p>
@@ -349,7 +376,7 @@ export function TopicReader({
             </div>
             <div className="flex flex-col gap-3 sm:flex-row xl:justify-end">
               <Button aria-pressed={bookmarked} onClick={toggleTopicBookmark} variant="ghost"><Bookmark size={17} /> {bookmarked ? "Bookmarked" : "Bookmark"}</Button>
-              <Button onClick={() => window.print()} variant="ghost"><Printer size={17} /> Print / PDF</Button>
+              {!securedNote ? <Button onClick={() => window.print()} variant="ghost"><Printer size={17} /> Print / PDF</Button> : null}
               <Button onClick={toggleComplete} variant={state.status === "completed" ? "secondary" : "primary"}>{state.status === "completed" ? <><Check size={17} /> Completed</> : <><BookOpenCheck size={17} /> Mark complete</>}</Button>
             </div>
           </div>
@@ -375,10 +402,21 @@ export function TopicReader({
                 const itemState = resolveTopicState(item, topicProgress);
                 const active = item.id === topic.id;
                 return (
-                  <Link className={`flex items-center gap-3 border-l-2 px-3 py-2.5 text-xs ${active ? "border-[#FF5A1F] bg-[#FF5A1F]/8 text-white" : "border-transparent text-[#C7C5CC]/70 hover:text-white"}`} href={learningPath(subject, chapter, item)} key={item.id}>
-                    <span className={`grid size-4 shrink-0 place-items-center border ${itemState.status === "completed" ? "border-[#3DE08A] bg-[#3DE08A] text-[#0E0D10]" : active ? "border-[#FF8A3D]" : "border-[#55505C]"}`}>{itemState.status === "completed" ? <Check size={10} strokeWidth={3} /> : null}</span>
-                    <span>{item.title}</span>
-                  </Link>
+                  <div key={item.id}>
+                    <Link className={`flex items-center gap-3 border-l-2 px-3 py-2.5 text-xs ${active ? "border-[#FF5A1F] bg-[#FF5A1F]/8 text-white" : "border-transparent text-[#C7C5CC]/70 hover:text-white"}`} href={learningPath(subject, chapter, item)}>
+                      <span className={`grid size-4 shrink-0 place-items-center border ${itemState.status === "completed" ? "border-[#3DE08A] bg-[#3DE08A] text-[#0E0D10]" : active ? "border-[#FF8A3D]" : "border-[#55505C]"}`}>{itemState.status === "completed" ? <Check size={10} strokeWidth={3} /> : null}</span>
+                      <span>{item.title}</span>
+                    </Link>
+                    {(item.simulationIds ?? []).map((simulationId) => {
+                      const simulation = simulationForId(simulationId);
+                      if (!simulation) return null;
+                      return (
+                        <Link className="ml-5 flex items-center gap-2 border-l border-[#3DE0D0]/30 px-3 py-2 text-[11px] text-[#3DE0D0]/80 hover:bg-[#3DE0D0]/5 hover:text-[#3DE0D0]" href={simulationPath(simulation.id)} key={simulation.id}>
+                          <FlaskConical size={12} /> {simulation.shortTitle}
+                        </Link>
+                      );
+                    })}
+                  </div>
                 );
               })}
             </div>
@@ -386,7 +424,11 @@ export function TopicReader({
         </aside>
 
         <article className="min-w-0">
-          {lesson ? lesson.sections.map((section) => <LessonSectionBlock key={section.id} section={section} />) : <GenericTopicBody chapter={chapter} subject={subject} topic={topic} />}
+          {securedNote
+            ? <SecuredNoteReader note={securedNote} />
+            : lesson
+              ? lesson.sections.map((section) => <LessonSectionBlock key={section.id} section={section} />)
+              : <GenericTopicBody chapter={chapter} subject={subject} topic={topic} />}
 
           <section className="py-10 sm:py-14">
             <Card variant="priority">
@@ -403,16 +445,16 @@ export function TopicReader({
 
           <nav aria-label="Adjacent topics" className="grid border-l border-t border-white/10 sm:grid-cols-2">
             {previous ? (
-              <Link className="group border-b border-r border-white/10 bg-[#161418] p-5 transition hover:bg-[#1E1B20] sm:p-6" href={learningPath(subject, previous.chapter, previous.topic)}>
-                <span className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[.14em] text-[#C7C5CC]/70"><ArrowLeft size={14} /> Previous concept</span>
-                <span className="mt-4 block font-display text-xl font-bold group-hover:text-[#FF8A3D]">{previous.topic.title}</span>
+              <Link className="group border-b border-r border-white/10 bg-[#161418] p-5 transition hover:bg-[#1E1B20] sm:p-6" href={previous.href}>
+                <span className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[.14em] text-[#C7C5CC]/70"><ArrowLeft size={14} /> Previous {previous.kind === "simulation" ? "simulation" : "concept"}</span>
+                <span className="mt-4 block font-display text-xl font-bold group-hover:text-[#FF8A3D]">{previous.label}</span>
                 <span className="mt-2 block text-xs text-[#C7C5CC]/70">{previous.chapter.title}</span>
               </Link>
             ) : <div className="hidden border-b border-r border-white/10 sm:block" />}
             {next ? (
-              <Link className="group border-b border-r border-white/10 bg-[#161418] p-5 text-right transition hover:bg-[#1E1B20] sm:p-6" href={learningPath(subject, next.chapter, next.topic)}>
-                <span className="flex items-center justify-end gap-2 font-mono text-[11px] uppercase tracking-[.14em] text-[#C7C5CC]/70">Next concept <ArrowRight size={14} /></span>
-                <span className="mt-4 block font-display text-xl font-bold group-hover:text-[#FF8A3D]">{next.topic.title}</span>
+              <Link className="group border-b border-r border-white/10 bg-[#161418] p-5 text-right transition hover:bg-[#1E1B20] sm:p-6" href={next.href}>
+                <span className="flex items-center justify-end gap-2 font-mono text-[11px] uppercase tracking-[.14em] text-[#C7C5CC]/70">Next {next.kind === "simulation" ? "simulation" : "concept"} <ArrowRight size={14} /></span>
+                <span className="mt-4 block font-display text-xl font-bold group-hover:text-[#FF8A3D]">{next.label}</span>
                 <span className="mt-2 block text-xs text-[#C7C5CC]/70">{next.chapter.title}</span>
               </Link>
             ) : (

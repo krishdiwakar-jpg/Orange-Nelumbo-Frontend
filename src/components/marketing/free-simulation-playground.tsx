@@ -46,7 +46,7 @@ function SimulationVisual({ slug, value, revision }: { slug: DemoSlug; value: nu
   return <svg className="size-full" viewBox="0 0 520 320" aria-label="Interactive function graph">{Array.from({length:9},(_,i)=><line key={`v${i}`} x1={35+i*56} x2={35+i*56} y1="18" y2="282" stroke="#2A262E"/>)}{Array.from({length:7},(_,i)=><line key={`h${i}`} x1="35" x2="485" y1={18+i*44} y2={18+i*44} stroke="#2A262E"/>)}<line x1="35" x2="485" y1="150" y2="150" stroke="#C7C5CC" opacity=".55"/><line x1="260" x2="260" y1="18" y2="282" stroke="#C7C5CC" opacity=".55"/><path d={graphPath} fill="none" stroke="#3DE08A" strokeWidth="3"/><text x="52" y="44" fill="#3DE0D0" fontFamily="JetBrains Mono" fontSize="11">f(x) = {value}x²</text></svg>;
 }
 
-export function FreeSimulationPlayground({ initialSlug = "vertical-throw" }: { initialSlug?: string }) {
+export function FreeSimulationPlayground({ fullscreen = false, initialSlug = "vertical-throw" }: { fullscreen?: boolean; initialSlug?: string }) {
   const initial = demos.find((demo) => demo.slug === initialSlug) ?? demos[0];
   const [activeSlug, setActiveSlug] = useState<DemoSlug>(initial.slug);
   const [values, setValues] = useState<Record<DemoSlug, number>>(() => Object.fromEntries(demos.map((demo) => [demo.slug, demo.initial])) as Record<DemoSlug, number>);
@@ -55,8 +55,8 @@ export function FreeSimulationPlayground({ initialSlug = "vertical-throw" }: { i
   const ActiveIcon = active.icon;
 
   return (
-    <div className="grid gap-5 xl:grid-cols-[280px_minmax(0,1fr)]">
-      <nav aria-label="Choose a demo simulation" className="border border-[#FF5A1F]/24 bg-[#161418] p-2">
+    <div className={fullscreen ? "grid h-full min-h-0 overflow-y-auto xl:grid-cols-[250px_minmax(0,1fr)] xl:overflow-hidden" : "grid gap-5 xl:grid-cols-[280px_minmax(0,1fr)]"}>
+      <nav aria-label="Choose a demo simulation" className={`${fullscreen ? "overflow-y-auto border-b xl:border-b-0 xl:border-r" : "border"} border-[#FF5A1F]/24 bg-[#161418] p-2`}>
         {demos.map((demo) => {
           const Icon = demo.icon;
           const selected = demo.slug === activeSlug;
@@ -64,14 +64,14 @@ export function FreeSimulationPlayground({ initialSlug = "vertical-throw" }: { i
         })}
       </nav>
 
-      <section className="overflow-hidden border border-[#FF5A1F]/28 bg-[#161418] shadow-[0_0_70px_rgba(255,90,31,.07)]">
+      <section className={`${fullscreen ? "flex min-h-0 flex-col" : "overflow-hidden border"} border-[#FF5A1F]/28 bg-[#161418] shadow-[0_0_70px_rgba(255,90,31,.07)]`}>
         <header className="flex flex-wrap items-start justify-between gap-5 border-b border-white/9 p-5 sm:p-7">
           <div className="flex items-start gap-4"><span className="grid size-12 place-items-center border border-[#FF5A1F]/35 text-[#FF8A3D]"><ActiveIcon size={22}/></span><div><h2 className="font-display text-2xl font-bold sm:text-3xl">{active.title}</h2><p className="mt-2 text-sm leading-6 text-[#C7C5CC]">{active.prompt}</p></div></div>
           <button className="button-ghost" onClick={() => setRevision((current) => current + 1)} type="button"><RotateCcw size={16}/> Replay</button>
         </header>
-        <div className="grid lg:grid-cols-[1fr_280px]">
-          <div className="brand-grid relative min-h-[390px] bg-[#0E0D10]"><SimulationVisual revision={revision} slug={active.slug} value={values[active.slug]}/></div>
-          <aside className="border-t border-white/9 p-5 lg:border-l lg:border-t-0 sm:p-6">
+        <div className={`${fullscreen ? "min-h-0 flex-1" : ""} grid lg:grid-cols-[1fr_280px]`}>
+          <div className={`brand-grid relative bg-[#0E0D10] ${fullscreen ? "min-h-[320px] lg:min-h-0" : "min-h-[390px]"}`}><SimulationVisual revision={revision} slug={active.slug} value={values[active.slug]}/></div>
+          <aside className={`${fullscreen ? "overflow-y-auto" : ""} border-t border-white/9 p-5 lg:border-l lg:border-t-0 sm:p-6`}>
             <p className="text-sm font-semibold text-[#FF8A3D]">Control one variable</p>
             <label className="mt-7 block"><span className="flex items-baseline justify-between gap-4 text-sm font-bold"><span>{active.label}</span><span className="font-mono text-[#3DE0D0]">{values[active.slug]}{active.unit}</span></span><input className="mt-5 w-full accent-[#FF5A1F]" min={active.min} max={active.max} step={active.step} type="range" value={values[active.slug]} onChange={(event) => setValues((current) => ({...current,[active.slug]:Number(event.target.value)}))}/><span className="mt-2 flex justify-between font-mono text-[10px] text-[#C7C5CC]/60"><span>{active.min}{active.unit}</span><span>{active.max}{active.unit}</span></span></label>
             <div className="mt-8 border-l-2 border-[#3DE0D0] bg-[#3DE0D0]/5 p-4"><p className="text-xs font-bold text-[#3DE0D0]">Try this</p><p className="mt-2 text-sm leading-6 text-[#C7C5CC]">Move the control slowly. Predict the change before the visual catches up.</p></div>

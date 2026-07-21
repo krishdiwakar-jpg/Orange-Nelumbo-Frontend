@@ -8,7 +8,7 @@ import type { Simulation } from "@/types/platform";
 
 const gravity = 9.8;
 
-export function SimulationLab({ simulation }: { simulation: Simulation }) {
+export function SimulationLab({ fullscreen = false, simulation }: { fullscreen?: boolean; simulation: Simulation }) {
   const [launchSpeed, setLaunchSpeed] = useState(simulation.controls?.[0]?.initialValue ?? 9.8);
   const [time, setTime] = useState(0);
   const [playing, setPlaying] = useState(false);
@@ -88,9 +88,11 @@ export function SimulationLab({ simulation }: { simulation: Simulation }) {
   }, [launchSpeed, totalTime]);
 
   return (
-    <div className="content-shell pb-28 pt-8 lg:pb-14 lg:pt-10">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+    <div className={fullscreen ? "h-full overflow-y-auto p-4 sm:p-5" : "content-shell pb-28 pt-8 lg:pb-14 lg:pt-10"}>
+      <div className={`${fullscreen ? "mb-4 justify-end" : "mb-6 justify-between"} flex flex-wrap items-center gap-4`}>
+        {!fullscreen ? (
         <Link className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-[#C7C5CC]/80 hover:text-white" href="/simulations"><ArrowLeft size={17} /> All simulations</Link>
+        ) : null}
         <div className="flex items-center gap-3"><span className="size-2 bg-[#3DE08A] shadow-[0_0_12px_#3DE08A]" /><span className="font-mono text-[11px] uppercase tracking-[.16em] text-[#3DE08A]">Lab live</span></div>
       </div>
       <div className="grid gap-5 xl:grid-cols-[1fr_340px]">

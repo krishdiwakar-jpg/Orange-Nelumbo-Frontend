@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Where an integral is fullest — Extrema of integral-defined functions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Varela+Round&display=swap" rel="stylesheet">
+<style>
+:root{
+ --carbon:#161418; --obsidian:#0E0D10; --graphite:#1E1B20; --steel:#2A262E;
+ --ignition:#FF5A1F; --ember:#FF8A3D; --titanium:#C7C5CC; --white:#F5F4F6;
+ --cyan:#3DE0D8; --honey:#F5B532; --marigold:#FFC96B; --sand:#F5E3C0;
+ --brick:#F0685A; --moss:#A9CF7F; --cocoa:#CDA98C; --terracotta:#E8784A;
+ --emerald:#1FA35A; --ghost:#FFE348;
+ --head:'Quicksand',system-ui,sans-serif; --read:'Varela Round',system-ui,sans-serif;
+ --eq-indent:20px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+ margin:0; background:var(--carbon);
+ background-image:
+   radial-gradient(circle at 50% -8%, rgba(255,90,31,.06), transparent 55%),
+   repeating-radial-gradient(circle at 50% 12%, rgba(199,197,204,.035) 0 1px, transparent 1px 76px),
+   linear-gradient(rgba(199,197,204,.02) 1px, transparent 1px);
+ background-size:auto, auto, 100% 40px;
+ color:var(--white); font-family:var(--read); font-size:17px; line-height:1.75;
+ -webkit-font-smoothing:antialiased;
+}
+.page{max-width:760px; margin:0 auto; padding:56px 24px 120px}
+.eyebrow{font-family:var(--head); font-weight:700; text-transform:uppercase;
+ letter-spacing:.12em; font-size:13px; color:var(--ignition); margin:0 0 14px}
+.eyebrow .chapdot{color:var(--emerald)}
+h1.title{font-family:var(--head); font-weight:700; font-size:clamp(30px,5.4vw,40px);
+ line-height:1.15; margin:0 0 20px; color:var(--white); letter-spacing:-.01em}
+.lede{font-size:19px; color:var(--titanium); margin:0 0 8px}
+.lede b{color:var(--sand); font-weight:400}
+h2{font-family:var(--head); font-weight:700; font-size:25px; line-height:1.2;
+ margin:64px 0 8px; color:var(--white)}
+h2 .num{color:var(--honey); margin-right:12px}
+h3{font-family:var(--head); font-weight:600; font-size:19px; color:var(--sand);
+ margin:40px 0 6px}
+.kicker{font-family:var(--head); font-weight:700; text-transform:uppercase;
+ letter-spacing:.11em; font-size:12.5px; color:var(--cocoa); margin:28px 0 6px}
+p{margin:16px 0}
+em{font-style:italic}
+.imath{font-style:italic}
+b.term{color:var(--sand); font-weight:400}
+.key{color:var(--marigold)}
+
+.eq{margin:24px 0 24px var(--eq-indent); padding-left:14px; border-left:2px solid var(--steel)}
+.eq .relation{font-family:var(--read); font-style:italic; font-size:20px; color:var(--white); text-align:left; margin:0}
+.eq .relation .lead{color:var(--ignition); font-style:normal}
+.eq .tag{font-family:var(--head); font-weight:600; font-size:12.5px; color:var(--cocoa); float:right; font-style:normal}
+.eq .star{color:var(--honey)}
+.eq .where{font-family:var(--read); font-size:14px; color:var(--cocoa); margin:8px 0 0; line-height:1.6}
+.eq .where b{color:var(--sand); font-weight:400; font-style:italic}
+
+.chain{margin:20px 0 20px var(--eq-indent)}
+.chain .row{margin:0 0 14px}
+.chain .step{font-family:var(--head); font-weight:500; font-size:12.5px; font-style:normal; color:var(--cocoa); margin:0 0 4px}
+.chain .step b{color:var(--honey); font-weight:700; margin-right:6px}
+.chain .eqline{margin-left:var(--eq-indent); font-family:var(--read); font-style:italic; font-size:19px; color:var(--white); text-align:left}
+.chain .concl{color:var(--moss)}
+
+.eqref{color:var(--ignition); cursor:help; text-decoration:none; border-bottom:1px dotted var(--ignition)}
+.eqtip{position:absolute; z-index:60; max-width:min(90vw,520px); background:var(--graphite);
+ border:1px solid var(--ignition); padding:10px 14px; font-family:var(--read); font-style:italic;
+ font-size:19px; color:var(--white); box-shadow:0 8px 30px rgba(0,0,0,.55)}
+
+.defs{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:20px 0}
+@media(max-width:560px){.defs{grid-template-columns:1fr}}
+.def{border:1px solid var(--steel); background:var(--graphite); padding:14px 16px}
+.def .sym{font-family:var(--read); font-style:italic; font-size:21px; color:var(--sand)}
+.def .name{font-family:var(--head); font-weight:700; text-transform:uppercase; letter-spacing:.08em; font-size:11px; color:var(--cocoa); margin:6px 0 4px}
+.def p{margin:0; font-size:15px; color:var(--titanium); line-height:1.6}
+
+.callout{border:1px solid rgba(255,90,31,.22); background:var(--graphite); padding:16px 20px; margin:24px 0; border-left:3px solid}
+.callout.keyidea{border-left-color:var(--honey)}
+.callout.trap{border-left-color:var(--brick)}
+.callout .clabel{font-family:var(--head); font-weight:700; text-transform:uppercase; letter-spacing:.11em; font-size:12px; margin:0 0 6px}
+.callout.keyidea .clabel{color:var(--honey)}
+.callout.trap .clabel{color:var(--brick)}
+.callout p{margin:0; font-size:16px}
+
+figure{margin:28px 0}
+figure svg{width:100%; height:auto; background:var(--obsidian); border:1px solid var(--steel); display:block}
+figcaption{font-family:var(--read); color:var(--cocoa); font-size:14px; margin-top:8px}
+figcaption b{color:var(--marigold); font-weight:400}
+
+.special{border-top:1px solid var(--steel); padding:16px 0 4px; margin:8px 0}
+.special .sname{font-family:var(--head); font-weight:700; color:var(--honey); font-size:16px}
+.special .trig{font-family:var(--head); font-weight:600; font-size:12.5px; text-transform:uppercase; letter-spacing:.07em; color:var(--honey); opacity:.9}
+.special .body{font-size:16px; color:var(--titanium); margin:6px 0 0}
+.special .body .m{font-style:italic; color:var(--white)}
+
+.scenario{border:1px solid var(--steel); background:linear-gradient(180deg,rgba(232,120,74,.05),transparent 40%); padding:20px 22px; margin:28px 0}
+.scenario .stamp{font-family:var(--head); font-weight:700; color:var(--terracotta); font-size:13px; letter-spacing:.06em}
+.scenario .pyq{display:inline-block; border:1px solid var(--terracotta); color:var(--terracotta); font-family:var(--head); font-weight:600; font-size:11px; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; margin-left:8px; vertical-align:middle}
+.scenario h3{margin:6px 0 2px; color:var(--sand)}
+.subk{font-family:var(--head); font-weight:700; text-transform:uppercase; letter-spacing:.1em; font-size:11.5px; color:var(--cocoa); margin:18px 0 2px}
+.kill{color:var(--moss)}
+.trapline{color:var(--brick)}
+
+.cp{border:1px solid var(--steel); background:var(--graphite); padding:16px 20px; margin:28px 0}
+.cp .clabel{font-family:var(--head); font-weight:700; text-transform:uppercase; letter-spacing:.11em; font-size:12px; color:var(--cyan); margin:0 0 8px}
+.cp .q{font-size:16px; margin:0 0 12px}
+.cp .opts{display:flex; flex-wrap:wrap; gap:8px}
+.cp button.opt{font-family:var(--head); font-weight:600; font-size:15px; color:var(--white); background:var(--carbon); border:1px solid var(--steel); border-radius:22px; padding:8px 16px; cursor:pointer; transition:all 140ms cubic-bezier(.16,1,.3,1)}
+.cp button.opt:hover{border-color:var(--ignition)}
+.cp button.opt.right{border-color:var(--moss); color:var(--moss)}
+.cp button.opt.wrong{border-color:var(--brick); color:var(--brick)}
+.cp .tin{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+.cp input.num{font-family:var(--read); font-size:16px; width:110px; padding:8px 10px; background:var(--carbon); border:1px solid var(--steel); color:var(--white)}
+.cp button.check{font-family:var(--head); font-weight:700; font-size:14px; color:var(--carbon); background:var(--cyan); border:none; border-radius:22px; padding:9px 18px; cursor:pointer}
+.cp .fb{font-size:14.5px; margin:12px 0 0; min-height:1px; color:var(--titanium)}
+.cp .fb.ok{color:var(--moss)} .cp .fb.no{color:var(--brick)}
+.cp .ans{display:none; font-size:13px; color:var(--cocoa); margin-top:8px}
+@media print{ .cp .ans{display:block} .cp .opts,.cp .tin{opacity:.6} }
+
+.sim-launch{margin:44px 0 8px; text-align:center}
+.sim-btn{font-family:var(--head); font-weight:700; font-size:17px; color:var(--carbon); background:linear-gradient(180deg,var(--ember),var(--ignition)); border:none; padding:16px 26px; cursor:pointer; letter-spacing:.01em; box-shadow:0 8px 30px rgba(255,90,31,.28)}
+.sim-note{font-family:var(--head); font-size:12.5px; color:var(--cocoa); text-align:center; margin-top:10px}
+
+.sim-overlay{position:fixed; inset:0; z-index:100; background:var(--carbon); display:flex; flex-direction:column}
+.sim-overlay[hidden]{display:none}
+.sim-bar{height:44px; flex:0 0 44px; display:flex; align-items:center; padding:0 14px; border-bottom:1px solid var(--steel); background:var(--obsidian)}
+.sim-back{font-family:var(--head); font-weight:700; font-size:14px; color:var(--ignition); background:none; border:1px solid var(--steel); padding:7px 14px; cursor:pointer; text-decoration:none}
+.sim-head{flex:0 0 auto; padding:10px 18px; border-bottom:1px solid var(--steel)}
+.sim-head .eyebrow{margin:0 0 4px}
+.sim-head h1{font-family:var(--head); font-weight:700; font-size:20px; margin:0 0 4px; color:var(--white)}
+.sim-head .what,.sim-head .explains{margin:2px 0; font-size:13.5px; color:var(--titanium); line-height:1.5}
+.sim-head .what b{color:var(--cyan); font-weight:400}
+.sim-body{flex:1 1 auto; min-height:0; display:grid; grid-template-columns:25% 75%}
+.sim-controls{overflow:auto; padding:16px; border-right:1px solid var(--steel); background:var(--carbon)}
+.sim-stage{position:relative; background:var(--obsidian); min-width:0}
+.sim-stage canvas{display:block; width:100%; height:100%}
+.sc-group{margin:0 0 18px}
+.sc-lab{font-family:var(--head); font-weight:700; text-transform:uppercase; letter-spacing:.09em; font-size:11px; color:var(--cocoa); margin:0 0 7px}
+.sc-val{font-family:var(--read); font-style:italic; color:var(--cyan); font-size:15px}
+.sim-controls input[type=range]{width:100%; accent-color:var(--ignition); margin:4px 0}
+.preset-row{display:flex; flex-wrap:wrap; gap:6px}
+.pbtn{font-family:var(--head); font-weight:600; font-size:12px; color:var(--white); background:var(--graphite); border:1px solid var(--steel); padding:7px 9px; cursor:pointer; text-align:left; flex:1 1 100%}
+.pbtn.active{border-color:var(--ignition); color:var(--ember)}
+.pbtn .rid{font-size:10px; color:var(--terracotta); letter-spacing:.05em}
+.runbar{display:flex; gap:6px; align-items:center; flex-wrap:wrap; margin:0 0 14px}
+.runbtn{font-family:var(--head); font-weight:700; font-size:14px; color:var(--carbon); background:var(--ignition); border:none; padding:9px 18px; cursor:pointer}
+.chip{font-family:var(--head); font-weight:600; font-size:12px; color:var(--white); background:var(--graphite); border:1px solid var(--steel); padding:7px 11px; cursor:pointer}
+.chip.active{border-color:var(--cyan); color:var(--cyan)}
+.spd{display:flex; gap:5px; flex-wrap:wrap}
+.sbtn{font-family:var(--head); font-weight:600; font-size:12px; color:var(--titanium); background:var(--graphite); border:1px solid var(--steel); padding:6px 10px; cursor:pointer}
+.sbtn.active{border-color:var(--ignition); color:var(--ember)}
+.rd{display:grid; grid-template-columns:auto 1fr; gap:3px 10px; font-size:14px; margin:6px 0}
+.rd .rk{font-family:var(--head); font-weight:600; color:var(--cocoa); font-size:12px; text-transform:uppercase; letter-spacing:.06em}
+.rd .rv{font-family:var(--read); font-style:italic; color:var(--cyan)}
+.expl{border-top:1px solid var(--steel); margin-top:12px; padding-top:12px}
+.expl .eb{font-family:var(--head); font-weight:700; text-transform:uppercase; letter-spacing:.09em; font-size:10.5px; margin:12px 0 3px}
+.expl .eb.a{color:var(--sand)} .expl .eb.b{color:var(--cocoa)}
+.expl .eb.c{color:var(--ignition)} .expl .eb.d{color:var(--cyan)}
+.expl .et{font-size:15px; color:var(--titanium); line-height:1.55; margin:0}
+.expl .esym{font-family:var(--read); font-style:italic; font-size:16px; color:var(--white); margin:0}
+.expl .esub{font-family:var(--read); font-style:italic; font-size:16px; color:var(--cyan); margin:3px 0 0}
+</style>
+</head>
+<body>
+<main class="page">
+
+ <p class="eyebrow">Application of Derivatives <span class="chapdot">·</span> Extrema of Integral-Defined Functions</p>
+ <h1 class="title">An integral is fullest exactly where its integrand turns from plus to minus.</h1>
+ <p class="lede">Picture the tank on your terrace. Every minute, water either flows <b>in</b> or drains <b>out</b>, at some rate that keeps changing. Call that rate <span class="imath">f(t)</span>. The amount of water standing in the tank after <span class="imath">x</span> minutes is the running total of that rate — an integral. On this page you will find the moment the tank is fullest, and the moment it is emptiest, without ever computing how much water is inside. You only watch the rate.</p>
+
+ <h2><span class="num">01</span>The idea, in depth</h2>
+
+ <p class="kicker">The concept</p>
+ <p>Fix a continuous rate <span class="imath">f</span> and a starting minute <span class="imath">a</span>. The water stored by minute <span class="imath">x</span> is</p>
+
+ <div class="eq" id="eq-1">
+  <span class="tag">(1)</span>
+  <p class="relation">F(x) = ∫<sub>a</sub><sup>x</sup> f(t) dt</p>
+  <p class="where"><b>F</b> the accumulated total (litres) · <b>f</b> the rate the total grows (litres/min) · <b>a</b> the fixed start minute · <b>x</b> the present minute.</p>
+ </div>
+
+ <p>You want the minute at which <span class="imath">F</span> is largest — a <b class="term">local maximum</b> — and the minute it is smallest. Ordinarily you would find a maximum of <span class="imath">F</span> by differentiating <span class="imath">F</span>. Here something lovely happens: differentiating an integral gives you the integrand straight back. That is the Fundamental Theorem of Calculus, and it is the whole engine of this page.</p>
+
+ <div class="eq" id="eq-2">
+  <span class="tag"><span class="star">★</span> (2)</span>
+  <p class="relation"><span class="lead">FTC&nbsp;&nbsp;</span>F′(x) = f(x)</p>
+  <p class="where">Valid when <b>f</b> is continuous. The derivative of the running total is the rate itself — the slope of <b>F</b> at minute <b>x</b> is the rate <b>f(x)</b> flowing at that minute.</p>
+ </div>
+
+ <p>Read <a class="eqref" href="#eq-2" data-eq="eq-2">eq. (2)</a> as a sentence about the tank. When the rate is positive, water is flowing in, so the total climbs. When the rate is negative, water is draining, so the total falls. The instant the rate crosses from positive to negative, the tank stops filling and starts emptying — that is the moment it holds the most. The instant the rate crosses from negative to positive, the tank stops emptying and starts filling — the moment it holds the least.</p>
+
+ <p>So the extrema of <span class="imath">F</span> are decided entirely by the <span class="key">sign changes of the integrand</span>. You never integrate. You watch where <span class="imath">f</span> is zero and which way it crosses.</p>
+
+ <figure>
+  <svg viewBox="0 0 640 372" role="img" aria-label="Top: an integrand f of t that is positive, crosses zero, then negative. Bottom: the accumulated total F of x rises to a peak exactly at the crossing, then falls.">
+   <text x="14" y="26" fill="#CDA98C" font-family="Quicksand,sans-serif" font-size="13" font-weight="600">RATE  f(t)</text>
+   <line x1="60" y1="96" x2="600" y2="96" stroke="#C7C5CC" stroke-width="1.4"/>
+   <text x="606" y="100" fill="#C7C5CC" font-family="Quicksand,sans-serif" font-size="13">t</text>
+   <path d="M78,96 L78,60 C150,40 250,54 332,96 Z" fill="rgba(61,224,216,0.16)"/>
+   <path d="M332,96 C380,128 430,140 470,132 L470,96 Z" fill="rgba(240,104,90,0.16)"/>
+   <path d="M78,60 C150,40 250,54 332,96 C390,130 440,140 490,124 C540,110 575,112 600,116" fill="none" stroke="#FFC96B" stroke-width="2.6"/>
+   <text x="150" y="34" fill="#3DE0D8" font-family="Quicksand,sans-serif" font-size="12.5" font-weight="600">f &gt; 0 · total climbs</text>
+   <text x="392" y="158" fill="#F0685A" font-family="Quicksand,sans-serif" font-size="12.5" font-weight="600">f &lt; 0 · total falls</text>
+   <circle cx="332" cy="96" r="4.5" fill="#F5B532"/>
+   <line x1="332" y1="42" x2="332" y2="356" stroke="#F5B532" stroke-width="1.3" stroke-dasharray="5 4"/>
+   <text x="230" y="196" fill="#F5B532" font-family="Quicksand,sans-serif" font-size="12" font-weight="600">f crosses + → −</text>
+   <text x="14" y="234" fill="#CDA98C" font-family="Quicksand,sans-serif" font-size="13" font-weight="600">TOTAL  F(x)</text>
+   <line x1="60" y1="356" x2="600" y2="356" stroke="#C7C5CC" stroke-width="1.4"/>
+   <text x="606" y="360" fill="#C7C5CC" font-family="Quicksand,sans-serif" font-size="13">x</text>
+   <path d="M78,340 C170,320 270,266 332,244 C400,266 452,300 520,326 C548,336 575,340 600,342" fill="none" stroke="#3DE0D8" stroke-width="2.8"/>
+   <circle cx="332" cy="244" r="5" fill="#F5B532"/>
+   <text x="352" y="242" fill="#F5B532" font-family="Quicksand,sans-serif" font-size="12.5" font-weight="600">F is fullest here</text>
+   <text x="120" y="330" fill="#A9CF7F" font-family="Quicksand,sans-serif" font-size="12">F rising</text>
+   <text x="470" y="316" fill="#F0685A" font-family="Quicksand,sans-serif" font-size="12">F falling</text>
+  </svg>
+  <figcaption><b>FIG 1</b> — The rate on top, the total below, sharing one time axis. Where the rate <b>f</b> cuts through zero from + to −, the total <b>F</b> reaches its peak. You read the maximum of <b>F</b> off the zeros of <b>f</b> — never by measuring how full the tank is.</figcaption>
+ </figure>
+
+ <p>Two things follow at once, and both matter for exams. First, the peak of <span class="imath">F</span> is <em>not</em> where <span class="imath">f</span> is largest — it is where <span class="imath">f</span> is <em>zero and dropping</em>. Confusing the total with its rate is the single most common blunder here. Second, the start minute <span class="imath">a</span> never appears in <a class="eqref" href="#eq-2" data-eq="eq-2">eq. (2)</a>. Changing <span class="imath">a</span> pours a fixed extra amount into the tank at time zero; it shifts every value of <span class="imath">F</span> by the same constant, but it cannot move the minute at which the tank is fullest. The locations of the extrema are blind to <span class="imath">a</span>.</p>
+
+ <div class="cp" id="cp1">
+  <p class="clabel">Quick check</p>
+  <p class="q">Let <span class="imath">F(x) = ∫<sub>5</sub><sup>x</sup> f(t) dt</span> with <span class="imath">f</span> continuous. Then <span class="imath">F′(x)</span> equals —</p>
+  <div class="opts">
+   <button class="opt" data-ok>f(x)</button>
+   <button class="opt">f(5)</button>
+   <button class="opt">f(x) − f(5)</button>
+   <button class="opt">F(x)</button>
+  </div>
+  <p class="fb"></p>
+  <p class="ans">Ans: f(x). By FTC, eq. (2) — the lower limit 5 leaves no trace in the derivative.</p>
+ </div>
+
+ <h2><span class="num">02</span>Every symbol, and the one rule of sign</h2>
+ <p>Before any calculation, pin down the quantities and the reading of "plus to minus". Everything below is decided by these.</p>
+
+ <div class="defs">
+  <div class="def"><span class="sym">F(x)</span><div class="name">Integral-defined function</div><p>The running total ∫<sub>a</sub><sup>x</sup> f. Its graph is the accumulation — the tank's water level over time.</p></div>
+  <div class="def"><span class="sym">f(t)</span><div class="name">Integrand</div><p>The rate that F grows. Continuous, so FTC applies. Its sign is the only thing you study.</p></div>
+  <div class="def"><span class="sym">F′(x)</span><div class="name">Derivative of the total</div><p>Equals f(x) exactly, by eq. (2). A critical point of F is a zero of f.</p></div>
+  <div class="def"><span class="sym">F″(x)</span><div class="name">Second derivative</div><p>Equals f′(x). Its sign at a critical point classifies max versus min without a sign line.</p></div>
+ </div>
+
+ <p>The sign convention is a single picture, and it is worth burning in. At a point <span class="imath">c</span> where <span class="imath">f(c)=0</span>:</p>
+
+ <figure>
+  <svg viewBox="0 0 640 210" role="img" aria-label="Two panels. Left: f changes plus to minus, F makes a peak, labelled maximum. Right: f changes minus to plus, F makes a valley, labelled minimum.">
+   <rect x="12" y="14" width="298" height="184" fill="none" stroke="#2A262E"/>
+   <text x="26" y="38" fill="#CDA98C" font-family="Quicksand,sans-serif" font-size="12.5" font-weight="600">f : + → −</text>
+   <line x1="40" y1="120" x2="284" y2="120" stroke="#C7C5CC" stroke-width="1.2"/>
+   <path d="M52,86 C110,110 150,120 162,120 C176,120 210,134 264,158" fill="none" stroke="#FFC96B" stroke-width="2.4"/>
+   <text x="70" y="80" fill="#3DE0D8" font-family="Quicksand,sans-serif" font-size="11">+</text>
+   <text x="240" y="150" fill="#F0685A" font-family="Quicksand,sans-serif" font-size="11">−</text>
+   <path d="M52,178 C110,160 150,150 162,150 C176,150 210,160 264,178" fill="none" stroke="#3DE0D8" stroke-width="2" opacity=".55"/>
+   <circle cx="162" cy="150" r="3.6" fill="#F5B532"/>
+   <text x="182" y="150" fill="#A9CF7F" font-family="Quicksand,sans-serif" font-size="12.5" font-weight="700">F: MAX</text>
+   <rect x="330" y="14" width="298" height="184" fill="none" stroke="#2A262E"/>
+   <text x="344" y="38" fill="#CDA98C" font-family="Quicksand,sans-serif" font-size="12.5" font-weight="600">f : − → +</text>
+   <line x1="358" y1="120" x2="602" y2="120" stroke="#C7C5CC" stroke-width="1.2"/>
+   <path d="M370,158 C420,136 456,120 470,120 C486,120 540,104 596,84" fill="none" stroke="#FFC96B" stroke-width="2.4"/>
+   <text x="388" y="150" fill="#F0685A" font-family="Quicksand,sans-serif" font-size="11">−</text>
+   <text x="560" y="98" fill="#3DE0D8" font-family="Quicksand,sans-serif" font-size="11">+</text>
+   <path d="M370,150 C420,166 456,176 470,176 C486,176 540,166 596,150" fill="none" stroke="#3DE0D8" stroke-width="2" opacity=".55"/>
+   <circle cx="470" cy="176" r="3.6" fill="#F5B532"/>
+   <text x="490" y="172" fill="#A9CF7F" font-family="Quicksand,sans-serif" font-size="12.5" font-weight="700">F: MIN</text>
+  </svg>
+  <figcaption><b>FIG 2</b> — The only rule you need. <b>f</b> going + → − sits under a peak of <b>F</b> (a maximum). <b>f</b> going − → + sits under a valley of <b>F</b> (a minimum). If <b>f</b> touches zero without changing sign, <b>F</b> merely pauses — no extremum.</figcaption>
+ </figure>
+
+ <p>That last line is the trap-door: a zero of <span class="imath">f</span> is only a candidate. A true extremum needs a genuine sign change. A double root — <span class="imath">f</span> touching the axis and bouncing back — gives a stationary point of <span class="imath">F</span> that is neither a maximum nor a minimum.</p>
+
+ <h2><span class="num">03</span>Deriving the two tools</h2>
+ <p>Nothing above should be taken on faith. Here is FTC from the definition of the derivative, then the Leibniz rule that handles a limit which is itself a function of <span class="imath">x</span>.</p>
+
+ <h3>Tool one — the derivative of a running total</h3>
+ <div class="chain">
+  <div class="row"><p class="step"><b>1</b>Write F′ straight from the definition of a derivative.</p><p class="eqline">F′(x) = lim<sub>h→0</sub> [ F(x+h) − F(x) ] / h</p></div>
+  <div class="row"><p class="step"><b>2</b>Subtract the two integrals; the shared part over [a, x] cancels.</p><p class="eqline">F(x+h) − F(x) = ∫<sub>x</sub><sup>x+h</sup> f(t) dt</p></div>
+  <div class="row"><p class="step"><b>3</b>f is continuous, so on the thin strip [x, x+h] it barely moves from f(x).</p><p class="eqline">∫<sub>x</sub><sup>x+h</sup> f(t) dt = f(c) · h ,&nbsp;&nbsp; c between x and x+h</p></div>
+  <div class="row"><p class="step"><b>4</b>Divide by h and let h → 0, so c → x.</p><p class="eqline">F′(x) = lim<sub>h→0</sub> f(c) = f(x)</p></div>
+  <div class="row"><p class="step"><b>∴</b>The slope of the total is the rate itself.</p><p class="eqline concl">F′(x) = f(x)</p></div>
+ </div>
+ <p>Step 3 is the mean-value theorem for integrals: the signed area of a thin slice equals the height at some inner point times the width. As the slice shrinks, that inner point is squeezed onto <span class="imath">x</span>. That is all FTC is.</p>
+
+ <h3>Tool two — when the limit is a function of x</h3>
+ <p>Often the upper limit is not <span class="imath">x</span> but something like <span class="imath">x²</span>, and the lower limit may move too. Compose FTC with the chain rule.</p>
+
+ <div class="chain">
+  <div class="row"><p class="step"><b>1</b>Name the "total up to u" function; its derivative is f by eq. (2).</p><p class="eqline">H(u) = ∫<sub>a</sub><sup>u</sup> f(t) dt ,&nbsp;&nbsp; H′(u) = f(u)</p></div>
+  <div class="row"><p class="step"><b>2</b>A varying upper limit v(x) means H(v(x)); apply the chain rule.</p><p class="eqline">d/dx H(v(x)) = f(v(x)) · v′(x)</p></div>
+  <div class="row"><p class="step"><b>3</b>A varying lower limit enters with a minus (swap the limits).</p><p class="eqline">g(x) = ∫<sub>u(x)</sub><sup>v(x)</sup> f = H(v(x)) − H(u(x))</p></div>
+  <div class="row"><p class="step"><b>∴</b>Differentiate both pieces — the Newton–Leibnitz rule.</p><p class="eqline concl">g′(x) = f(v(x)) v′(x) − f(u(x)) u′(x)</p></div>
+ </div>
+
+ <div class="eq" id="eq-3">
+  <span class="tag"><span class="star">★</span> (3)</span>
+  <p class="relation"><span class="lead">Leibniz&nbsp;&nbsp;</span>g′(x) = f(v(x)) v′(x) − f(u(x)) u′(x)</p>
+  <p class="where"><b>v(x)</b> upper limit · <b>u(x)</b> lower limit · each integrand value is multiplied by the derivative of its own limit. Take a constant limit's derivative as 0.</p>
+ </div>
+
+ <p>Notice what <a class="eqref" href="#eq-3" data-eq="eq-3">eq. (3)</a> quietly introduces: the factor <span class="imath">v′(x)</span>. A varying limit can create a critical point where <span class="imath">v′(x)=0</span>, even though the integrand is nowhere zero there. That extra root is where most marks are lost, and we hunt it down in the second scenario.</p>
+
+ <div class="cp" id="cp2">
+  <p class="clabel">Quick check</p>
+  <p class="q">For <span class="imath">F(x)=∫<sub>0</sub><sup>x</sup> f</span>, a local maximum of <span class="imath">F</span> sits where the integrand —</p>
+  <div class="opts">
+   <button class="opt">is largest</button>
+   <button class="opt" data-ok>changes + to −</button>
+   <button class="opt">changes − to +</button>
+   <button class="opt">equals 1</button>
+  </div>
+  <p class="fb"></p>
+  <p class="ans">Ans: changes + to −. See FIG 2 — the rate turns from filling to draining.</p>
+ </div>
+
+ <h2><span class="num">04</span>The special cases, named</h2>
+ <p>Four situations cover every question this subheading asks. Each is one line of trigger.</p>
+
+ <div class="special">
+  <span class="sname">Constant lower limit</span> &nbsp;<span class="trig">trigger: F = ∫ from a fixed a to x</span>
+  <p class="body">Then <span class="m">F′(x) = f(x)</span>. Extrema live at the sign changes of <span class="m">f</span>, and moving <span class="m">a</span> only slides the whole graph of <span class="m">F</span> up or down — the extrema stay put.</p>
+ </div>
+ <div class="special">
+  <span class="sname">Function upper limit</span> &nbsp;<span class="trig">trigger: upper limit is v(x), e.g. x²</span>
+  <p class="body">Then <span class="m">g′(x) = f(v(x))·v′(x)</span>. Set both factors to zero: candidates come from <span class="m">f(v(x))=0</span> and from <span class="m">v′(x)=0</span>.</p>
+ </div>
+ <div class="special">
+  <span class="sname">Both limits vary</span> &nbsp;<span class="trig">trigger: g = ∫ from u(x) to v(x)</span>
+  <p class="body">The full rule <span class="m">g′ = f(v)v′ − f(u)u′</span>. Factor it completely, then draw one sign line for <span class="m">g′</span>.</p>
+ </div>
+ <div class="special">
+  <span class="sname">Second-derivative test</span> &nbsp;<span class="trig">trigger: classify a critical point fast</span>
+  <p class="body">Since <span class="m">F″ = f′</span>, at a zero <span class="m">c</span> of <span class="m">f</span>: if <span class="m">f′(c) &lt; 0</span> it is a maximum, if <span class="m">f′(c) &gt; 0</span> a minimum. If <span class="m">f′(c)=0</span> too, fall back to the sign line.</p>
+ </div>
+
+ <div class="callout keyidea">
+  <p class="clabel">Key idea</p>
+  <p>Whatever the limits, first write <span class="imath">g′(x)</span> and factor it. The zeros of that factored form are your only candidates; a sign line across them, read left to right, hands you every maximum and minimum in one pass.</p>
+ </div>
+
+ <div class="cp" id="cp3">
+  <p class="clabel">Quick check — type a number</p>
+  <p class="q">For <span class="imath">g(x)=∫<sub>0</sub><sup>x²</sup> (t−1) dt</span>, compute <span class="imath">g′(1)</span>.</p>
+  <div class="tin">
+   <input class="num" id="cp3in" inputmode="decimal" placeholder="g′(1) = ?">
+   <button class="check" data-target="cp3in" data-ans="0" data-tol="0.05">Check</button>
+  </div>
+  <p class="fb"></p>
+  <p class="ans">Ans: 0. By eq. (3), g′(x)=(x²−1)·2x, so g′(1)=0·2=0. The lab's preset "Composite limit x²" shows this live.</p>
+ </div>
+
+ <h2><span class="num">05</span>Two worked scenarios</h2>
+
+ <div class="scenario">
+  <p><span class="stamp">SCENARIO · AOD-032</span><span class="pyq">PYQ pattern · JEE Main</span></p>
+  <h3>A parabola integrand — find the peak and the trough</h3>
+
+  <p class="subk">The setup</p>
+  <p>Let <span class="imath">F(x) = ∫<sub>0</sub><sup>x</sup> (t−1)(t−2) dt</span> on all of ℝ. Locate the local maximum and local minimum of <span class="imath">F</span>.</p>
+
+  <figure>
+   <svg viewBox="0 0 640 176" role="img" aria-label="Sign line for F prime equals x minus 1 times x minus 2: positive before 1, negative between 1 and 2, positive after 2, giving a maximum at 1 and a minimum at 2.">
+    <line x1="40" y1="96" x2="600" y2="96" stroke="#C7C5CC" stroke-width="1.4"/>
+    <text x="606" y="100" fill="#C7C5CC" font-family="Quicksand,sans-serif" font-size="13">x</text>
+    <line x1="220" y1="88" x2="220" y2="104" stroke="#F5B532" stroke-width="1.6"/>
+    <line x1="380" y1="88" x2="380" y2="104" stroke="#F5B532" stroke-width="1.6"/>
+    <text x="220" y="124" fill="#F5E3C0" font-family="Quicksand,sans-serif" font-size="13" text-anchor="middle">1</text>
+    <text x="380" y="124" fill="#F5E3C0" font-family="Quicksand,sans-serif" font-size="13" text-anchor="middle">2</text>
+    <text x="120" y="80" fill="#3DE0D8" font-family="Quicksand,sans-serif" font-size="16" text-anchor="middle" font-weight="700">+</text>
+    <text x="300" y="80" fill="#F0685A" font-family="Quicksand,sans-serif" font-size="16" text-anchor="middle" font-weight="700">−</text>
+    <text x="490" y="80" fill="#3DE0D8" font-family="Quicksand,sans-serif" font-size="16" text-anchor="middle" font-weight="700">+</text>
+    <text x="220" y="152" fill="#A9CF7F" font-family="Quicksand,sans-serif" font-size="12.5" text-anchor="middle" font-weight="700">MAX</text>
+    <text x="380" y="152" fill="#A9CF7F" font-family="Quicksand,sans-serif" font-size="12.5" text-anchor="middle" font-weight="700">MIN</text>
+    <text x="40" y="40" fill="#CDA98C" font-family="Quicksand,sans-serif" font-size="12.5" font-weight="600">sign of  F′(x) = (x−1)(x−2)</text>
+   </svg>
+   <figcaption><b>FIG 3</b> — One sign line settles it. <b>F′</b> runs + − +, so <b>F</b> peaks at <b>x = 1</b> and bottoms at <b>x = 2</b>.</figcaption>
+  </figure>
+
+  <p class="subk">How to attack</p>
+  <div class="chain">
+   <div class="row"><p class="step"><b>1</b>Do not integrate — FTC hands you the derivative directly.</p><p class="eqline">F′(x) = (x−1)(x−2)</p></div>
+   <div class="row"><p class="step"><b>2</b>Set it to zero for the candidate minutes.</p><p class="eqline">(x−1)(x−2) = 0 ⟹ x = 1, 2</p></div>
+   <div class="row"><p class="step"><b>3</b>Read the sign of F′ across the roots (FIG 3): + , − , +.</p><p class="eqline">F′ &gt; 0 on (−∞,1), &lt; 0 on (1,2), &gt; 0 on (2,∞)</p></div>
+   <div class="row"><p class="step"><b>∴</b>+ → − at 1 is a peak; − → + at 2 is a trough.</p><p class="eqline concl">local max at x = 1,&nbsp; local min at x = 2</p></div>
+  </div>
+
+  <p class="subk">The trap</p>
+  <p class="trapline">Students expand the bracket, integrate to <span class="imath">F(x)=x³/3 − 3x²/2 + 2x</span>, then differentiate it back — burning time and inviting a sign slip. Others report <span class="imath">x=2</span> as the maximum because <span class="imath">f</span> is climbing there. Neither is needed, and the second is wrong.</p>
+  <p class="subk">The line that finishes it</p>
+  <p class="kill">F′ is the integrand itself; its + → − crossing is the maximum. Answer: max at x = 1, min at x = 2.</p>
+ </div>
+
+ <div class="cp" id="cp4">
+  <p class="clabel">Quick check — type a number</p>
+  <p class="q">For <span class="imath">F(x)=∫<sub>0</sub><sup>x</sup>(t−1)(t−2)dt</span>, at which <span class="imath">x</span> is <span class="imath">F</span> a local <em>maximum</em>?</p>
+  <div class="tin">
+   <input class="num" id="cp4in" inputmode="decimal" placeholder="x = ?">
+   <button class="check" data-target="cp4in" data-ans="1" data-tol="0.01">Check</button>
+  </div>
+  <p class="fb"></p>
+  <p class="ans">Ans: x = 1, where the integrand crosses + to −.</p>
+ </div>
+
+ <div class="scenario">
+  <p><span class="stamp">SCENARIO · AOD-033</span><span class="pyq">PYQ pattern · JEE Advanced</span></p>
+  <h3>A composite upper limit — mind the extra root</h3>
+
+  <p class="subk">The setup</p>
+  <p>Let <span class="imath">g(x) = ∫<sub>0</sub><sup>x²</sup> (t−1) dt</span> on ℝ. Find every local maximum and minimum of <span class="imath">g</span>.</p>
+
+  <figure>
+   <svg viewBox="0 0 640 182" role="img" aria-label="Sign line for g prime equals 2x times x squared minus 1, with roots at minus 1, 0 and 1, sign negative, positive, negative, positive, giving minima at minus one and one and a maximum at zero.">
+    <line x1="40" y1="96" x2="600" y2="96" stroke="#C7C5CC" stroke-width="1.4"/>
+    <text x="606" y="100" fill="#C7C5CC" font-family="Quicksand,sans-serif" font-size="13">x</text>
+    <line x1="150" y1="88" x2="150" y2="104" stroke="#F5B532" stroke-width="1.6"/>
+    <line x1="320" y1="88" x2="320" y2="104" stroke="#F5B532" stroke-width="1.6"/>
+    <line x1="490" y1="88" x2="490" y2="104" stroke="#F5B532" stroke-width="1.6"/>
+    <text x="150" y="124" fill="#F5E3C0" font-family="Quicksand,sans-serif" font-size="13" text-anchor="middle">−1</text>
+    <text x="320" y="124" fill="#F5E3C0" font-family="Quicksand,sans-serif" font-size="13" text-anchor="middle">0</text>
+    <text x="490" y="124" fill="#F5E3C0" font-family="Quicksand,sans-serif" font-size="13" text-anchor="middle">1</text>
+    <text x="95"  y="80" fill="#F0685A" font-family="Quicksand,sans-serif" font-size="16" text-anchor="middle" font-weight="700">−</text>
+    <text x="235" y="80" fill="#3DE0D8" font-family="Quicksand,sans-serif" font-size="16" text-anchor="middle" font-weight="700">+</text>
+    <text x="405" y="80" fill="#F0685A" font-family="Quicksand,sans-serif" font-size="16" text-anchor="middle" font-weight="700">−</text>
+    <text x="545" y="80" fill="#3DE0D8" font-family="Quicksand,sans-serif" font-size="16" text-anchor="middle" font-weight="700">+</text>
+    <text x="150" y="152" fill="#A9CF7F" font-family="Quicksand,sans-serif" font-size="12.5" text-anchor="middle" font-weight="700">MIN</text>
+    <text x="320" y="152" fill="#A9CF7F" font-family="Quicksand,sans-serif" font-size="12.5" text-anchor="middle" font-weight="700">MAX</text>
+    <text x="490" y="152" fill="#A9CF7F" font-family="Quicksand,sans-serif" font-size="12.5" text-anchor="middle" font-weight="700">MIN</text>
+    <text x="40" y="40" fill="#CDA98C" font-family="Quicksand,sans-serif" font-size="12.5" font-weight="600">sign of  g′(x) = 2x(x²−1)</text>
+   </svg>
+   <figcaption><b>FIG 4</b> — The factor <b>2x</b> from the chain rule plants a root at <b>x = 0</b> that the integrand never gave. <b>g′</b> runs − + − +, so minima sit at <b>±1</b> and a maximum at <b>0</b>.</figcaption>
+  </figure>
+
+  <p class="subk">How to attack</p>
+  <div class="chain">
+   <div class="row"><p class="step"><b>1</b>Apply Leibniz: value at the upper limit, times the limit's derivative.</p><p class="eqline">g′(x) = (x²−1) · 2x</p></div>
+   <div class="row"><p class="step"><b>2</b>Factor fully — three roots, not one.</p><p class="eqline">g′(x) = 2x(x−1)(x+1) = 0 ⟹ x = −1, 0, 1</p></div>
+   <div class="row"><p class="step"><b>3</b>Sign line across the three roots (FIG 4): − , + , − , +.</p><p class="eqline">g′ &lt; 0, &gt; 0, &lt; 0, &gt; 0</p></div>
+   <div class="row"><p class="step"><b>∴</b>Read the crossings: − → + minima, + → − maximum.</p><p class="eqline concl">min at x = ±1,&nbsp; max at x = 0</p></div>
+  </div>
+
+  <p class="subk">The trap</p>
+  <p class="trapline">The costly mistake is writing <span class="imath">g′(x)=x²−1</span> and forgetting the <span class="imath">2x</span> from the chain rule — which drops the whole <span class="imath">x=0</span> extremum. A quick sanity check: <span class="imath">g(x)=x⁴/2 − x²</span>, so <span class="imath">g′=2x³−2x=2x(x²−1)</span>, confirming the extra root.</p>
+  <p class="subk">The line that finishes it</p>
+  <p class="kill">Every varying limit brings its own derivative as a factor. Here that factor is 2x — so x = 0 is a genuine maximum, and the answer is min at ±1, max at 0.</p>
+ </div>
+
+ <p class="kicker">Now do it yourself</p>
+ <p>You have read where the tank is fullest off the sign of the rate. The bench below lets you <em>watch</em> it: press Run and see area pile onto the total, drag the start minute <span class="imath">a</span> and confirm the peak does not budge, and switch to the composite presets to catch that extra root appearing at <span class="imath">x=0</span>. Every number on screen is the exact closed form, matched to the scenarios above.</p>
+
+ <div class="sim-launch">
+  <button type="button" class="sim-btn" onclick="openSim('sim-accum')">▶ Open the simulation — Accumulation bench</button>
+  <p class="sim-note">Opens full screen in this page · press Esc or "Back to notes" to return</p>
+ </div>
+
+ <div id="sim-accum" class="sim-overlay" role="dialog" aria-modal="true" aria-label="Accumulation bench simulation" hidden>
+  <div class="sim-bar">
+   <button type="button" class="sim-back" onclick="closeSim('sim-accum')">← Back to notes</button>
+  </div>
+  <div class="sim-head">
+   <p class="eyebrow">SIMULATION · Extrema of Integral-Defined Functions</p>
+   <h1>Accumulation bench</h1>
+   <p class="what"><b>What it shows:</b> the integrand on top and the running total below — as the upper limit sweeps, area accumulates and the total rises or falls.</p>
+   <p class="explains"><b>What to do:</b> press Run to sweep, drag the lower limit to see the total shift without moving its extrema, and switch presets to meet composite limits.</p>
+  </div>
+  <div class="sim-body">
+   <div class="sim-controls" id="s_controls">
+    <div class="sc-group">
+     <p class="sc-lab">Presets — keyed to KG rows</p>
+     <div class="preset-row" id="s_presets"></div>
+    </div>
+    <div class="runbar">
+     <button class="runbtn" id="s_run">▶ Run</button>
+     <button class="chip active" id="s_chipG" data-gt="g">g(x)</button>
+     <button class="chip" id="s_chipGp" data-gt="gp">g′(x)</button>
+    </div>
+    <div class="sc-group">
+     <p class="sc-lab">Speed</p>
+     <div class="spd" id="s_speed">
+      <button class="sbtn" data-s="0.25">0.25×</button>
+      <button class="sbtn" data-s="0.5">0.5×</button>
+      <button class="sbtn active" data-s="1">1×</button>
+      <button class="sbtn" data-s="2">2×</button>
+      <button class="sbtn" data-s="4">4×</button>
+      <button class="sbtn" id="s_reset">⟲ Reset (R)</button>
+     </div>
+    </div>
+    <div class="sc-group">
+     <p class="sc-lab">Upper limit sweep — <span class="sc-val" id="s_xval">x = −1.00</span></p>
+     <input type="range" id="s_x" min="-1" max="4" step="0.01" value="-1" aria-label="upper limit sweep x">
+    </div>
+    <div class="sc-group" id="s_agroup">
+     <p class="sc-lab">Lower limit — <span class="sc-val" id="s_aval">a = 0.00</span></p>
+     <input type="range" id="s_a" min="-1" max="3" step="0.05" value="0" aria-label="lower limit a">
+    </div>
+    <div class="rd">
+     <span class="rk">upper u</span><span class="rv" id="s_ru">0.00</span>
+     <span class="rk">lower ℓ</span><span class="rv" id="s_rl">0.00</span>
+     <span class="rk">g(x)</span><span class="rv" id="s_rg">0.00</span>
+     <span class="rk">g′(x)</span><span class="rv" id="s_rgp">0.00</span>
+     <span class="rk">nearest</span><span class="rv" id="s_rcrit">—</span>
+    </div>
+    <div class="expl">
+     <p class="eb a">What you see</p><p class="et" id="s_bA">—</p>
+     <p class="eb b">The math, live</p><p class="esym" id="s_bSym">—</p><p class="esub" id="s_bSub">—</p>
+     <p class="eb c">Because → therefore</p><p class="et" id="s_bC">—</p>
+     <p class="eb d">Check yourself</p><p class="et" id="s_bD">—</p>
+    </div>
+   </div>
+   <div class="sim-stage" id="s_stage">
+    <canvas id="s_canvas" aria-label="Two stacked graphs: the integrand with shaded signed area, and the accumulated total with its maxima and minima marked."></canvas>
+   </div>
+  </div>
+ </div>
+
+</main>
+
+<script>
+/* equation-reference hover preview */
+(function(){
+ const tip=document.createElement('div'); tip.className='eqtip'; tip.hidden=true;
+ document.body.appendChild(tip);
+ document.querySelectorAll('.eqref').forEach(ref=>{
+  const eq=document.getElementById(ref.dataset.eq);
+  const show=()=>{ if(!eq) return; const r0=eq.querySelector('.relation'); tip.innerHTML=r0?r0.innerHTML:eq.innerHTML; tip.hidden=false;
+   const r=ref.getBoundingClientRect();
+   tip.style.left=Math.min(r.left+window.scrollX, window.scrollX+window.innerWidth-360)+'px';
+   tip.style.top=(r.bottom+window.scrollY+6)+'px'; };
+  const hide=()=>{ tip.hidden=true; };
+  ref.addEventListener('mouseenter',show); ref.addEventListener('mouseleave',hide);
+  ref.addEventListener('focus',show); ref.addEventListener('blur',hide);
+ });
+})();
+
+/* checkpoints */
+(function(){
+ document.querySelectorAll('.cp .opt').forEach(b=>{
+  b.addEventListener('click',()=>{
+   const cp=b.closest('.cp'); const fb=cp.querySelector('.fb');
+   cp.querySelectorAll('.opt').forEach(o=>o.classList.remove('right','wrong'));
+   if(b.hasAttribute('data-ok')){ b.classList.add('right'); fb.textContent='Correct — that is the rule from FIG 2 and eq. (2).'; fb.className='fb ok'; }
+   else{ b.classList.add('wrong'); fb.textContent='Not quite. A maximum of F sits where the integrand turns from + to − — revisit FIG 2.'; fb.className='fb no'; }
+  });
+ });
+ document.querySelectorAll('.cp .check').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+   const cp=btn.closest('.cp'); const fb=cp.querySelector('.fb');
+   const inp=document.getElementById(btn.dataset.target);
+   const v=parseFloat((inp.value||'').replace(/[−]/g,'-'));
+   const ans=parseFloat(btn.dataset.ans), tol=parseFloat(btn.dataset.tol);
+   if(isNaN(v)){ fb.textContent='Type a number first.'; fb.className='fb no'; return; }
+   if(Math.abs(v-ans)<=tol){ fb.textContent='Correct — that matches eq. (3) applied at that point.'; fb.className='fb ok'; }
+   else{ fb.textContent='Not yet. Write g′ from the Leibniz rule, factor it, then substitute.'; fb.className='fb no'; }
+  });
+ });
+})();
+
+/* overlay open/close */
+let simReturn=null;
+function openSim(id){ simReturn=window.scrollY; const o=document.getElementById(id); o.hidden=false;
+ document.body.style.overflow='hidden'; if(window.SIM&&window.SIM.active) window.SIM.active(true);
+ if(window.SIM&&window.SIM.resize) requestAnimationFrame(window.SIM.resize); }
+function closeSim(id){ document.getElementById(id).hidden=true; document.body.style.overflow='';
+ if(window.SIM&&window.SIM.active) window.SIM.active(false); if(simReturn!=null) window.scrollTo(0,simReturn); }
+addEventListener('keydown',e=>{ if(e.key==='Escape') document.querySelectorAll('.sim-overlay:not([hidden])').forEach(o=>closeSim(o.id)); });
+</script>
+
+<!-- ===== SIM ENGINE (identical to extrema-of-integral-defined-functions.sim.html) ===== -->
+<script>
+(function(){
+ const $=id=>document.getElementById(id);
+ const canvas=$('s_canvas'); if(!canvas) return;
+ const ctx=canvas.getContext('2d');
+ const stage=$('s_stage');
+ const dpr=Math.min(window.devicePixelRatio||1,2.5);
+ const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+ function fmt(n,d){ if(!isFinite(n)) return '—'; let s=n.toFixed(d);
+  if(parseFloat(s)===0) s=(0).toFixed(d); return s.replace('-','−'); }
+ const f2=n=>fmt(n,2), f3=n=>fmt(n,3);
+ function tick(v){ const r=Math.round(v*1000)/1000;
+  let s=(Math.abs(r-Math.round(r))<1e-9)?String(Math.round(r)):String(r);
+  return s.replace('-','−'); }
+
+ const PI=Math.PI;
+ const PRESETS={
+  P1:{ row:'AOD-032', name:'Parabola integrand', fLabel:'f(t) = (t−1)(t−2)',
+    f:t=>(t-1)*(t-2), A:t=>t*t*t/3 - 1.5*t*t + 2*t,
+    hi:x=>x, hip:x=>1, loFn:null, loFnp:null,
+    xmin:-1, xmax:4, xstart:-1, Wa:8, Wb:8, fY:[-2,7], gY:[-4,6], gpY:[-2,7],
+    aEnabled:true, crit:[{x:1,type:'max'},{x:2,type:'min'}],
+    sym:'g′(x) = f(x) = (x−1)(x−2)',
+    gpSub:x=>`g′(${f2(x)}) = (${f2(x)}−1)(${f2(x)}−2) = ${f3((x-1)*(x-2))}`,
+    rise:'The integrand is positive, so area piles on and g climbs.',
+    fall:'The integrand is negative, so area is removed and g falls.',
+    note:{1:'f crosses + to − at x = 1 — g is at a local maximum.',2:'f crosses − to + at x = 2 — g is at a local minimum.'},
+    D:'Before Run: will g rise or fall first? Then drag x to 1.00 and watch it turn — that is the maximum.' },
+  P2:{ row:'AOD-032', name:'Three sign changes', fLabel:'f(t) = (t−1)(t−2)(t−3)',
+    f:t=>(t-1)*(t-2)*(t-3), A:t=>t*t*t*t/4 - 2*t*t*t + 5.5*t*t - 6*t,
+    hi:x=>x, hip:x=>1, loFn:null, loFnp:null,
+    xmin:-0.5, xmax:4, xstart:-0.5, Wa:8, Wb:8, fY:[-7,7], gY:[-3.5,3], gpY:[-7,7],
+    aEnabled:true, crit:[{x:1,type:'min'},{x:2,type:'max'},{x:3,type:'min'}],
+    sym:'g′(x) = f(x) = (x−1)(x−2)(x−3)',
+    gpSub:x=>`g′(${f2(x)}) = (${f2(x)}−1)(${f2(x)}−2)(${f2(x)}−3) = ${f3((x-1)*(x-2)*(x-3))}`,
+    rise:'The integrand is positive, so g climbs.',
+    fall:'The integrand is negative, so g falls.',
+    note:{1:'f crosses − to + at x = 1 — a local minimum.',2:'f crosses + to − at x = 2 — a local maximum.',3:'f crosses − to + at x = 3 — a local minimum.'},
+    D:'Count the sign changes of f. Each one is an extremum of g — three in all.' },
+  P3:{ row:'AOD-032', name:'Sine integrand', fLabel:'f(t) = sin t',
+    f:t=>Math.sin(t), A:t=>-Math.cos(t),
+    hi:x=>x, hip:x=>1, loFn:null, loFnp:null,
+    xmin:-1, xmax:7, xstart:-1, Wa:9, Wb:9, fY:[-1.3,1.3], gY:[-0.5,2.5], gpY:[-1.3,1.3],
+    aEnabled:true, crit:[{x:0,type:'min'},{x:PI,type:'max'},{x:2*PI,type:'min'}],
+    sym:'g′(x) = f(x) = sin x',
+    gpSub:x=>`g′(${f2(x)}) = sin(${f2(x)}) = ${f3(Math.sin(x))}`,
+    rise:'sin x is positive, so g climbs.',
+    fall:'sin x is negative, so g falls.',
+    note:{0:'sin crosses − to + at x = 0 — a local minimum.',3.14159:'sin crosses + to − at x = π — a local maximum.',6.28319:'sin crosses − to + at x = 2π — a local minimum.'},
+    D:'A wave keeps changing sign — so g here has a maximum at π and minima at 0 and 2π.' },
+  P4:{ row:'AOD-033', name:'Composite limit x²', fLabel:'f(t) = t − 1,  upper = x²',
+    f:t=>t-1, A:t=>t*t/2 - t,
+    hi:x=>x*x, hip:x=>2*x, loFn:null, loFnp:null,
+    xmin:-1.6, xmax:1.6, xstart:-1.6, Wa:8, Wb:6, fY:[-2,3], gY:[-1,2], gpY:[-5.5,5.5],
+    aEnabled:true, crit:[{x:-1,type:'min'},{x:0,type:'max'},{x:1,type:'min'}],
+    sym:'g′(x) = f(x²)·2x = (x²−1)·2x',
+    gpSub:x=>`g′(${f2(x)}) = 2(${f2(x)})((${f2(x)})²−1) = ${f3(2*x*(x*x-1))}`,
+    rise:'g′ = 2x(x²−1) is positive here, so g climbs.',
+    fall:'g′ = 2x(x²−1) is negative here, so g falls.',
+    note:{'-1':'g′ crosses − to + at x = −1 — a local minimum.',0:'At x = 0 the factor 2x flips sign — a local maximum, though the integrand is not zero.',1:'g′ crosses − to + at x = 1 — a local minimum.'},
+    D:'Watch x = 0: the total turns even though the integrand is nowhere zero. The factor 2x did that.' },
+  P5:{ row:'AOD-033', name:'Both limits vary', fLabel:'f(t) = t,  ∫ from x to x²',
+    f:t=>t, A:t=>t*t/2,
+    hi:x=>x*x, hip:x=>2*x, loFn:x=>x, loFnp:x=>1,
+    xmin:-1.3, xmax:1.3, xstart:-1.3, Wa:6, Wb:6, fY:[-2,2], gY:[-0.5,1], gpY:[-3.5,3.5],
+    aEnabled:false, crit:[{x:-0.70711,type:'min'},{x:0,type:'max'},{x:0.70711,type:'min'}],
+    sym:'g′(x) = f(x²)·2x − f(x)·1 = 2x³ − x',
+    gpSub:x=>`g′(${f2(x)}) = 2(${f2(x)})³ − (${f2(x)}) = ${f3(2*x*x*x - x)}`,
+    rise:'g′ = 2x³ − x is positive here, so g climbs.',
+    fall:'g′ = 2x³ − x is negative here, so g falls.',
+    note:{'-0.70711':'g′ crosses − to + near x = −0.71 — a local minimum.',0:'At x = 0 both limit terms vanish — a local maximum.',0.70711:'g′ crosses − to + near x = 0.71 — a local minimum.'},
+    D:'Both limits move now. The lower limit subtracts f(x)·1 — see it in the live equation.' },
+ };
+
+ let P=PRESETS.P1;
+ let x=P.xstart, xTarget=P.xstart, aCur=0, aTarget=0;
+ let playing=false, speed=1, graphType='g';
+ let ghost=null;
+ let simIsActive=false;
+ let cssW=0, cssH=0, last=0;
+
+ function loVal(w){ return P.loFn? P.loFn(w): aCur; }
+ function Gval(w){ return P.A(P.hi(w)) - P.A(loVal(w)); }
+ function Gp(w){ const lp=P.loFnp?P.loFnp(w):0; return P.f(P.hi(w))*P.hip(w) - P.f(loVal(w))*lp; }
+
+ function resize(){ const r=stage.getBoundingClientRect(); cssW=r.width; cssH=r.height;
+  if(cssW<2||cssH<2) return;
+  canvas.width=Math.round(cssW*dpr); canvas.height=Math.round(cssH*dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0); }
+ addEventListener('resize',resize);
+
+ function niceStep(r){ const p=Math.pow(10,Math.floor(Math.log10(r))); const f=r/p;
+  return (f<1.5?1:f<3?2:f<7?5:10)*p; }
+ function drawFunc(m,fn,color,lw){ ctx.strokeStyle=color; ctx.lineWidth=lw; ctx.lineJoin='round';
+  const w0=m.panX-m.Ww/2, w1=m.panX+m.Ww/2, dw=(w1-w0)/320; let started=false; ctx.beginPath();
+  for(let w=w0; w<=w1; w+=dw){ const v=fn(w); if(!isFinite(v)){started=false;continue;}
+   const X=m.sx(w), Y=m.sy(v); if(Y<m.pt-400||Y>m.pb+400){started=false;continue;}
+   if(!started){ctx.moveTo(X,Y);started=true;} else ctx.lineTo(X,Y); }
+  ctx.stroke(); }
+ function tri(X,Y,dir){ const s=5.5; ctx.beginPath();
+  if(dir==='up'){ctx.moveTo(X,Y-s);ctx.lineTo(X-s,Y+s*0.75);ctx.lineTo(X+s,Y+s*0.75);}
+  else{ctx.moveTo(X,Y+s);ctx.lineTo(X-s,Y-s*0.75);ctx.lineTo(X+s,Y-s*0.75);}
+  ctx.closePath(); ctx.fill(); }
+
+ function drawZone(z,opt){
+  ctx.fillStyle='#0E0D10'; ctx.fillRect(z.x,z.y,z.w,z.h);
+  ctx.strokeStyle='#2A262E'; ctx.lineWidth=1; ctx.strokeRect(z.x+.5,z.y+.5,z.w-1,z.h-1);
+  const mL=52,mR=14,mT=24,mB=24;
+  const pl=z.x+mL, pr=z.x+z.w-mR, pt=z.y+mT, pb=z.y+z.h-mB;
+  const pw=pr-pl, ph=pb-pt;
+  const Ww=opt.Ww, ppux=pw/Ww, cx=pl+pw/2;
+  const ppuy=ph/(opt.ymax-opt.ymin);
+  const sx=w=>cx+(w-opt.panX)*ppux;
+  const sy=v=>pb-(v-opt.ymin)*ppuy;
+  const m={sx,sy,pl,pr,pt,pb,pw,ph,ppux,ppuy,cx,panX:opt.panX,Ww};
+  ctx.fillStyle='#CDA98C'; ctx.font='600 12px Quicksand,sans-serif'; ctx.textAlign='left'; ctx.textBaseline='alphabetic';
+  ctx.fillText(opt.title, z.x+8, z.y+16);
+  ctx.save(); ctx.beginPath(); ctx.rect(pl,pt,pw,ph); ctx.clip();
+  const k0=Math.ceil(opt.panX-Ww/2), k1=Math.floor(opt.panX+Ww/2);
+  for(let k=k0;k<=k1;k++){ const X=sx(k); ctx.strokeStyle=(k===0)?'rgba(199,197,204,0.45)':'rgba(255,138,61,0.06)';
+   ctx.lineWidth=(k===0)?1.4:1; ctx.beginPath();ctx.moveTo(X,pt);ctx.lineTo(X,pb);ctx.stroke(); }
+  const step=niceStep((opt.ymax-opt.ymin)/5);
+  const y0=Math.ceil(opt.ymin/step)*step;
+  for(let v=y0; v<=opt.ymax+1e-9; v+=step){ const Y=sy(v);
+   ctx.strokeStyle=(Math.abs(v)<1e-9)?'rgba(199,197,204,0.45)':'rgba(255,138,61,0.06)';
+   ctx.lineWidth=(Math.abs(v)<1e-9)?1.4:1; ctx.beginPath();ctx.moveTo(pl,Y);ctx.lineTo(pr,Y);ctx.stroke(); }
+  opt.content(m);
+  ctx.strokeStyle='#F5B532'; ctx.setLineDash([5,4]); ctx.lineWidth=1.4;
+  ctx.beginPath();ctx.moveTo(cx,pt);ctx.lineTo(cx,pb);ctx.stroke(); ctx.setLineDash([]);
+  ctx.restore();
+  ctx.fillStyle='#9C968E'; ctx.font='500 11px Quicksand,sans-serif'; ctx.textAlign='center'; ctx.textBaseline='top';
+  for(let k=k0;k<=k1;k++){ const X=sx(k); if(X>pl+6&&X<pr-6) ctx.fillText(String(k),X,pb+5); }
+  ctx.textAlign='right'; ctx.textBaseline='middle';
+  for(let v=y0; v<=opt.ymax+1e-9; v+=step){ const Y=sy(v); ctx.fillText(tick(v),pl-6,Y); }
+  ctx.fillStyle='#C7C5CC'; ctx.font='600 11px Quicksand,sans-serif'; ctx.textAlign='right'; ctx.textBaseline='alphabetic';
+  ctx.fillText(opt.xlab, pr, pb+18);
+  return m;
+ }
+
+ function draw(){
+  if(cssW<2||cssH<2) return;
+  const W=cssW,H=cssH; ctx.clearRect(0,0,W,H);
+  const statusH=24, gap=12;
+  const zoneH=(H-statusH-gap)/2;
+  const uV=P.hi(x);
+  drawZone({x:0,y:0,w:W,h:zoneH},{
+   title:'INTEGRAND   f(t)', xlab:'t', panX:uV, Ww:P.Wa, ymin:P.fY[0], ymax:P.fY[1],
+   content:(m)=>{
+    const lo=loVal(x), hi=P.hi(x); const a0=Math.min(lo,hi), a1=Math.max(lo,hi);
+    const dw=(m.Ww)/240;
+    for(let t=a0;t<a1;t+=dw){ const fv=P.f(t); const X0=m.sx(t),X1=m.sx(t+dw);
+     const Y0=m.sy(0),Yf=m.sy(fv);
+     ctx.fillStyle=(fv>=0)?'rgba(61,224,216,0.16)':'rgba(240,104,90,0.16)';
+     ctx.fillRect(X0,Math.min(Y0,Yf),Math.max(1,X1-X0+1),Math.abs(Yf-Y0)); }
+    drawFunc(m,P.f,'#FFC96B',2.6);
+    const XL=m.sx(lo); if(XL>m.pl&&XL<m.pr){ ctx.strokeStyle='#C7C5CC'; ctx.setLineDash([3,3]); ctx.lineWidth=1.2;
+     ctx.beginPath();ctx.moveTo(XL,m.pt);ctx.lineTo(XL,m.pb);ctx.stroke(); ctx.setLineDash([]); }
+   }
+  });
+  drawZone({x:0,y:zoneH+gap,w:W,h:zoneH},{
+   title:(graphType==='g'?'ACCUMULATION   g(x)':'DERIVATIVE   g′(x)'), xlab:'x', panX:x, Ww:P.Wb,
+   ymin:(graphType==='g'?P.gY[0]:P.gpY[0]), ymax:(graphType==='g'?P.gY[1]:P.gpY[1]),
+   content:(m)=>{
+    if(ghost && graphType==='g'){ ctx.setLineDash([2,4]);
+     drawFunc(m, w=>P.A(P.hi(w))-P.A(ghost.a), '#FFE348', 1.8); ctx.setLineDash([]); }
+    const fn = (graphType==='g')? (w=>Gval(w)) : (w=>Gp(w));
+    drawFunc(m, fn, (graphType==='g'?'#3DE0D8':'#A9CF7F'), 2.8);
+    P.crit.forEach(c=>{ const val=(graphType==='g')?Gval(c.x):0; const X=m.sx(c.x),Y=m.sy(val);
+     if(X>m.pl&&X<m.pr){ ctx.fillStyle='#F5B532'; tri(X,Y,c.type==='max'?'down':'up'); } });
+    const val=(graphType==='g')?Gval(x):Gp(x); const X=m.cx,Y=m.sy(val);
+    ctx.fillStyle=(graphType==='g'?'#3DE0D8':'#A9CF7F'); ctx.beginPath();ctx.arc(X,Y,4.6,0,7);ctx.fill();
+    ctx.strokeStyle='#0E0D10'; ctx.lineWidth=1.6; ctx.stroke();
+    const lw=132, lh=(graphType==='g'&&ghost)?44:30, lx=m.pr-lw-4, ly=m.pt+4;
+    ctx.fillStyle='rgba(14,13,16,0.86)'; ctx.fillRect(lx,ly,lw,lh);
+    ctx.strokeStyle='#2A262E'; ctx.lineWidth=1; ctx.strokeRect(lx+.5,ly+.5,lw-1,lh-1);
+    ctx.font='500 11px Quicksand,sans-serif'; ctx.textAlign='left'; ctx.textBaseline='middle';
+    ctx.fillStyle=(graphType==='g'?'#3DE0D8':'#A9CF7F'); ctx.fillRect(lx+8,ly+11,12,3);
+    ctx.fillStyle='#C7C5CC'; ctx.fillText(graphType==='g'?'g(x) — total':'g′(x) — slope', lx+26, ly+13);
+    if(graphType==='g'&&ghost){ ctx.fillStyle='#FFE348'; ctx.fillRect(lx+8,ly+29,12,3);
+     ctx.fillStyle='#C7C5CC'; ctx.fillText('ghost — last run', lx+26, ly+31); }
+   }
+  });
+  ctx.fillStyle='#0E0D10'; ctx.fillRect(0,H-statusH,W,statusH);
+  ctx.fillStyle='rgba(245,244,246,0.55)'; ctx.font='500 11px Quicksand,sans-serif';
+  ctx.textAlign='left'; ctx.textBaseline='middle';
+  ctx.fillText('x-grid: 1 div = 1 unit  ·  x = '+f2(x)+'  ·  u = '+f2(uV)+'  ·  g = '+f3(Gval(x))+'  ·  '+(playing?'RUNNING':'PAUSED')+' '+speed+'×', 10, H-statusH/2);
+ }
+
+ function narrate(w){
+  let best=null,bd=1e9; P.crit.forEach(c=>{ const d=Math.abs(w-c.x); if(d<bd){bd=d;best=c;} });
+  if(best && bd<0.10){ let nt=''; Object.keys(P.note).forEach(k=>{ if(Math.abs(parseFloat(k)-best.x)<0.02) nt=P.note[k]; });
+   return {A:(best.type==='max'?'A local maximum of g.':'A local minimum of g.'), C:nt}; }
+  const s=Gp(w);
+  if(s>0) return {A:'g is climbing.', C:P.rise};
+  if(s<0) return {A:'g is falling.', C:P.fall};
+  return {A:'g is momentarily flat.', C:'g′ = 0 here — a candidate extremum.'};
+ }
+ function readouts(){
+  $('s_xval').textContent='x = '+f2(x);
+  $('s_aval').textContent='a = '+f2(aCur);
+  $('s_ru').textContent=f2(P.hi(x));
+  $('s_rl').textContent=f2(loVal(x));
+  $('s_rg').textContent=f3(Gval(x));
+  $('s_rgp').textContent=f3(Gp(x));
+  let best=null,bd=1e9; P.crit.forEach(c=>{ const d=Math.abs(x-c.x); if(d<bd){bd=d;best=c;} });
+  $('s_rcrit').textContent=best? (f2(best.x)+' · '+best.type) : '—';
+  const n=narrate(x);
+  $('s_bA').textContent=n.A; $('s_bC').textContent=n.C;
+  $('s_bSym').textContent=P.sym; $('s_bSub').innerHTML=P.gpSub(x);
+ }
+
+ const RATE_SECS=6;
+ function frame(ts){
+  if(!last) last=ts; let dt=Math.min((ts-last)/1000,0.05); last=ts; const sdt=dt*speed;
+  if(simIsActive){
+   if(playing){ const rate=(P.xmax-P.xmin)/RATE_SECS; x+=rate*sdt;
+    if(x>=P.xmax){ x=P.xmax; playing=false; runFinished(); updateRunBtn(); }
+    xTarget=x; sx.value=x; }
+   else if(!reduced){ x+=(xTarget-x)*(1-Math.pow(0.0001,dt)); if(Math.abs(xTarget-x)<1e-4)x=xTarget; }
+   else x=xTarget;
+   if(!reduced){ aCur+=(aTarget-aCur)*(1-Math.pow(0.0001,dt)); if(Math.abs(aTarget-aCur)<1e-4)aCur=aTarget; }
+   else aCur=aTarget;
+   draw(); readouts();
+  }
+  requestAnimationFrame(frame);
+ }
+
+ const sx=$('s_x'), sa=$('s_a');
+ function runFinished(){ ghost = P.aEnabled? {a:aCur, type:'g'} : null; }
+ function updateRunBtn(){ $('s_run').textContent=playing?'❚❚ Pause':'▶ Run'; }
+ function activeKey(){ const b=document.querySelector('#s_presets .pbtn.active'); return b?b.dataset.k:'P1'; }
+ function loadPreset(key){
+  P=PRESETS[key]; ghost=null; playing=false; updateRunBtn();
+  x=xTarget=P.xstart; aCur=aTarget=0;
+  sx.min=P.xmin; sx.max=P.xmax; sx.value=P.xstart; sa.value=0;
+  $('s_agroup').style.display=P.aEnabled?'':'none';
+  document.querySelectorAll('#s_presets .pbtn').forEach(b=>b.classList.toggle('active',b.dataset.k===key));
+  $('s_bD').textContent=P.D;
+  readouts();
+ }
+ (function(){ const wrap=$('s_presets');
+  Object.keys(PRESETS).forEach(k=>{ const p=PRESETS[k]; const b=document.createElement('button');
+   b.className='pbtn'; b.dataset.k=k; b.innerHTML='<span class="rid">'+p.row+'</span> '+p.name+' — '+p.fLabel;
+   b.addEventListener('click',()=>loadPreset(k)); wrap.appendChild(b); });
+ })();
+ sx.addEventListener('input',()=>{ playing=false; updateRunBtn(); xTarget=parseFloat(sx.value); });
+ sa.addEventListener('input',()=>{ aTarget=parseFloat(sa.value); });
+ $('s_run').addEventListener('click',()=>{ if(!playing){ if(x>=P.xmax-1e-6){ x=xTarget=P.xmin; sx.value=P.xmin; } playing=true; } else playing=false; updateRunBtn(); });
+ $('s_reset').addEventListener('click',()=>loadPreset(activeKey()));
+ $('s_chipG').addEventListener('click',()=>setGT('g'));
+ $('s_chipGp').addEventListener('click',()=>setGT('gp'));
+ function setGT(gt){ graphType=gt; $('s_chipG').classList.toggle('active',gt==='g'); $('s_chipGp').classList.toggle('active',gt==='gp'); }
+ document.querySelectorAll('#s_speed .sbtn[data-s]').forEach(b=>{
+  b.addEventListener('click',()=>{ speed=parseFloat(b.dataset.s);
+   document.querySelectorAll('#s_speed .sbtn[data-s]').forEach(o=>o.classList.toggle('active',o===b)); });
+ });
+ addEventListener('keydown',e=>{ if(!simIsActive) return;
+  if(e.key===' '){ e.preventDefault(); $('s_run').click(); }
+  else if(e.key==='r'||e.key==='R'){ loadPreset(activeKey()); }
+  else if(e.key==='ArrowRight'){ playing=false; updateRunBtn(); xTarget=Math.min(P.xmax,xTarget+0.05); sx.value=xTarget; }
+  else if(e.key==='ArrowLeft'){ playing=false; updateRunBtn(); xTarget=Math.max(P.xmin,xTarget-0.05); sx.value=xTarget; }
+ });
+
+ window.SIM={ resize, active:(v)=>{ simIsActive=v; if(v) resize(); } };
+ if(!document.querySelector('.sim-overlay')) simIsActive=true;
+
+ loadPreset('P1');
+ resize();
+ requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
