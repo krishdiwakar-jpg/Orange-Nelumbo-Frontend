@@ -13,7 +13,6 @@ import {
   FileText,
   FlaskConical,
   Lightbulb,
-  Printer,
   ShieldAlert,
   Sparkles,
   Target,
@@ -364,7 +363,6 @@ export function TopicReader({
             </div>
             <div className="flex flex-col gap-3 sm:flex-row xl:justify-end">
               <Button aria-pressed={bookmarked} onClick={toggleTopicBookmark} variant="ghost"><Bookmark size={17} /> {bookmarked ? "Bookmarked" : "Bookmark"}</Button>
-              {!securedNote ? <Button onClick={() => window.print()} variant="ghost"><Printer size={17} /> Print / PDF</Button> : null}
               <Button onClick={toggleComplete} variant={state.status === "completed" ? "secondary" : "primary"}>{state.status === "completed" ? <><Check size={17} /> Completed</> : <><BookOpenCheck size={17} /> Mark complete</>}</Button>
             </div>
           </div>
